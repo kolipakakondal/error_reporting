@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.eclipse.epp.logging</groupId>
+		<artifactId>releng</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>repositories</artifactId>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>head</module>
+		<module>milestones</module>
+		<module>stable</module>
+		<module>simrel</module>
+	</modules>
+
+	<properties>
+		<p2MirrorsURL>http://www.eclipse.org/downloads/download.php?file=/epp/updates/${project.artifactId}&amp;format=xml</p2MirrorsURL>
+		<p2StatsURL>http://download.eclipse.org/stats/epp/${project.artifactId}</p2StatsURL>
+		<statsTrackedArtifacts>org.eclipse.epp.logging.aeri.ui.feature</statsTrackedArtifacts>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>repo.eclipse.org</id>
+			<url>https://repo.eclipse.org/content/repositories/recommenders/</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.recommenders</groupId>
+			<artifactId>repository-resources</artifactId>
+			<version>2.1.12</version>
+			<!-- Needed to determine reactor build order only; not a runtime dependency. -->
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.tycho.extras</groupId>
+					<artifactId>tycho-eclipserun-plugin</artifactId>
+					<executions>
+						<execution>
+							<!-- See http://wiki.eclipse.org/Equinox/p2/p2.mirrorsURL -->
+							<id>add-p2-mirrors-url-property</id>
+							<goals>
+								<goal>eclipse-run</goal>
+							</goals>
+							<phase>package</phase>
+							<configuration>
+								<appArgLine>-application
+									org.eclipse.wtp.releng.tools.addRepoProperties</appArgLine>
+								<argLine>-DartifactRepoDirectory=${project.build.directory}/repository
+									-Dp2MirrorsURL=${p2MirrorsURL}</argLine>
+								<dependencies>
+									<dependency>
+										<artifactId>org.eclipse.wtp.releng.tools.feature</artifactId>
+										<type>eclipse-feature</type>
+									</dependency>
+								</dependencies>
+							</configuration>
+						</execution>
+						<execution>
+							<!-- See http://wiki.eclipse.org/Equinox_p2_download_stats -->
+							<id>add-p2-stats-uri-property</id>
+							<goals>
+								<goal>eclipse-run</goal>
+							</goals>
+							<phase>package</phase>
+							<configuration>
+								<appArgLine>-application
+									org.eclipse.wtp.releng.tools.addRepoProperties</appArgLine>
+								<argLine>-DartifactRepoDirectory=${project.build.directory}/repository
+									-Dp2StatsURI=${p2StatsURL}
+									-DstatsTrackedArtifacts=${statsTrackedArtifacts}
+									-DstatsArtifactsSuffix=-${project.version}</argLine>
+								<dependencies>
+									<dependency>
+										<artifactId>org.eclipse.wtp.releng.tools.feature</artifactId>
+										<type>eclipse-feature</type>
+									</dependency>
+								</dependencies>
+							</configuration>
+						</execution>
+					</executions>
+					<configuration>
+						<repositories>
+							<repository>
+								<id>wtp-releng</id>
+								<url>http://download.eclipse.org/webtools/releng/repository</url>
+								<layout>p2</layout>
+							</repository>
+							<repository>
+								<id>luna</id>
+								<url>http://download.eclipse.org/releases/luna</url>
+								<layout>p2</layout>
+							</repository>
+						</repositories>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-remote-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-repository-resources</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<resourceBundles>
+								<resourceBundle>org.eclipse.recommenders:repository-resources:2.1.12</resourceBundle>
+							</resourceBundles>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>resources</id>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

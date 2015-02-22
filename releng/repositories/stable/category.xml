@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+	<feature id="org.eclipse.epp.logging.aeri.ui.feature">
+		<category name="org.eclipse.epp.logging.repositories.categories.main"/>
+	</feature>
+	<feature id="org.eclipse.epp.logging.aeri.ui.feature.source">
+		<category name="org.eclipse.epp.logging.repositories.categories.sources"/>
+	</feature>
+	<feature id="org.eclipse.epp.logging.3rd.feature">
+		<category name="org.eclipse.epp.logging.repositories.categories.deps"/>
+	</feature>
+	<feature id="org.eclipse.epp.logging.3rd.feature.source">
+		<category name="org.eclipse.epp.logging.repositories.categories.deps"/>
+	</feature>
+	<category-def name="org.eclipse.epp.logging.repositories.categories.main" label="EPP Logging"/>
+	<category-def name="org.eclipse.epp.logging.repositories.categories.sources" label="EPP Logging Sources"/>
+	<category-def name="org.eclipse.epp.logging.repositories.categories.deps" label="EPP Logging Dependencies (do not install manually)"/>
+</site>
