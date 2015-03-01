@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Codetrails GmbH.
+ * Copyright (c) 2015 Codetrails GmbH.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,8 +11,10 @@
 package org.eclipse.epp.internal.logging.aeri.ui;
 
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.*;
+import static org.eclipse.epp.internal.logging.aeri.ui.model.PreferenceInitializer.*;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.epp.internal.logging.aeri.ui.l10n.Messages;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Browsers;
 import org.eclipse.jface.dialogs.Dialog;

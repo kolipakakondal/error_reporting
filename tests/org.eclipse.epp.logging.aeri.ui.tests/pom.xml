@@ -20,6 +20,7 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<configuration>
 					<useUIHarness>true</useUIHarness>
+					<useUIThread>false</useUIThread>
 					<dependencies>
 						<dependency>
 							<artifactId>org.eclipse.jdt.core</artifactId>

@@ -4,12 +4,12 @@
    <extension
          point="org.eclipse.ui.startup">
       <startup
-            class="org.eclipse.epp.internal.logging.aeri.ui.LogListener"></startup>
+            class="org.eclipse.epp.internal.logging.aeri.ui.Startup"></startup>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.eclipse.epp.internal.logging.aeri.ui.PreferenceInitializer">
+            class="org.eclipse.epp.internal.logging.aeri.ui.model.PreferenceInitializer">
       </initializer>
    </extension>
    <extension
@@ -21,4 +21,74 @@
             name="Error Reporting">
       </page>
    </extension>
+   <!-- notifications: category -->
+   <extension
+         point="org.eclipse.mylyn.commons.notifications.ui.notifications">
+      <category
+            id="org.eclipse.epp.logging.aeri.notifications.category"
+            label="Error Reporting">
+      </category>
+   </extension>
+   <!-- notifications: sink -->
+   <extension
+         point="org.eclipse.mylyn.commons.notifications.ui.notifications">
+      <sink
+            id="org.eclipse.epp.logging.aeri.notifications.sink.popup"
+            class="org.eclipse.epp.internal.logging.aeri.ui.notifications.AeriPopupNotificationSink"
+            label="Desktop Popup (Errors)">
+      </sink>
+   </extension>
+   <!-- notifications: events -->
+   <extension
+         point="org.eclipse.mylyn.commons.notifications.ui.notifications">
+      <event
+            id="org.eclipse.epp.logging.aeri.notifications.event.configure"
+            label="Configure" 
+            categoryId="org.eclipse.epp.logging.aeri.notifications.category">
+            <defaultHandler
+                sinkId="org.eclipse.epp.logging.aeri.notifications.sink.popup">
+            </defaultHandler>
+      </event>
+   </extension>
+   <extension
+         point="org.eclipse.mylyn.commons.notifications.ui.notifications">
+      <event
+            id="org.eclipse.epp.logging.aeri.notifications.event.newReport"
+            label="New Event logged" 
+            categoryId="org.eclipse.epp.logging.aeri.notifications.category">
+            <defaultHandler
+                sinkId="org.eclipse.epp.logging.aeri.notifications.sink.popup">
+            </defaultHandler>
+      </event>
+   </extension>
+   <extension
+         point="org.eclipse.mylyn.commons.notifications.ui.notifications">
+      <event
+            id="org.eclipse.epp.logging.aeri.notifications.event.response"
+            label="Upload Response" 
+            categoryId="org.eclipse.epp.logging.aeri.notifications.category">
+            <defaultHandler
+                sinkId="org.eclipse.epp.logging.aeri.notifications.sink.popup">
+            </defaultHandler>
+      </event>
+   </extension>
+   <extension
+         point="org.eclipse.mylyn.commons.notifications.ui.notifications">
+      <event
+            id="org.eclipse.epp.logging.aeri.notifications.event.response.moreInfo"
+            label="More Info Request" 
+            categoryId="org.eclipse.epp.logging.aeri.notifications.category">
+            <defaultHandler
+                sinkId="org.eclipse.epp.logging.aeri.notifications.sink.popup">
+            </defaultHandler>
+      </event>
+   </extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated aeri -->
+      <package
+            uri="http://eclipse.org/epp/logging/aeri"
+            class="org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage"
+            genModel="models/aeri.genmodel"/>
+   </extension>
+
 </plugin>

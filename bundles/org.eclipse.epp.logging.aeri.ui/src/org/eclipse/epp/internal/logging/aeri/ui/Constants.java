@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Codetrails GmbH.
+ * Copyright (c) 2015 Codetrails GmbH.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,8 @@ package org.eclipse.epp.internal.logging.aeri.ui;
 
 import java.util.Set;
 
-import org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage;
+import org.eclipse.epp.internal.logging.aeri.ui.log.LogListener;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StandInStacktraceProvider;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -22,54 +23,26 @@ public final class Constants {
         throw new IllegalStateException("Not meant to be instantiated"); //$NON-NLS-1$
     }
 
-    static final String PLUGIN_ID = "org.eclipse.epp.logging.aeri.ui";
+    public static final String PLUGIN_ID = "org.eclipse.epp.logging.aeri.ui";
 
-    static final String PREF_PAGE_ID = "org.eclipse.epp.logging.aeri.ui.preferencePages.preference";
+    public static final String PREF_PAGE_ID = "org.eclipse.epp.logging.aeri.ui.preferencePages.preference";
 
     /**
-     * Specifying '-Dorg.eclipse.epp.logging.aeri.rcp.skipReports=true'
-     * as vmarg in eclipse launch configurations lets the log listener skip
-     * automated error reporting.
+     * Specifying '-Dorg.eclipse.epp.logging.aeri.rcp.skipReports=true' as vmarg
+     * in eclipse launch configurations lets the log listener skip automated
+     * error reporting.
      */
-    static final String SYSPROP_SKIP_REPORTS = PLUGIN_ID + ".skipReports";
-    static final String SYSPROP_ECLIPSE_BUILD_ID = "eclipse.buildId";
+    public static final String SYSPROP_SKIP_REPORTS = PLUGIN_ID + ".skipReports";
+    public static final String SYSPROP_ECLIPSE_BUILD_ID = "eclipse.buildId";
 
-    static final String PROP_NAME;
-    static final String PROP_EMAIL;
-    static final String PROP_ANONYMIZE_STACKTRACES;
-    static final String PROP_ANONYMIZE_MESSAGES;
-    static final String PROP_CONFIGURED;
-    static final String PROP_SEND_ACTION;
-    static final String PROP_REMEMBER_SEND_ACTION;
-    static final String PROP_REMEMBER_SETTING_PERIOD_START;
-    static final String PROP_SKIP_SIMILAR_ERRORS;
-    static final String PROP_WHITELISTED_PLUGINS;
-    static final String PROP_WHITELISTED_PACKAGES;
-    static final String PROP_SERVER;
+    // values for notifications
+    public static final String NOTIFY_CONFIGURATION = "org.eclipse.epp.logging.aeri.notifications.event.configure";
+    public static final String NOTIFY_REPORT = "org.eclipse.epp.logging.aeri.notifications.event.newReport";
+    public static final String NOTIFY_UPLOAD = "org.eclipse.epp.logging.aeri.notifications.event.response";
+    public static final String NOTIFY_MORE_INFO = "org.eclipse.epp.logging.aeri.notifications.event.moreinfo";
 
-    static {
-        ModelPackage pkg = ModelPackage.eINSTANCE;
-        PROP_ANONYMIZE_STACKTRACES = pkg.getSettings_AnonymizeStrackTraceElements().getName();
-        PROP_ANONYMIZE_MESSAGES = pkg.getSettings_AnonymizeMessages().getName();
-        PROP_CONFIGURED = pkg.getSettings_Configured().getName();
-        PROP_EMAIL = pkg.getSettings_Email().getName();
-        PROP_NAME = pkg.getSettings_Name().getName();
-        PROP_REMEMBER_SEND_ACTION = pkg.getSettings_RememberSendAction().getName();
-        PROP_REMEMBER_SETTING_PERIOD_START = pkg.getSettings_RememberSendActionPeriodStart().getName();
-        PROP_SEND_ACTION = pkg.getSettings_Action().getName();
-        PROP_SERVER = pkg.getSettings_ServerUrl().getName();
-        PROP_SKIP_SIMILAR_ERRORS = pkg.getSettings_SkipSimilarErrors().getName();
-        PROP_WHITELISTED_PACKAGES = pkg.getSettings_WhitelistedPackages().getName();
-        PROP_WHITELISTED_PLUGINS = pkg.getSettings_WhitelistedPluginIds().getName();
-    }
-
-    static final String HELP_URL = "https://dev.eclipse.org/recommenders/community/confess/";
-    static final String FEEDBACK_FORM_URL = "https://docs.google.com/a/codetrails.com/forms/d/1wd9AzydLv_TMa7ZBXHO7zQIhZjZCJRNMed-6J4fVNsc/viewform";
-    static final String SERVER_URL = getServerUrl();
-
-    private static String getServerUrl() {
-        return System.getProperty(PLUGIN_ID + "." + PROP_SERVER, "https://dev.eclipse.org/recommenders/community/confess/0.5/reports/");
-    }
+    public static final String HELP_URL = "https://dev.eclipse.org/recommenders/community/confess/";
+    public static final String FEEDBACK_FORM_URL = "https://docs.google.com/a/codetrails.com/forms/d/1wd9AzydLv_TMa7ZBXHO7zQIhZjZCJRNMed-6J4fVNsc/viewform";
 
     // Cache
     public static final int PREVIOUS_ERROR_CACHE_MAXIMUM_SIZE = 30;

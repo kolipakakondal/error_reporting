@@ -1,12 +1,12 @@
 /**
- * Copyright (c) 2010, 2014 Darmstadt University of Technology.
+ * Copyright (c) 2015 Codetrails GmbH.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Marcel Bruch - manual test code.
+ *    Marcel Bruch - initial API and implementation.
  */
 package org.eclipse.epp.internal.logging.aeri.ui.actions;
 
@@ -42,11 +42,11 @@ public class LogErrorsAction implements IWorkbenchWindowActionDelegate {
             @Override
             public IStatus run(IProgressMonitor monitor) {
                 System.setProperty("eclipse.buildId", "unit-tests");
-                logMultiStatusDelayed();
+                // logMultiStatusDelayed();
                 // logManyDifferentErrors();
                 // XXX only execute in non-production. These errors should never
                 // be sent to eclipse.org!
-                // logStressTest();
+                logStressTest();
                 return Status.OK_STATUS;
             }
 
@@ -62,16 +62,15 @@ public class LogErrorsAction implements IWorkbenchWindowActionDelegate {
             cause.setStackTrace(createTrace(3));
             Exception exception = new RuntimeException("exception message", cause);
             exception.setStackTrace(createTrace(3));
-            children[i] = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "status error message " + ++counter,
-                    exception);
+            children[i] = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "status error message " + ++counter, exception);
         }
         try {
             Thread.sleep(750);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        log.log(new MultiStatus("org.eclipse.epp.logging.aeri", IStatus.ERROR, children, "status error message",
-                new RuntimeException()));
+        log.log(new MultiStatus("org.eclipse.epp.logging.aeri", IStatus.ERROR, children, "status error message", new RuntimeException(
+                "Processing the user query failed due to an incompatible query string format.")));
     }
 
     @SuppressWarnings("unused")

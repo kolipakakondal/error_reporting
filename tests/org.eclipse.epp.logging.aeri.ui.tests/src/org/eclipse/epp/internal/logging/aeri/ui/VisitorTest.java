@@ -11,21 +11,22 @@
 package org.eclipse.epp.internal.logging.aeri.ui;
 
 import static org.eclipse.epp.internal.logging.aeri.ui.model.ModelFactory.eINSTANCE;
+import static org.eclipse.epp.internal.logging.aeri.ui.model.Reports.visit;
 
-import org.eclipse.epp.internal.logging.aeri.ui.model.impl.VisitorImpl;
+import org.eclipse.epp.internal.logging.aeri.ui.model.util.ModelSwitch;
 import org.junit.Test;
 
 public class VisitorTest {
 
-    VisitorImpl someVisitor = new VisitorImpl() {
+    ModelSwitch<Void> someVisitor = new ModelSwitch<Void>() {
     };
 
     @Test
     public void testNullSafe() {
-        eINSTANCE.createStatus().accept(someVisitor);
-        eINSTANCE.createErrorReport().accept(someVisitor);
-        eINSTANCE.createStackTraceElement().accept(someVisitor);
-        eINSTANCE.createThrowable().accept(someVisitor);
-        eINSTANCE.createBundle().accept(someVisitor);
+        visit(eINSTANCE.createStatus(), someVisitor);
+        visit(eINSTANCE.createStackTraceElement(), someVisitor);
+        visit(eINSTANCE.createErrorReport(), someVisitor);
+        visit(eINSTANCE.createThrowable(), someVisitor);
+        visit(eINSTANCE.createBundle(), someVisitor);
     }
 }

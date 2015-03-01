@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Codetrails GmbH.
+ * Copyright (c) 2015 Codetrails GmbH.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,14 +12,13 @@ package org.eclipse.epp.internal.logging.aeri.ui;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static java.text.MessageFormat.format;
+import static org.apache.commons.lang3.StringUtils.abbreviate;
 import static org.eclipse.core.runtime.IStatus.WARNING;
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.PLUGIN_ID;
-import static org.eclipse.epp.internal.logging.aeri.ui.ReportState.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.proxy;
 
 import java.net.URI;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.entity.GzipCompressingEntity;
@@ -33,18 +32,17 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseShowRequest;
+import org.eclipse.epp.internal.logging.aeri.ui.l10n.Messages;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
+import org.eclipse.epp.internal.logging.aeri.ui.model.Reports;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse.ProblemResolution;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
-import org.eclipse.epp.internal.logging.aeri.ui.utils.ErrorReports;
-import org.eclipse.epp.internal.logging.aeri.ui.utils.GsonUtil;
-import org.eclipse.epp.internal.logging.aeri.ui.utils.Logs;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.progress.IProgressConstants;
+import org.eclipse.epp.internal.logging.aeri.ui.utils.Json;
 
 import com.google.common.base.Optional;
+import com.google.common.eventbus.EventBus;
 
 /**
  * Responsible to anonymize (if requested) and send an error report.
@@ -55,14 +53,14 @@ public class UploadJob extends Job {
     private ErrorReport event;
     private URI target;
     private Settings settings;
-    private History history;
+    private EventBus bus;
 
-    public UploadJob(ErrorReport event, History history, Settings settings, URI target) {
+    public UploadJob(ErrorReport event, Settings settings, URI target, EventBus bus) {
         super(format(Messages.UPLOADJOB_NAME, target));
         this.event = event;
-        this.history = history;
         this.settings = settings;
         this.target = target;
+        this.bus = bus;
     }
 
     @Override
@@ -70,7 +68,7 @@ public class UploadJob extends Job {
         monitor.beginTask(Messages.UPLOADJOB_TASKNAME, 1);
         try {
             executor = Executor.newInstance();
-            String body = ErrorReports.toJson(event, settings, false);
+            String body = Reports.toJson(event, settings, false);
             StringEntity stringEntity = new StringEntity(body, ContentType.APPLICATION_OCTET_STREAM.withCharset(UTF_8));
             HttpEntity entity = new GzipCompressingEntity(stringEntity);
             Request request = Request.Post(target).body(entity);
@@ -81,30 +79,17 @@ public class UploadJob extends Job {
             if (code >= 400) {
                 return new Status(WARNING, PLUGIN_ID, format(Messages.UPLOADJOB_BAD_RESPONSE, details));
             }
-            history.remember(event);
-            final ReportState state = GsonUtil.deserialize(details, ReportState.class);
-            setProperty(IProgressConstants.KEEP_PROPERTY, Boolean.TRUE);
-            setProperty(IProgressConstants.ACTION_PROPERTY, new Action() {
-                @Override
-                public void run() {
-                    try {
-                        Shell activeShell = Display.getCurrent().getActiveShell();
-                        new ThankYouDialog(activeShell, state).open();
-                    } catch (Exception e) {
-                        Logs.log(LogMessages.THANK_YOU_DIALOG_ERROR, e);
-                    }
-                }
-            });
-            Optional<String> info = state.getInformation();
-            if (FIXED.equals(state.getResolved().orNull())) {
-                String message = format(Messages.UPLOADJOB_ALREADY_FIXED_UPDATE, info.or("The error you reported has been fixed."), state
-                        .getBugId().or(Messages.THANKYOUDIALOG_INVALID_SERVER_RESPONSE));
-                openPopup(message, state.getBugUrl().orNull());
-            } else if (ArrayUtils.contains(state.getKeywords().or(EMPTY_STRINGS), KEYWORD_NEEDINFO)) {
-                String message = format(Messages.UPLOADJOB_NEED_FURTHER_INFORMATION, info.or(""),
-                        state.getBugId().or(Messages.THANKYOUDIALOG_INVALID_SERVER_RESPONSE));
-                openPopup(message, state.getBugUrl().orNull());
-            }
+            final ServerResponse05 response05 = Json.deserialize(details, ServerResponse05.class);
+
+            // TODO complete dto
+            ServerResponse result = new ServerResponse();
+            result.setReportTitle(abbreviate(event.getStatus().getMessage(), 80));
+            result.setIncidentId(response05.bugId);
+            result.setIncidentUrl(response05.bugUrl);
+            result.setResolution(tryParse(response05));
+            result.setCommitterMessage(response05.information);
+
+            bus.post(new ServerResponseShowRequest(result));
             return new Status(IStatus.INFO, PLUGIN_ID, format(Messages.UPLOADJOB_THANK_YOU, details));
         } catch (Exception e) {
             return new Status(WARNING, PLUGIN_ID, Messages.UPLOADJOB_FAILED_WITH_EXCEPTION, e);
@@ -113,14 +98,68 @@ public class UploadJob extends Job {
         }
     }
 
-    private void openPopup(final String message, final String url) {
-
-        Display.getDefault().syncExec(new Runnable() {
-            @Override
-            public void run() {
-                Window dialog = new ReportNotificationPopup(message, url);
-                dialog.open();
-            }
-        });
+    private ProblemResolution tryParse(ServerResponse05 state) {
+        try {
+            return ProblemResolution.valueOf(state.getResolved().or(ProblemResolution.UNCONFIRMED.name()));
+        } catch (Exception e) {
+            return ProblemResolution.UNCONFIRMED;
+        }
     }
+
+    @SuppressWarnings("unused")
+    private static class ServerResponse05 {
+
+        public static final String KEYWORD_NEEDINFO = "needinfo"; //$NON-NLS-1$
+        public static final String[] EMPTY_STRINGS = new String[0];
+        public static final String FIXED = "FIXED"; //$NON-NLS-1$
+        public static final String ASSIGNED = "ASSIGNED"; //$NON-NLS-1$
+        public static final String NOT_ECLIPSE = "NOT_ECLIPSE"; //$NON-NLS-1$
+        public static final String INVALID = "INVALID"; //$NON-NLS-1$
+        public static final String WONTFIX = "WONTFIX"; //$NON-NLS-1$
+        public static final String WORKSFORME = "WORKSFORME"; //$NON-NLS-1$
+        public static final String MOVED = "MOVED"; //$NON-NLS-1$
+        public static final String DUPLICATE = "DUPLICATE"; //$NON-NLS-1$
+        public static final String UNKNOWN = "UNKNOWN"; //$NON-NLS-1$
+        public static final String CLOSED = "CLOSED"; //$NON-NLS-1$
+        public static final String RESOLVED = "RESOLVED"; //$NON-NLS-1$
+        public static final String NEW = "NEW"; //$NON-NLS-1$
+        public static final String UNCONFIRMED = "UNCONFIRMED"; //$NON-NLS-1$
+
+        private boolean created;
+        private String bugId;
+        private String bugUrl;
+        private String status;
+        private String resolved;
+        private String information;
+        private String[] keywords;
+
+        public boolean isCreated() {
+            return created;
+        }
+
+        public Optional<String> getBugId() {
+            return Optional.fromNullable(bugId);
+        }
+
+        public Optional<String> getBugUrl() {
+            return Optional.fromNullable(bugUrl);
+        }
+
+        public Optional<String> getInformation() {
+            return Optional.fromNullable(information);
+        }
+
+        public Optional<String[]> getKeywords() {
+            return Optional.fromNullable(keywords);
+        }
+
+        public Optional<String> getResolved() {
+            return Optional.fromNullable(resolved);
+        }
+
+        public Optional<String> getStatus() {
+            return Optional.fromNullable(status);
+        }
+    }
+
 }

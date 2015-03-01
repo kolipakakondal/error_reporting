@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Codetrails GmbH.
+ * Copyright (c) 2015 Codetrails GmbH.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,23 +12,15 @@ package org.eclipse.epp.internal.logging.aeri.ui;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.SYSPROP_ECLIPSE_BUILD_ID;
-import static org.eclipse.epp.internal.logging.aeri.ui.model.SendAction.ASK;
-import static org.eclipse.epp.internal.logging.aeri.ui.model.SendAction.SILENT;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.lucene.store.Directory;
@@ -36,89 +28,97 @@ import org.apache.lucene.store.RAMDirectory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportLogged;
+import org.eclipse.epp.internal.logging.aeri.ui.log.LogListener;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ModelFactory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.epp.internal.logging.aeri.ui.utils.RetainSystemProperties;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 
-import com.google.common.base.Optional;
+import com.google.common.base.Throwables;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 
 public class LogListenerTest {
 
     private static final String TEST_PLUGIN_ID = "org.eclipse.epp.logging.aeri.rcp.tests";
     private static final String ANY_THIRD_PARTY_PLUGIN_ID = "any.third.party.plugin.id";
+    private EventBus bus;
+    private BlockingQueue<Object> queue;
+    private Settings settings;
     private LogListener sut;
+    private ReportHistory history;
 
-    private static Status createErrorStatus() {
-        Exception e1 = new RuntimeException();
-        StackTraceElement[] trace = ErrorReportsDTOs.createStacktraceForClasses("A", "D", "C");
-        e1.setStackTrace(trace);
-        return new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message", e1);
-    }
+    @Rule
+    public RetainSystemProperties retainSystemProperties = new RetainSystemProperties();
 
-    // mockito can only mock visible & non-final classes
-    protected class TestHistory extends History {
+    private static class TestHistory extends ReportHistory {
         @Override
         protected Directory createIndexDirectory() throws IOException {
             return new RAMDirectory();
         }
     }
 
-    @Rule
-    public RetainSystemProperties retainSystemProperties = new RetainSystemProperties();
-    private History history;
-    private Settings settings;
-
     @Before
-    public void setUp() throws Exception {
-        // Flag to bypass the runtime workbench test check:
+    public void setup() {
         System.setProperty(SYSPROP_ECLIPSE_BUILD_ID, "unit-tests");
-
         settings = ModelFactory.eINSTANCE.createSettings();
         settings.setConfigured(true);
         settings.setWhitelistedPluginIds(newArrayList(TEST_PLUGIN_ID));
         settings.setWhitelistedPackages(newArrayList("java"));
-        history = spy(new TestHistory());
+        settings.setAction(SendAction.SILENT);
+        settings.setSkipSimilarErrors(true);
+
+        history = new TestHistory();
         history.startAsync();
         history.awaitRunning();
-        // not called on spy, so call manually
-        history.startUp();
 
-        sut = spy(new LogListener(history, settings));
-        // safety: do not send errors during tests
-        doNothing().when(sut).checkAndSendWithDialog(Mockito.any(ErrorReport.class));
-        doNothing().when(sut).sendStatus(Mockito.any(ErrorReport.class));
+        queue = new LinkedBlockingQueue<>();
+        bus = new EventBus();
+        bus.register(this);
 
-        // Mockito.when(sut.readStacktracesRcpPreferences()).thenAnswer(new
-        // Answer<StacktracesRcpPreferences>() {
-        // @Override
-        // public StacktracesRcpPreferences answer(InvocationOnMock invocation)
-        // throws Throwable {
-        // StacktracesRcpPreferences StacktracesRcpPreferences =
-        // (StacktracesRcpPreferences) invocation
-        // .callRealMethod();
-        // if (StacktracesRcpPreferencesOverrider != null) {
-        // StacktracesRcpPreferencesOverrider.override(StacktracesRcpPreferences);
-        // }
-        // // don't open initial config dialog
-        // StacktracesRcpPreferences.setConfigured(true);
-        // return StacktracesRcpPreferences;
-        // }
-        // });
+        sut = Startup.createLogListener(settings, history, bus);
+    }
+
+    @Subscribe
+    public void on(Object o) {
+        queue.add(o);
+    }
+
+    private NewReportLogged pollEvent() {
+        return pollEvent(20, TimeUnit.SECONDS);
+    }
+
+    private NewReportLogged pollEvent(int timeoutSeconds, TimeUnit unit) {
+        try {
+            Object event = queue.poll(timeoutSeconds, unit);
+            if (event == null) {
+                return null;
+            }
+            return (NewReportLogged) event;
+        } catch (InterruptedException e) {
+            throw Throwables.propagate(e);
+        }
+    }
+
+    private void verifyNoErrorReportLogged() {
+        assertThat(queue.isEmpty(), is(true));
+    }
+
+    private void verifyExactOneErrorReportLogged() {
+        NewReportLogged event1 = pollEvent(1, TimeUnit.SECONDS);
+        assertThat(event1, is(not(nullValue())));
+        assertThat(queue.isEmpty(), is(true));
     }
 
     @Test
     public void testStatusUnmodified() {
-        settings.setAction(SendAction.SILENT);
         Status empty = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "has no stacktrace");
         Status empty2 = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "has no stacktrace");
 
@@ -128,7 +128,6 @@ public class LogListenerTest {
 
     @Test
     public void testNoInsertDebugStacktraceOnIgnoreMode() {
-        settings.setAction(SendAction.IGNORE);
         Status empty = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "has no stacktrace");
         Assert.assertThat(empty.getException(), nullValue());
 
@@ -139,58 +138,36 @@ public class LogListenerTest {
 
     @Test
     public void testInsertDebugStacktrace() {
-
-        settings.setAction(SendAction.SILENT);
         Status empty = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "has no stacktrace");
 
         sut.logging(empty, "");
 
-        ArgumentCaptor<ErrorReport> captor = ArgumentCaptor.forClass(ErrorReport.class);
-        verify(sut).sendStatus(captor.capture());
-        ErrorReport sendReport = captor.getValue();
-        assertThat(sendReport.getStatus().getException(), not(nullValue()));
+        NewReportLogged event = pollEvent();
+
+        assertThat(event.report.getStatus().getException(), not(nullValue()));
     }
 
     @Test
     public void testInsertedDebugStacktraceHasFingerprint() {
-
-        settings.setAction(SendAction.SILENT);
         Status empty = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "has no stacktrace");
 
         sut.logging(empty, "");
 
-        ArgumentCaptor<ErrorReport> captor = ArgumentCaptor.forClass(ErrorReport.class);
-        verify(sut).sendStatus(captor.capture());
-        ErrorReport sendReport = captor.getValue();
+        NewReportLogged event = pollEvent();
         // the fingerprint should not be a string of only 0-values, which
         // indicates a missing fingerprint
-        assertThat(sendReport.getStatus().getFingerprint().matches("[0]*"), is(false));
+        assertThat(event.report.getStatus().getFingerprint().matches("[0]*"), is(false));
     }
 
     @Test
     public void testBundlesAddedToDebugStacktrace() {
-        settings.setAction(SendAction.SILENT);
         Status empty = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "has no stacktrace");
 
         sut.logging(empty, "");
 
-        ArgumentCaptor<ErrorReport> captor = ArgumentCaptor.forClass(ErrorReport.class);
-        verify(sut).sendStatus(captor.capture());
-        ErrorReport sendReport = captor.getValue();
-        assertThat(sendReport.getPresentBundles(), not(Matchers.empty()));
-    }
+        NewReportLogged event = pollEvent();
 
-    @Test
-    @Ignore
-    public void testUnavailableShell() {
-        // only for this test: use all ui-features and StacktracesRcpPreferences
-        // reproduces Bug 448860
-        sut = spy(new LogListener());
-        doNothing().when(sut).sendStatus(Mockito.any(ErrorReport.class));
-        Optional<Shell> absent = Optional.absent();
-        when(sut.getWorkbenchWindowShell()).thenReturn(absent);
-        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message");
-        sut.logging(status, "");
+        assertThat(event.report.getPresentBundles(), not(Matchers.empty()));
     }
 
     @Test
@@ -199,7 +176,7 @@ public class LogListenerTest {
 
         sut.logging(status, "");
 
-        verifyNoErrorReportSend();
+        verifyNoErrorReportLogged();
     }
 
     @Test
@@ -209,7 +186,7 @@ public class LogListenerTest {
 
         sut.logging(status, "");
 
-        verifyNoErrorReportSend();
+        verifyNoErrorReportLogged();
     }
 
     @Test
@@ -218,7 +195,7 @@ public class LogListenerTest {
 
         sut.logging(status, "");
 
-        verifyNoErrorReportSend();
+        verifyNoErrorReportLogged();
     }
 
     @Test
@@ -227,7 +204,7 @@ public class LogListenerTest {
 
         sut.logging(status, "");
 
-        verifyNoErrorReportSend();
+        verifyNoErrorReportLogged();
     }
 
     @Test
@@ -236,81 +213,36 @@ public class LogListenerTest {
 
         sut.logging(status, "");
 
-        verifyNoErrorReportSend();
-    }
-
-    @Test
-    public void testSendIfSilentMode() {
-        settings.setAction(SendAction.SILENT);
-        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message");
-
-        sut.logging(status, "");
-
-        verify(sut, times(1)).sendStatus(Mockito.any(ErrorReport.class));
-    }
-
-    @Test
-    public void testUseHistory() {
-        settings.setAction(SendAction.SILENT);
-        settings.setSkipSimilarErrors(true);
-        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message");
-
-        sut.logging(status, "");
-
-        verify(history, times(1)).seen(Mockito.any(ErrorReport.class));
-    }
-
-    @Test
-    public void testNoCheckIfSilentMode() {
-        settings.setAction(SendAction.SILENT);
-        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message");
-
-        sut.logging(status, "");
-
-        verify(sut, never()).checkAndSendWithDialog(Mockito.any(ErrorReport.class));
-    }
-
-    @Test
-    public void testCheckIfAskMode() {
-        settings.setAction(ASK);
-        settings.setSkipSimilarErrors(true);
-        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message");
-
-        sut.logging(status, "");
-
-        verify(sut, times(1)).checkAndSendWithDialog(Mockito.any(ErrorReport.class));
+        verifyNoErrorReportLogged();
     }
 
     @Test
     public void testIfSkipReportsTrue() {
-        settings.setAction(SendAction.SILENT);
         System.setProperty(Constants.SYSPROP_SKIP_REPORTS, "true");
         Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message");
 
         sut.logging(status, "");
 
-        verifyNoErrorReportSend();
+        verifyNoErrorReportLogged();
     }
 
     @Test
     public void testIfSkipReportsFalse() {
-        settings.setAction(ASK);
         System.setProperty(Constants.SYSPROP_SKIP_REPORTS, "false");
         Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message");
 
         sut.logging(status, "");
 
-        verify(sut, times(1)).checkAndSendWithDialog(Mockito.any(ErrorReport.class));
+        assertThat(pollEvent(), is(not(nullValue())));
     }
 
     @Test
     public void testUnknownPluginsIgnored() {
-        settings.setAction(SendAction.SILENT);
         Status status = new Status(IStatus.ERROR, ANY_THIRD_PARTY_PLUGIN_ID, "any message");
 
         sut.logging(status, "");
 
-        verifyNoErrorReportSend();
+        verifyNoErrorReportLogged();
     }
 
     @Test
@@ -320,76 +252,90 @@ public class LogListenerTest {
 
         sut.logging(status, "");
 
-        verifyNoErrorReportSend();
+        verifyNoErrorReportLogged();
     }
 
     @Test
     public void testSkipSimilarErrors() {
         settings.setSkipSimilarErrors(true);
-        settings.setAction(ASK);
 
-        Status s1 = createErrorStatus();
-        Status s2 = createErrorStatus();
+        Throwable t1 = new Throwable();
+        Status s1 = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message", t1);
+        Status s2 = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message", t1);
+
         sut.logging(s1, "");
+        NewReportLogged event1 = pollEvent(1, TimeUnit.SECONDS);
+        history.remember(event1.report);
+
         sut.logging(s2, "");
 
-        verify(sut, times(1)).checkAndSendWithDialog(Mockito.any(ErrorReport.class));
+        NewReportLogged event2 = pollEvent(1, TimeUnit.SECONDS);
+        assertThat(event2, is(nullValue()));
     }
 
     @Test
     public void testNoSkippingSimilarErrors() {
         settings.setSkipSimilarErrors(false);
-        settings.setAction(SILENT);
 
-        sut.logging(createErrorStatus(), "");
-        sut.logging(createErrorStatus(), "");
+        Throwable t1 = new Throwable();
+        Status s1 = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message", t1);
+        Status s2 = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message", t1);
 
-        verify(sut, times(2)).sendStatus(Mockito.any(ErrorReport.class));
-    }
+        sut.logging(s1, "");
+        NewReportLogged event1 = pollEvent(1, TimeUnit.SECONDS);
+        history.remember(event1.report);
 
-    @Test
-    public void testSilentSendsErrors() {
+        sut.logging(s2, "");
 
-        settings.setSkipSimilarErrors(false);
-        settings.setAction(SILENT);
-
-        sut.logging(createErrorStatus(), "");
-        sut.logging(createErrorStatus(), "");
-
-        verify(sut, times(2)).sendStatus(Mockito.any(ErrorReport.class));
-
+        NewReportLogged event2 = pollEvent(1, TimeUnit.SECONDS);
+        assertThat(event2, is(not(nullValue())));
     }
 
     @Test
     public void testNoReportOfSourceFiles() {
-        settings.setAction(SILENT);
         String sourceDataMessage = "Exception occurred during compilation unit conversion:\n"
-                + "----------------------------------- SOURCE BEGIN -------------------------------------\n" + "package some.package;\n"
-                + "\n" + "import static some.import.method;\n" + "import static some.other.import;\n";
+                + "----------------------------------- SOURCE BEGIN -------------------------------------\n"
+                + "package some.package;\n" + "\n" + "import static some.import.method;\n"
+                + "import static some.other.import;\n";
         Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, sourceDataMessage, new RuntimeException());
 
         sut.logging(status, "");
 
-        ArgumentCaptor<ErrorReport> captor = ArgumentCaptor.forClass(ErrorReport.class);
-        verify(sut).sendStatus(captor.capture());
-        Assert.assertEquals("source file contents removed", captor.getValue().getStatus().getMessage());
+        NewReportLogged event = pollEvent();
+
+        assertThat(event.report.getStatus().getMessage(), is("source file contents removed"));
     }
 
     @Test
     public void testMonitoringStatusWithNoChildsFiltered() throws IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, NoSuchMethodException, SecurityException {
-        settings.setAction(SILENT);
-        MultiStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, "UI freeze of 6,0s at 11:24:59.108", new RuntimeException(
-                "stand-in-stacktrace"));
+        MultiStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, "UI freeze of 6,0s at 11:24:59.108",
+                new RuntimeException("stand-in-stacktrace"));
         Method method = Status.class.getDeclaredMethod("setSeverity", Integer.TYPE);
         method.setAccessible(true);
         method.invoke(multi, IStatus.ERROR);
         sut.logging(multi, "");
-        verifyNoErrorReportSend();
+        verifyNoErrorReportLogged();
     }
 
-    private void verifyNoErrorReportSend() {
-        verify(sut, never()).sendStatus(Mockito.any(ErrorReport.class));
-        verify(sut, never()).checkAndSendWithDialog(Mockito.any(ErrorReport.class));
+    @Test
+    public void testMultipleSimilarErrors() {
+        for (int i = 0; i < 10; i++) {
+            Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "Error Message", new RuntimeException());
+            sut.logging(status, "");
+        }
+        // only one event should be logged
+        verifyExactOneErrorReportLogged();
+    }
+
+    @Test
+    public void testMultipleErrorsWithDifferentMessages() {
+        for (int i = 0; i < 10; i++) {
+            Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "Error Message Number " + i,
+                    new RuntimeException());
+            sut.logging(status, "");
+        }
+        // only one event should be logged
+        verifyExactOneErrorReportLogged();
     }
 }

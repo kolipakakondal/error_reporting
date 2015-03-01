@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.epp.logging.aeri.ui/src-gen" modelPluginID="org.eclipse.epp.logging.aeri.ui"
+    modelName="Aeri" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" bundleManifest="false" complianceLevel="7.0"
+    copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>aeri.ecore</foreignModel>
+  <genPackages prefix="Model" basePackage="org.eclipse.epp.internal.logging.aeri.ui"
+      disposableProviderFactory="true" contentTypeIdentifier="" ecorePackage="aeri.ecore#/"
+      publicationLocation="">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="aeri.ecore#//SendAction">
+      <genEnumLiterals ecoreEnumLiteral="aeri.ecore#//SendAction/ASK"/>
+      <genEnumLiterals ecoreEnumLiteral="aeri.ecore#//SendAction/IGNORE"/>
+      <genEnumLiterals ecoreEnumLiteral="aeri.ecore#//SendAction/SILENT"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="aeri.ecore#//RememberSendAction">
+      <genEnumLiterals ecoreEnumLiteral="aeri.ecore#//RememberSendAction/HOURS_24"/>
+      <genEnumLiterals ecoreEnumLiteral="aeri.ecore#//RememberSendAction/RESTART"/>
+      <genEnumLiterals ecoreEnumLiteral="aeri.ecore#//RememberSendAction/PERMANENT"/>
+      <genEnumLiterals ecoreEnumLiteral="aeri.ecore#//RememberSendAction/NONE"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="aeri.ecore#//UUID"/>
+    <genClasses ecoreClass="aeri.ecore#//ErrorReport">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/anonymousId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/comment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/eclipseBuildId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/eclipseProduct"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/javaRuntimeVersion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/osgiWs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/osgiOs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/osgiOsVersion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/osgiArch"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/logMessage"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//ErrorReport/ignoreSimilar"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aeri.ecore#//ErrorReport/presentBundles"/>
+    </genClasses>
+    <genClasses ecoreClass="aeri.ecore#//Bundle">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Bundle/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Bundle/version"/>
+    </genClasses>
+    <genClasses ecoreClass="aeri.ecore#//Status">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Status/pluginId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Status/pluginVersion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Status/code"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Status/severity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Status/message"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Status/fingerprint"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference aeri.ecore#//Status/children"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aeri.ecore#//Status/exception"/>
+    </genClasses>
+    <genClasses ecoreClass="aeri.ecore#//Throwable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Throwable/className"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Throwable/message"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aeri.ecore#//Throwable/cause"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference aeri.ecore#//Throwable/stackTrace"/>
+    </genClasses>
+    <genClasses ecoreClass="aeri.ecore#//StackTraceElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//StackTraceElement/fileName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//StackTraceElement/className"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//StackTraceElement/methodName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//StackTraceElement/lineNumber"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//StackTraceElement/native"/>
+    </genClasses>
+    <genClasses ecoreClass="aeri.ecore#//Settings">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Settings/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Settings/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Settings/anonymizeMessages"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Settings/anonymizeStrackTraceElements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Settings/configured"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Settings/skipSimilarErrors"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Settings/action"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Settings/rememberSendAction"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Settings/whitelistedPackages"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aeri.ecore#//Settings/whitelistedPluginIds"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
