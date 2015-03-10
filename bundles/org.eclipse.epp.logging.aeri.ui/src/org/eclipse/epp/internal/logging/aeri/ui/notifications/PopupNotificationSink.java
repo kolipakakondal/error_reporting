@@ -30,14 +30,13 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.mylyn.commons.notifications.core.AbstractNotification;
 import org.eclipse.mylyn.commons.notifications.core.NotificationSink;
 import org.eclipse.mylyn.commons.notifications.core.NotificationSinkEvent;
-import org.eclipse.mylyn.internal.commons.notifications.ui.popup.PopupNotificationSink;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 
 @SuppressWarnings("restriction")
-public class AeriPopupNotificationSink extends NotificationSink {
+public class PopupNotificationSink extends NotificationSink {
 
     private static final long DELAY_OPEN = 1 * 1000;
 
@@ -45,11 +44,11 @@ public class AeriPopupNotificationSink extends NotificationSink {
 
     private final WeakHashMap<Object, Object> cancelledTokens = new WeakHashMap<Object, Object>();
 
-    private final Set<AeriNotification> notifications = new HashSet<AeriNotification>();
+    private final Set<Notification> notifications = new HashSet<Notification>();
 
-    private final Set<AeriNotification> currentlyNotifying = Collections.synchronizedSet(notifications);
+    private final Set<Notification> currentlyNotifying = Collections.synchronizedSet(notifications);
 
-    private AeriPopupNotification popup;
+    private PopupNotification popup;
 
     private final Job openJob = new Job("") {
         @Override
@@ -65,13 +64,13 @@ public class AeriPopupNotificationSink extends NotificationSink {
                     public void run() {
                         // TODO needs cleanup
                         if (popup != null && popup.getReturnCode() == Window.CANCEL) {
-                            AeriNotification notification = popup.getNotification();
+                            Notification notification = popup.getNotification();
                             if (notification.getToken() != null) {
                                 cancelledTokens.put(notification.getToken(), null);
                             }
                         }
-                        for (Iterator<AeriNotification> it = currentlyNotifying.iterator(); it.hasNext();) {
-                            AeriNotification notification = it.next();
+                        for (Iterator<Notification> it = currentlyNotifying.iterator(); it.hasNext();) {
+                            Notification notification = it.next();
                             if (notification.getToken() != null && cancelledTokens.containsKey(notification.getToken())) {
                                 it.remove();
                             }
@@ -97,7 +96,7 @@ public class AeriPopupNotificationSink extends NotificationSink {
         }
     };
 
-    public AeriPopupNotificationSink() {
+    public PopupNotificationSink() {
         openJob.setSystem(RUN_AS_SYSTEM_JOB);
     }
 
@@ -115,8 +114,8 @@ public class AeriPopupNotificationSink extends NotificationSink {
         // TODO how to handle multiple events? (maybe: accumulate all in one
         // message?)
         for (AbstractNotification notification : event.getNotifications()) {
-            if (notification instanceof AeriNotification) {
-                currentlyNotifying.add((AeriNotification) notification);
+            if (notification instanceof Notification) {
+                currentlyNotifying.add((Notification) notification);
             }
         }
 
@@ -136,12 +135,12 @@ public class AeriPopupNotificationSink extends NotificationSink {
         }
 
         Shell shell = new Shell(PlatformUI.getWorkbench().getDisplay());
-        popup = new AeriPopupNotification(shell.getDisplay());
+        popup = new PopupNotification(shell.getDisplay());
         popup.setFadingEnabled(isAnimationsEnabled());
-        List<AeriNotification> toDisplay = new ArrayList<AeriNotification>(currentlyNotifying);
+        List<Notification> toDisplay = new ArrayList<Notification>(currentlyNotifying);
         Collections.sort(toDisplay);
         // TODO handle all
-        AeriNotification notification = toDisplay.get(0);
+        Notification notification = toDisplay.get(0);
         popup.setNotification(notification);
         notification.setPopup(popup);
         cleanNotified();

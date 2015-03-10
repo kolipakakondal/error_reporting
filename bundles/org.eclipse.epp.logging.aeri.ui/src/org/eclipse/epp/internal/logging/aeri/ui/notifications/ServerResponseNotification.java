@@ -24,7 +24,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
 
-public class ServerResponseNotification extends AeriNotification {
+public class ServerResponseNotification extends Notification {
 
     private static final int MAX_REPORT_TITLE_CHARACTER_LENGTH = 40;
 

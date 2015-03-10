@@ -20,7 +20,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureShowDialogReques
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
 
-public class ConfigureNotification extends AeriNotification {
+public class ConfigureNotification extends Notification {
 
     public ConfigureNotification(EventBus bus) {
         super(Constants.NOTIFY_CONFIGURATION, bus);

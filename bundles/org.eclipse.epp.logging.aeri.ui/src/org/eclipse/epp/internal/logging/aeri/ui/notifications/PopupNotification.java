@@ -37,7 +37,7 @@ import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 
 @SuppressWarnings("restriction")
-public class AeriPopupNotification extends AbstractWorkbenchNotificationPopup {
+public class PopupNotification extends AbstractWorkbenchNotificationPopup {
 
     private static final int MAX_LABEL_CHAR_LENGTH = 120;
     private static final int MAX_DESCRIPTION_CHAR_LENGTH = 500;
@@ -45,21 +45,21 @@ public class AeriPopupNotification extends AbstractWorkbenchNotificationPopup {
     private static final int MAX_WIDTH = 400;
     private static final int PADDING_EDGE = 5;
 
-    private AeriNotification notification;
+    private Notification notification;
 
-    public AeriPopupNotification(Display display) {
+    public PopupNotification(Display display) {
         super(display);
     }
 
-    public AeriPopupNotification(Display display, int style) {
+    public PopupNotification(Display display, int style) {
         super(display, style);
     }
 
-    public AeriNotification getNotification() {
+    public Notification getNotification() {
         return notification;
     }
 
-    public void setNotification(AeriNotification notification) {
+    public void setNotification(Notification notification) {
         this.notification = notification;
     }
 
@@ -85,8 +85,8 @@ public class AeriPopupNotification extends AbstractWorkbenchNotificationPopup {
             descriptionText.setBackground(contentComposite.getBackground());
             GridDataFactory.fillDefaults().span(2, SWT.DEFAULT).grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(descriptionText);
         }
-        if (notification instanceof AeriNotification) {
-            AeriNotification executableNotification = notification;
+        if (notification instanceof Notification) {
+            Notification executableNotification = notification;
             Composite linksComposite = new Composite(contentComposite, SWT.NO_FOCUS | SWT.RIGHT);
             GridDataFactory.fillDefaults().span(2, SWT.DEFAULT).grab(true, false).align(SWT.END, SWT.TOP).applyTo(linksComposite);
             GridLayoutFactory.fillDefaults().numColumns(executableNotification.getActions().size()).applyTo(linksComposite);
@@ -100,7 +100,6 @@ public class AeriPopupNotification extends AbstractWorkbenchNotificationPopup {
                 actionLink.addHyperlinkListener(new HyperlinkAdapter() {
                     @Override
                     public void linkActivated(HyperlinkEvent e) {
-                        action.execute();
                         IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
                         if (window != null) {
                             Shell windowShell = window.getShell();
@@ -112,6 +111,7 @@ public class AeriPopupNotification extends AbstractWorkbenchNotificationPopup {
                                 windowShell.forceActive();
                             }
                         }
+                        action.execute();
                     }
                 });
             }
