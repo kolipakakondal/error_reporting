@@ -24,7 +24,7 @@ fi
 echo "Publishing '${RELEASE}' repository of '${SIMREL}' configuration at http://${DOWNLOAD_PATH}"
 echo
 
-SOURCE=${HUDSON_HOME}/jobs/${PROMOTED_JOB_NAME}/configurations/axis-simrel/${SIMREL}/builds/${PROMOTED_ID}/archive/releng/repositories/${RELEASE}/target/repository
+SOURCE=${HUDSON_HOME}/jobs/${PROMOTED_JOB_NAME}/builds/${PROMOTED_ID}/archive/releng/repositories/${RELEASE}/target/repository
 TARGET=/home/data/httpd/${DOWNLOAD_PATH}
 
 mkdir -p ${TARGET}
