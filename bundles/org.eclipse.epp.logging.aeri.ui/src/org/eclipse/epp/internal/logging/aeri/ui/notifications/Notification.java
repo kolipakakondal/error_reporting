@@ -21,13 +21,13 @@ import com.google.common.base.Optional;
 import com.google.common.eventbus.EventBus;
 
 @SuppressWarnings("restriction")
-public abstract class AeriNotification extends AbstractUiNotification {
+public abstract class Notification extends AbstractUiNotification {
 
     private EventBus bus;
     private boolean unhandled = true;
-    private AeriPopupNotification popup;
+    private PopupNotification popup;
 
-    public AeriNotification(String eventId, EventBus bus) {
+    public Notification(String eventId, EventBus bus) {
         super(eventId);
         this.bus = bus;
     }
@@ -56,11 +56,11 @@ public abstract class AeriNotification extends AbstractUiNotification {
         return "Error Reporting";
     }
 
-    public void setPopup(AeriPopupNotification popup) {
+    public void setPopup(PopupNotification popup) {
         this.popup = popup;
     }
 
-    public Optional<AeriPopupNotification> getPopup() {
+    public Optional<PopupNotification> getPopup() {
         return Optional.fromNullable(popup);
     }
 
@@ -81,7 +81,7 @@ public abstract class AeriNotification extends AbstractUiNotification {
 
     public void fireEvent(Object event) {
         unhandled = false;
-        AeriPopupNotification popup = getPopup().orNull();
+        PopupNotification popup = getPopup().orNull();
         if (popup != null) {
             popup.close();
         }

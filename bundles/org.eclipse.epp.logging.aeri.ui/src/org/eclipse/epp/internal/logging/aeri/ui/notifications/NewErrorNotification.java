@@ -24,7 +24,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
 
-public class NewErrorNotification extends AeriNotification {
+public class NewErrorNotification extends Notification {
 
     private final ErrorReport report;
 

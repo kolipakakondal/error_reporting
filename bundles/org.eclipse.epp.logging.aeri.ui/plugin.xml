@@ -34,7 +34,7 @@
          point="org.eclipse.mylyn.commons.notifications.ui.notifications">
       <sink
             id="org.eclipse.epp.logging.aeri.notifications.sink.popup"
-            class="org.eclipse.epp.internal.logging.aeri.ui.notifications.AeriPopupNotificationSink"
+            class="org.eclipse.epp.internal.logging.aeri.ui.notifications.PopupNotificationSink"
             label="Desktop Popup (Errors)">
       </sink>
    </extension>
