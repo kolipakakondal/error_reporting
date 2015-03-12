@@ -14,7 +14,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>org.eclipse.epp.logging.aeri.ui.feature</module>
+		<module>org.eclipse.epp.logging.aeri.feature</module>
 		<module>org.eclipse.epp.logging.3rd.feature</module>
 		<module>org.eclipse.epp.logging.sdk.feature</module>
 	</modules>
