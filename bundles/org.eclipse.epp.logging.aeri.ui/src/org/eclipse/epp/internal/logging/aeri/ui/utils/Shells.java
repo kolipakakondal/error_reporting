@@ -37,6 +37,10 @@ public class Shells {
         return Display.getCurrent() != null;
     }
 
+    /**
+     * Returns the Display of <code>PlatformUI.getWorkbench().getDisplay()</code>. If the workbench is closing or not
+     * created or the display is disposed this will return {@link Optional#absent()}.
+     */
     public static Optional<Display> getDisplay() {
         IWorkbench workbench = PlatformUI.getWorkbench();
         if (workbench == null || workbench.isClosing()) {

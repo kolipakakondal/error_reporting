@@ -13,7 +13,7 @@ package org.eclipse.epp.internal.logging.aeri.ui.notifications;
 import java.util.List;
 
 import org.eclipse.epp.internal.logging.aeri.ui.Constants;
-import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogDisableRequested;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigurePopupDisableRequested;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureRequestTimedOut;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureShowDialogRequest;
 
@@ -40,7 +40,7 @@ public class ConfigureNotification extends Notification {
 
             @Override
             public void execute() {
-                fireEvent(new ConfigureDialogDisableRequested());
+                fireEvent(new ConfigurePopupDisableRequested());
             }
 
         };

@@ -15,6 +15,7 @@ import static com.google.common.collect.ImmutableList.copyOf;
 import static java.text.MessageFormat.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.eclipse.epp.internal.logging.aeri.ui.ConfigurationDialog.ESC_CANCEL;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.utils.Shells.isUIThread;
 import static org.eclipse.jface.window.Window.*;
 
@@ -28,7 +29,7 @@ import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogCanceled;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogCompleted;
-import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogDisableRequested;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigurePopupDisableRequested;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureRequestTimedOut;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureShowDialogRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportLogged;
@@ -41,6 +42,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseNotificatio
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseOpenBugzillaRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseOpenIncidentRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseShowRequest;
+import org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages;
 import org.eclipse.epp.internal.logging.aeri.ui.l10n.Messages;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
@@ -54,6 +56,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
@@ -61,6 +65,8 @@ import com.google.common.eventbus.Subscribe;
 
 public class ReportingController {
 
+    private static final long NOTIFICATION_IDLE_TIMEOUT_MS = TimeUnit.SECONDS.toMillis(30);
+    private static final long CONFIGURATION_PROCESS_TIMEOUT_MS = TimeUnit.MINUTES.toMillis(5);
     private IObservableList queueUI;
     // careful! do never make any modifications to this list! It's a means to
     // access the queued reports outside the UI
@@ -101,31 +107,23 @@ public class ReportingController {
     @Subscribe
     public synchronized void on(NewReportLogged e) {
         ErrorReport report = e.report;
-        if (isIgnoreReports()) {
-            return;
-        }
-        if (isSentSilently()) {
-            scheduleForSending(report);
-            return;
-        } else {
-            addToQueue(report);
-        }
 
-        if (isConfigured()) {
+        addToQueue(report);
+
+        if (!isConfigured()) {
             if (!isConfigureInProgress()) {
                 requestShowConfigureDialog();
             }
-            // we can't do anything else yet:
+            // we can't do anything else yet, wait for configuration
             return;
+        }
+
+        if (isSentSilently()) {
+            requestSendSilently();
+        } else if (!isNotificationInProgress()) {
+            requestShowNewReportNotification(report);
         } else {
-            if (isSentSilently()) {
-                requestSendSilently();
-                return;
-            } else if (!isNotificationInProgress()) {
-                requestShowNewReportNotification(report);
-            }
             // if something is going on already, don't notify
-            return;
         }
     }
 
@@ -162,28 +160,33 @@ public class ReportingController {
         if (isUIThread()) {
             run.run();
         } else {
-            Shells.getDisplay().orNull().asyncExec(run);
+            Optional<Display> display = Shells.getDisplay();
+            if (display.isPresent()) {
+                display.get().asyncExec(run);
+            } else {
+                log(LogMessages.ILLEGAL_STATE_NO_DISPLAY);
+            }
         }
     }
 
-    private boolean isIgnoreReports() {
-        return settings.getAction() == SendAction.IGNORE;
-    }
-
     private boolean isConfigured() {
-        return !settings.isConfigured();
+        return settings.isConfigured();
     }
 
     private boolean isConfigureInProgress() {
         // after some timeout we assume that there is no
         // configuration in progress. E.g., if Mylyn notifications as disabled,
         // we'll never know...
-        if (System.currentTimeMillis() > configureInProgressTimeout) {
-            // TODO log that situation as WARNING
+        if (isConfigurationProcessTimedOut()) {
             resetConfigureRequestTimeout();
             setConfigureInProgress(false);
+            log(LogMessages.CONFIGURATION_TIMED_OUT);
         }
         return configureInProgress;
+    }
+
+    private boolean isConfigurationProcessTimedOut() {
+        return System.currentTimeMillis() > configureInProgressTimeout;
     }
 
     private long resetConfigureRequestTimeout() {
@@ -196,7 +199,7 @@ public class ReportingController {
 
     private void requestShowConfigureDialog() {
         setConfigureInProgress(true);
-        configureInProgressTimeout = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5);
+        configureInProgressTimeout = System.currentTimeMillis() + CONFIGURATION_PROCESS_TIMEOUT_MS;
         notifications.showWelcomeNotification();
     }
 
@@ -207,12 +210,16 @@ public class ReportingController {
     }
 
     private boolean isNotificationInProgress() {
-        if (System.currentTimeMillis() > notificationInProgressTimeout) {
-            // TODO log that situation as WARNING
+        if (isNotificationTimedOut()) {
             resetNotificationInProgress();
             setNotificationInProgress(false);
+            log(LogMessages.NOTIFICATION_TIMED_OUT);
         }
         return notificationInProgress;
+    }
+
+    private boolean isNotificationTimedOut() {
+        return System.currentTimeMillis() > notificationInProgressTimeout;
     }
 
     private void setNotificationInProgress(boolean newValue) {
@@ -220,25 +227,21 @@ public class ReportingController {
     }
 
     private void setNotificationInProgressTimeout() {
-        notificationInProgressTimeout = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(30);
+        notificationInProgressTimeout = System.currentTimeMillis() + NOTIFICATION_IDLE_TIMEOUT_MS;
     }
 
     private long resetNotificationInProgress() {
         return notificationInProgressTimeout = Long.MAX_VALUE;
     }
 
-    private void scheduleForSending(ErrorReport report) {
-        scheduleForSending(Lists.newArrayList(report));
-    }
-
-    private void scheduleForSending(List<ErrorReport> reports) {
+    @VisibleForTesting
+    public void scheduleForSending(List<ErrorReport> reports) {
         URI target = URI.create(settings.getServerUrl());
         List<Job> jobs = Lists.newLinkedList();
         history.remember(reports);
         for (ErrorReport report : reports) {
             UploadJob job = new UploadJob(report, settings, target, bus);
             jobs.add(job);
-            System.out.println("scheduled " + report.hashCode() + ": " + report.getStatus().getMessage());
         }
         Jobs.sequential(format(Messages.UPLOADJOB_NAME, target), jobs);
     }
@@ -251,21 +254,14 @@ public class ReportingController {
         int status = dialog.open();
         switch (status) {
         case Window.OK: {
-            settings.setAction(SendAction.ASK);
-            settings.setConfigured(true);
-            bus.post(new ConfigureDialogCompleted());
+            bus.post(new ConfigureDialogCompleted(SendAction.ASK));
             break;
         }
         case Window.CANCEL: {
-            settings.setAction(SendAction.IGNORE);
-            settings.setConfigured(true);
-            bus.post(new ConfigureDialogCompleted());
+            bus.post(new ConfigureDialogCompleted(SendAction.IGNORE));
             break;
         }
         case ConfigurationDialog.ESC_CANCEL: {
-            settings.setAction(SendAction.IGNORE);
-            settings.setRememberSendAction(RememberSendAction.RESTART);
-            settings.setConfigured(false);
             bus.post(new ConfigureDialogCanceled());
             break;
         }
@@ -277,8 +273,11 @@ public class ReportingController {
 
     @Subscribe
     public void on(ConfigureDialogCompleted e) {
+        settings.setAction(e.selectedAction);
+        settings.setConfigured(true);
         setConfigureInProgress(false);
-        if (isIgnoreReports()) {
+        if (e.selectedAction == SendAction.IGNORE) {
+            // the user disabled the system
             clearIncoming();
         } else {
             if (!queueRO.isEmpty()) {
@@ -290,11 +289,14 @@ public class ReportingController {
 
     @Subscribe
     public void on(ConfigureDialogCanceled e) {
+        settings.setAction(SendAction.IGNORE);
+        settings.setRememberSendAction(RememberSendAction.RESTART);
+        settings.setConfigured(false);
         setConfigureInProgress(false);
     }
 
     @Subscribe
-    public void on(ConfigureDialogDisableRequested e) {
+    public void on(ConfigurePopupDisableRequested e) {
         setConfigureInProgress(false);
         settings.setConfigured(true);
         settings.setAction(SendAction.IGNORE);

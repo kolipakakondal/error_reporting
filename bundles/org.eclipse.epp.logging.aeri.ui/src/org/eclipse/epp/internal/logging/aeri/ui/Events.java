@@ -11,6 +11,7 @@
 package org.eclipse.epp.internal.logging.aeri.ui;
 
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
+import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
 
 public class Events {
@@ -28,12 +29,18 @@ public class Events {
     }
 
     public static class ConfigureDialogCompleted {
+
+        public final SendAction selectedAction;
+
+        public ConfigureDialogCompleted(SendAction selectedAction) {
+            this.selectedAction = selectedAction;
+        }
     }
 
     public static class ConfigureDialogCanceled {
     }
 
-    public static class ConfigureDialogDisableRequested {
+    public static class ConfigurePopupDisableRequested {
     }
 
     public static class ConfigureRequestTimedOut {

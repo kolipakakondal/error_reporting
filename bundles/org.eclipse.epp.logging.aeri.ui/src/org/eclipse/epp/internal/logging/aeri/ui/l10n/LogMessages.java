@@ -23,7 +23,8 @@ public final class LogMessages extends DefaultLogMessage {
     private static final Bundle BUNDLE = FrameworkUtil.getBundle(LogMessages.class);
     private static final String VERSION = "Version: " + BUNDLE.getVersion().toString(); //$NON-NLS-1$
 
-    public static final LogMessages NO_INTERNET = new LogMessages(WARNING, "Could not connect to server. Your IP is ''{0}''"); //$NON-NLS-1$
+    public static final LogMessages NO_INTERNET = new LogMessages(WARNING,
+            "Could not connect to server. Your IP is ''{0}''"); //$NON-NLS-1$
     public static final LogMessages FAILED_TO_PARSE_SEND_MODE = new LogMessages(WARNING,
             "Failed to parse send mode ''{0}''. Returning ''{1}'' instead."); //$NON-NLS-1$
 
@@ -45,9 +46,18 @@ public final class LogMessages extends DefaultLogMessage {
     public static final LogMessages THANK_YOU_DIALOG_ERROR = new LogMessages(WARNING, "Error in thank you dialog"); //$NON-NLS-1$
 
     public static final LogMessages HISTORY_NOT_AVAILABLE = new LogMessages(WARNING, "History service is not available"); //$NON-NLS-1$
-    public static final LogMessages HISTORY_NO_FINGERPRINT = new LogMessages(WARNING, "Cannot index error report without fingerprint"); //$NON-NLS-1$
-    public static final LogMessages HISTORY_STOP_FAILED = new LogMessages(WARNING, "Stoping the history service failed."); //$NON-NLS-1$
-    public static final LogMessages HISTORY_START_FAILED = new LogMessages(WARNING, "Starting the history service failed."); //$NON-NLS-1$
+    public static final LogMessages HISTORY_NO_FINGERPRINT = new LogMessages(WARNING,
+            "Cannot index error report without fingerprint"); //$NON-NLS-1$
+    public static final LogMessages HISTORY_STOP_FAILED = new LogMessages(WARNING,
+            "Stoping the history service failed."); //$NON-NLS-1$
+    public static final LogMessages HISTORY_START_FAILED = new LogMessages(WARNING,
+            "Starting the history service failed."); //$NON-NLS-1$
+
+    public static final LogMessages ILLEGAL_STATE_NO_DISPLAY = new LogMessages(WARNING,
+            "The system seems to be in an illegal state (e.g. workbench starting/restarting)"); //$NON-NLS-1$
+
+    public static final LogMessages CONFIGURATION_TIMED_OUT = new LogMessages(WARNING, "The configuration timed out"); //$NON-NLS-1$
+    public static final LogMessages NOTIFICATION_TIMED_OUT = new LogMessages(WARNING, "The notification timed out"); //$NON-NLS-1$
 
     public LogMessages(int severity, String message) {
         super(severity, code++, String.format("%s %s", message, VERSION));
