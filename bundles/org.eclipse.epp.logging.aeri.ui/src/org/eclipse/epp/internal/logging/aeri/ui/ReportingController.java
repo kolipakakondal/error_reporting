@@ -317,7 +317,7 @@ public class ReportingController {
     }
 
     @Subscribe
-    public void on(NewReportShowDetailsRequest e) {
+    public void on(final NewReportShowDetailsRequest e) {
         // show
         Runnable run = new Runnable() {
 
@@ -334,13 +334,17 @@ public class ReportingController {
                     break;
                 }
                 case CANCEL: {
-                    bus.post(new NewReportNotificationSkipped());
+                    for (Object report : queueUI) {
+                        bus.post(new NewReportNotificationSkipped((ErrorReport) report));
+                    }
                     break;
                 }
                 case ESC_CANCEL: {
                     // TODO: better behaviour than review the configuration on the next event?
                     settings.setConfigured(false);
-                    bus.post(new NewReportNotificationSkipped());
+                    for (Object report : queueUI) {
+                        bus.post(new NewReportNotificationSkipped((ErrorReport) report));
+                    }
                     break;
                 }
                 default:
@@ -390,7 +394,7 @@ public class ReportingController {
     @Subscribe
     public void on(ServerResponseOpenBugzillaRequest e) {
         setNotificationInProgress(false);
-        String url = e.state.getBugUrl().orNull();
+        String url = e.response.getBugUrl().orNull();
         if (!isEmpty(url)) {
             Browsers.openInExternalBrowser(url);
         }
@@ -399,7 +403,7 @@ public class ReportingController {
     @Subscribe
     public void on(ServerResponseOpenIncidentRequest e) {
         setNotificationInProgress(false);
-        String url = e.state.getIncidentUrl();
+        String url = e.response.getIncidentUrl();
         if (!isEmpty(url)) {
             Browsers.openInExternalBrowser(url);
         }

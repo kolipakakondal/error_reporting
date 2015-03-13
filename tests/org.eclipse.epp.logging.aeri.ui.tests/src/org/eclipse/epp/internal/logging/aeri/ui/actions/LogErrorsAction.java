@@ -43,10 +43,11 @@ public class LogErrorsAction implements IWorkbenchWindowActionDelegate {
             public IStatus run(IProgressMonitor monitor) {
                 System.setProperty("eclipse.buildId", "unit-tests");
                 // logMultiStatusDelayed();
+                logError();
                 // logManyDifferentErrors();
                 // XXX only execute in non-production. These errors should never
                 // be sent to eclipse.org!
-                logStressTest();
+                // logStressTest();
                 return Status.OK_STATUS;
             }
 
@@ -62,15 +63,20 @@ public class LogErrorsAction implements IWorkbenchWindowActionDelegate {
             cause.setStackTrace(createTrace(3));
             Exception exception = new RuntimeException("exception message", cause);
             exception.setStackTrace(createTrace(3));
-            children[i] = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "status error message " + ++counter, exception);
+            children[i] = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri",
+                    "status error message " + ++counter, exception);
         }
         try {
             Thread.sleep(750);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        log.log(new MultiStatus("org.eclipse.epp.logging.aeri", IStatus.ERROR, children, "status error message", new RuntimeException(
-                "Processing the user query failed due to an incompatible query string format.")));
+        log.log(new MultiStatus("org.eclipse.epp.logging.aeri", IStatus.ERROR, children, "status error message",
+                new RuntimeException("Processing the user query failed due to an incompatible query string format.")));
+    }
+
+    private void logError() {
+        log.log(new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "Test Error without exception"));
     }
 
     @SuppressWarnings("unused")

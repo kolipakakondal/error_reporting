@@ -72,7 +72,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
     @Override
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
-        shell.setText("An Error Was Logged");
+        shell.setText("Automated Error Reporting Configuration");
         shell.addListener(SWT.Traverse, new Listener() {
             @Override
             public void handleEvent(Event e) {
@@ -88,8 +88,8 @@ public class ConfigurationDialog extends TitleAreaDialog {
     @Override
     public void create() {
         super.create();
-        setTitle("Do you want to enable Error Reporting in Eclipse?");
-        setMessage("Error events may reveal issues in Eclipse. Thus we ask you to report them to eclipse.org. To help improve Eclipse, please enable the reporter.");
+        setTitle("Thank you for using the Automated Error Reporter");
+        setMessage("Please take a moment for the initial configuration. All values can be changed in the preferences at any time.");
 
         // move focus away from first text-field to show its message-hint
         anonymizeStacktracesButton.setFocus();
@@ -108,13 +108,13 @@ public class ConfigurationDialog extends TitleAreaDialog {
         Composite container = new Composite(area, SWT.NONE);
         container.setLayout(new GridLayout());
         GridDataFactory.fillDefaults().grab(true, true).applyTo(container);
-        //
+
         Composite personalGroup = createPersonalGroup(container);
         GridDataFactory.fillDefaults().indent(10, 10).grab(true, false).applyTo(personalGroup);
-        //
+
         Group makeAnonymousGroup = makeAnonymousGroup(container);
         GridDataFactory.fillDefaults().applyTo(makeAnonymousGroup);
-        //
+
         Composite linksComposite = createLinksComposite(container);
         GridDataFactory.fillDefaults().grab(true, true).align(SWT.FILL, SWT.FILL).applyTo(linksComposite);
 
@@ -125,11 +125,12 @@ public class ConfigurationDialog extends TitleAreaDialog {
 
     private Composite createPersonalGroup(Composite container) {
         Composite personalGroup = new Composite(container, SWT.NONE);
-        // personalGroup.setText(Messages.SETTINGSPAGE_GROUPLABEL_PERSONAL);
         GridLayoutFactory.fillDefaults().numColumns(2).applyTo(personalGroup);
-        nameText = createLabelledText(personalGroup, Messages.FIELD_LABEL_NAME, Messages.FIELD_MESSAGE_NAME, Messages.FIELD_MESSAGE_NAME);
+        nameText = createLabelledText(personalGroup, Messages.FIELD_LABEL_NAME, Messages.FIELD_MESSAGE_NAME,
+                Messages.FIELD_MESSAGE_NAME);
         String emailTooltip = Messages.FIELD_MESSAGE_EMAIL + '\n' + Messages.FIELD_DESC_EMAIL;
-        emailText = createLabelledText(personalGroup, Messages.FIELD_LABEL_EMAIL, Messages.FIELD_MESSAGE_EMAIL, emailTooltip);
+        emailText = createLabelledText(personalGroup, Messages.FIELD_LABEL_EMAIL, Messages.FIELD_MESSAGE_EMAIL,
+                emailTooltip);
         return personalGroup;
     }
 
@@ -145,15 +146,15 @@ public class ConfigurationDialog extends TitleAreaDialog {
     }
 
     private Group makeAnonymousGroup(Composite container) {
-        Group makeAnonymousGroup = new Group(container, SWT.SHADOW_ETCHED_IN | SWT.SHADOW_ETCHED_OUT | SWT.SHADOW_IN | SWT.SHADOW_OUT);
+        Group makeAnonymousGroup = new Group(container, SWT.SHADOW_ETCHED_IN | SWT.SHADOW_ETCHED_OUT | SWT.SHADOW_IN
+                | SWT.SHADOW_OUT);
         makeAnonymousGroup.setLayout(new RowLayout(SWT.VERTICAL));
         makeAnonymousGroup.setText(Messages.CONFIGURATIONDIALOG_ANONYMIZATION);
 
-        anonymizeStacktracesButton = createGroupCheckButton(makeAnonymousGroup, Messages.FIELD_LABEL_ANONYMIZE_STACKTRACES,
-                Messages.TOOLTIP_MAKE_STACKTRACE_ANONYMOUS);
+        anonymizeStacktracesButton = createGroupCheckButton(makeAnonymousGroup,
+                Messages.FIELD_LABEL_ANONYMIZE_STACKTRACES, Messages.TOOLTIP_MAKE_STACKTRACE_ANONYMOUS);
         clearMessagesButton = createGroupCheckButton(makeAnonymousGroup, Messages.FIELD_LABEL_ANONYMIZE_MESSAGES,
                 Messages.TOOLTIP_MAKE_MESSAGES_ANONYMOUS);
-        makeAnonymousGroup.setFocus();
         return makeAnonymousGroup;
     }
 

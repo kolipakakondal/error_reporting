@@ -17,7 +17,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
 public class Events {
     public static class NewReportLogged {
 
-        public ErrorReport report;
+        public final ErrorReport report;
 
         public NewReportLogged(ErrorReport report) {
             this.report = report;
@@ -60,7 +60,11 @@ public class Events {
      */
     public static class NewReportNotificationSkipped {
 
-        public ErrorReport report;
+        public final ErrorReport report;
+
+        public NewReportNotificationSkipped(ErrorReport report) {
+            this.report = report;
+        }
     }
 
     /**
@@ -68,11 +72,21 @@ public class Events {
      * out)
      */
     public static class NewReportNotificationTimedOut {
-        public ErrorReport report;
+
+        public final ErrorReport report;
+
+        public NewReportNotificationTimedOut(ErrorReport report) {
+            this.report = report;
+        }
     }
 
     public static class NewReportShowDetailsRequest {
-        public ErrorReport report;
+
+        public final ErrorReport report;
+
+        public NewReportShowDetailsRequest(ErrorReport report) {
+            this.report = report;
+        }
     }
 
     public static class SendReportsRequest {
@@ -80,7 +94,7 @@ public class Events {
 
     public static class ServerResponseShowRequest {
 
-        public ServerResponse response;
+        public final ServerResponse response;
 
         public ServerResponseShowRequest(ServerResponse response) {
             this.response = response;
@@ -93,22 +107,21 @@ public class Events {
 
     public static class ServerResponseOpenBugzillaRequest {
 
-        public ServerResponse state;
+        public final ServerResponse response;
 
-        public ServerResponseOpenBugzillaRequest(ServerResponse state) {
-            this.state = state;
+        public ServerResponseOpenBugzillaRequest(ServerResponse response) {
+            this.response = response;
         }
 
     }
 
     public static class ServerResponseOpenIncidentRequest {
 
-        public ServerResponse state;
+        public final ServerResponse response;
 
-        public ServerResponseOpenIncidentRequest(ServerResponse state) {
-            this.state = state;
+        public ServerResponseOpenIncidentRequest(ServerResponse response) {
+            this.response = response;
         }
 
     }
-
 }

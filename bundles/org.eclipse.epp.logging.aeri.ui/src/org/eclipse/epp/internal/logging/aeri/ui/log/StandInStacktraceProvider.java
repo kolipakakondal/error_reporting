@@ -31,7 +31,7 @@ public class StandInStacktraceProvider {
         }
     }
 
-    private static final String STAND_IN_MESSAGE = "Stand-In Stacktrace supplied by Eclipse Stacktraces & Error Reporting Tool";
+    private static final String STAND_IN_MESSAGE = "Stand-In Stacktrace supplied by the Eclipse Error Reporting";
 
     public void insertStandInStacktraceIfEmpty(final Status status, Settings settings) {
         if (requiresStandInStacktrace(status)) {

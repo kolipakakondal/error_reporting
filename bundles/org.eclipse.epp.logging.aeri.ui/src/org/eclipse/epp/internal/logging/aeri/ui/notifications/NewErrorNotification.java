@@ -15,8 +15,8 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.epp.internal.logging.aeri.ui.Constants;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportNotificationTimedOut;
-import org.eclipse.epp.internal.logging.aeri.ui.Events.SendReportsRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportShowDetailsRequest;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.SendReportsRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Throwable;
 
@@ -60,7 +60,7 @@ public class NewErrorNotification extends Notification {
 
             @Override
             public void execute() {
-                fireEvent(new NewReportShowDetailsRequest());
+                fireEvent(new NewReportShowDetailsRequest(report));
             }
         };
         NoficationAction a2 = new NoficationAction("Send") {
@@ -80,6 +80,6 @@ public class NewErrorNotification extends Notification {
 
     @Override
     public void unhandled() {
-        fireEvent(new NewReportNotificationTimedOut());
+        fireEvent(new NewReportNotificationTimedOut(report));
     }
 }
