@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
- * </p>
  * <ul>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Status#getPluginId <em>Plugin Id</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Status#getPluginVersion <em>Plugin Version</em>}</li>
@@ -24,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Status#getChildren <em>Children</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Status#getException <em>Exception</em>}</li>
  * </ul>
+ * </p>
  *
  * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getStatus()
  * @model

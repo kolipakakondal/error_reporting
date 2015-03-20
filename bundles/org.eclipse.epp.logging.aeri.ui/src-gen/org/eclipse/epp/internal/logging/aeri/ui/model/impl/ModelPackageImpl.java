@@ -633,6 +633,15 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getSettings_ProblemsZipEtag() {
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(12);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EEnum getSendAction() {
         return sendActionEEnum;
     }
@@ -749,6 +758,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
         createEAttribute(settingsEClass, SETTINGS__SERVER_URL);
         createEAttribute(settingsEClass, SETTINGS__WHITELISTED_PACKAGES);
         createEAttribute(settingsEClass, SETTINGS__WHITELISTED_PLUGIN_IDS);
+        createEAttribute(settingsEClass, SETTINGS__PROBLEMS_ZIP_ETAG);
 
         // Create enums
         sendActionEEnum = createEEnum(SEND_ACTION);
@@ -846,6 +856,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
         initEAttribute(getSettings_ServerUrl(), ecorePackage.getEString(), "serverUrl", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getSettings_WhitelistedPackages(), this.getListOfStrings(), "whitelistedPackages", "", 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getSettings_WhitelistedPluginIds(), this.getListOfStrings(), "whitelistedPluginIds", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_ProblemsZipEtag(), ecorePackage.getEString(), "problemsZipEtag", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize enums and add enum literals
         initEEnum(sendActionEEnum, SendAction.class, "SendAction");

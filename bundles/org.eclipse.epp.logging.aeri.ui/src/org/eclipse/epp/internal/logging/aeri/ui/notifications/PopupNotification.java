@@ -15,6 +15,7 @@ import static org.apache.commons.lang3.StringUtils.*;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.mylyn.commons.notifications.ui.AbstractUiNotification;
 import org.eclipse.mylyn.commons.ui.compatibility.CommonColors;
 import org.eclipse.mylyn.commons.workbench.AbstractWorkbenchNotificationPopup;
 import org.eclipse.mylyn.commons.workbench.forms.CommonFormUtil;
@@ -22,6 +23,7 @@ import org.eclipse.mylyn.commons.workbench.forms.ScalingHyperlink;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
@@ -64,6 +66,14 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
     }
 
     @Override
+    protected Image getPopupShellImage(int maximumHeight) {
+        if (notification instanceof AbstractUiNotification) {
+            return ((AbstractUiNotification) notification).getNotificationImage();
+        }
+        return super.getPopupShellImage(maximumHeight);
+    }
+
+    @Override
     protected void createContentArea(Composite parent) {
         Composite contentComposite = new Composite(parent, SWT.NO_FOCUS);
         GridLayout gridLayout = new GridLayout(2, false);
@@ -76,6 +86,7 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
         labelText.setForeground(CommonColors.TEXT_QUOTED);
         labelText.setText(abbreviate(notification.getLabel(), MAX_LABEL_CHAR_LENGTH));
         labelText.setBackground(contentComposite.getBackground());
+
         GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(labelText);
         String description = notification.getDescription();
         if (isNotBlank(description)) {

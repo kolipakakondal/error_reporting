@@ -16,9 +16,8 @@ import static org.apache.commons.lang3.StringUtils.*;
 import java.util.List;
 
 import org.eclipse.epp.internal.logging.aeri.ui.Constants;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.OpenUrlInBrowserRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseNotificationTimedOut;
-import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseOpenBugzillaRequest;
-import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseOpenIncidentRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
 
 import com.google.common.collect.Lists;
@@ -126,7 +125,7 @@ public class ServerResponseNotification extends Notification {
 
                 @Override
                 public void execute() {
-                    fireEvent(new ServerResponseOpenBugzillaRequest(state));
+                    fireEvent(new OpenUrlInBrowserRequest(state.getBugUrl().orNull()));
                 }
             };
             actions.add(a);
@@ -135,7 +134,7 @@ public class ServerResponseNotification extends Notification {
 
             @Override
             public void execute() {
-                fireEvent(new ServerResponseOpenIncidentRequest(state));
+                fireEvent(new OpenUrlInBrowserRequest(state.getIncidentUrl()));
             }
         };
         actions.add(a2);

@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
- * </p>
  * <ul>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport#getAnonymousId <em>Anonymous Id</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport#getName <em>Name</em>}</li>
@@ -33,6 +32,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport#getPresentBundles <em>Present Bundles</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport#getStatus <em>Status</em>}</li>
  * </ul>
+ * </p>
  *
  * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getErrorReport()
  * @model

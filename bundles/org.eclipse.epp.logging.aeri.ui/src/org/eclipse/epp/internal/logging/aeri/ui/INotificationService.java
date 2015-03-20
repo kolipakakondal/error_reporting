@@ -11,6 +11,7 @@
 package org.eclipse.epp.internal.logging.aeri.ui;
 
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
 
 public interface INotificationService {
@@ -20,4 +21,8 @@ public interface INotificationService {
     void showNewReportsAvailableNotification(ErrorReport report);
 
     void showNewResponseNotification(ServerResponse response);
+
+    void showNeedInfoNotification(ErrorReport report, ProblemStatus status);
+
+    void showBugFixedInfo(ErrorReport report, ProblemStatus status);
 }

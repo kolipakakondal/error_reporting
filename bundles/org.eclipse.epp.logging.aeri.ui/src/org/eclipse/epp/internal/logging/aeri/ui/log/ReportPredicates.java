@@ -14,12 +14,35 @@ import static com.google.common.base.Objects.equal;
 
 import org.eclipse.epp.internal.logging.aeri.ui.ExpiringReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus.RequiredAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 
 public class ReportPredicates {
+
+    public static class ProblemDatabaseIgnoredPredicate implements Predicate<ErrorReport> {
+
+        private ProblemsDatabaseService index;
+
+        public ProblemDatabaseIgnoredPredicate(ProblemsDatabaseService index) {
+            this.index = index;
+        }
+
+        @Override
+        public boolean apply(ErrorReport report) {
+            Optional<ProblemStatus> status = index.seen(report);
+            if (status.isPresent()) {
+                if (status.get().getAction() == RequiredAction.IGNORE) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 
     public static class ReportsHistoryPredicate implements Predicate<ErrorReport> {
 

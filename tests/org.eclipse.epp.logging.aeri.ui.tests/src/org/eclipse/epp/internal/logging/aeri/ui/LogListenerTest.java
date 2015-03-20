@@ -14,7 +14,9 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.SYSPROP_ECLIPSE_BUILD_ID;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,8 +32,13 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportLogged;
 import org.eclipse.epp.internal.logging.aeri.ui.log.LogListener;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ModelFactory;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus.RequiredAction;
+import org.eclipse.epp.internal.logging.aeri.ui.model.Reports;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.RetainSystemProperties;
@@ -40,7 +47,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -54,11 +63,24 @@ public class LogListenerTest {
     private Settings settings;
     private LogListener sut;
     private ReportHistory history;
+    private ExpiringReportHistory expiringHistory;
+    private ProblemsDatabaseService problemStatusIndex;
 
     @Rule
     public RetainSystemProperties retainSystemProperties = new RetainSystemProperties();
 
     private static class TestHistory extends ReportHistory {
+        @Override
+        protected Directory createIndexDirectory() throws IOException {
+            return new RAMDirectory();
+        }
+    }
+
+    private static class TestServerProblemStatusIndex extends ProblemsDatabaseService {
+        public TestServerProblemStatusIndex(File indexDirectory) {
+            super(indexDirectory);
+        }
+
         @Override
         protected Directory createIndexDirectory() throws IOException {
             return new RAMDirectory();
@@ -83,7 +105,17 @@ public class LogListenerTest {
         bus = new EventBus();
         bus.register(this);
 
-        sut = Startup.createLogListener(settings, history, bus);
+        expiringHistory = new ExpiringReportHistory();
+
+        // problemStatusIndex = new TestServerProblemStatusIndex(null);
+        // problemStatusIndex.startAsync();
+        // problemStatusIndex.awaitRunning();+
+        problemStatusIndex = mock(ProblemsDatabaseService.class);
+        Optional<ProblemStatus> noStatus = Optional.absent();
+
+        when(problemStatusIndex.seen(Mockito.any(ErrorReport.class))).thenReturn(noStatus);
+
+        sut = Startup.createLogListener(settings, history, bus, expiringHistory, problemStatusIndex);
     }
 
     @Subscribe
@@ -294,9 +326,8 @@ public class LogListenerTest {
     @Test
     public void testNoReportOfSourceFiles() {
         String sourceDataMessage = "Exception occurred during compilation unit conversion:\n"
-                + "----------------------------------- SOURCE BEGIN -------------------------------------\n"
-                + "package some.package;\n" + "\n" + "import static some.import.method;\n"
-                + "import static some.other.import;\n";
+                + "----------------------------------- SOURCE BEGIN -------------------------------------\n" + "package some.package;\n"
+                + "\n" + "import static some.import.method;\n" + "import static some.other.import;\n";
         Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, sourceDataMessage, new RuntimeException());
 
         sut.logging(status, "");
@@ -309,8 +340,8 @@ public class LogListenerTest {
     @Test
     public void testMonitoringStatusWithNoChildsFiltered() throws IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, NoSuchMethodException, SecurityException {
-        MultiStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, "UI freeze of 6,0s at 11:24:59.108",
-                new RuntimeException("stand-in-stacktrace"));
+        MultiStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, "UI freeze of 6,0s at 11:24:59.108", new RuntimeException(
+                "stand-in-stacktrace"));
         Method method = Status.class.getDeclaredMethod("setSeverity", Integer.TYPE);
         method.setAccessible(true);
         method.invoke(multi, IStatus.ERROR);
@@ -331,11 +362,31 @@ public class LogListenerTest {
     @Test
     public void testMultipleErrorsWithDifferentMessages() {
         for (int i = 0; i < 10; i++) {
-            Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "Error Message Number " + i,
-                    new RuntimeException());
+            Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "Error Message Number " + i, new RuntimeException());
             sut.logging(status, "");
         }
         // only one event should be logged
         verifyExactOneErrorReportLogged();
+    }
+
+    @Test
+    public void testServerProblemIgnoreHandled() {
+        settings.setSkipSimilarErrors(false);
+
+        Throwable t1 = new Throwable();
+        t1.fillInStackTrace();
+        Status s1 = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message", t1);
+        ErrorReport report = Reports.newErrorReport(s1, settings);
+
+        ProblemStatus status = new ProblemStatus();
+        status.setIncidentFingerprint(Reports.traceIdentityHash(report));
+        status.setBugUrl("http://the.url");
+        status.setAction(RequiredAction.IGNORE);
+
+        when(problemStatusIndex.seen(Mockito.any(ErrorReport.class))).thenReturn(Optional.of(status));
+
+        sut.logging(s1, "");
+
+        verifyNoErrorReportLogged();
     }
 }

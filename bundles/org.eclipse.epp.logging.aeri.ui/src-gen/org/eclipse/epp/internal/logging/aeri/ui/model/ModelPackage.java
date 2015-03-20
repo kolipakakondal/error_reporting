@@ -623,13 +623,22 @@ public interface ModelPackage extends EPackage {
     int SETTINGS__WHITELISTED_PLUGIN_IDS = 11;
 
     /**
+     * The feature id for the '<em><b>Problems Zip Etag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int SETTINGS__PROBLEMS_ZIP_ETAG = 12;
+
+    /**
      * The number of structural features of the '<em>Settings</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int SETTINGS_FEATURE_COUNT = 12;
+    int SETTINGS_FEATURE_COUNT = 13;
 
     /**
      * The number of operations of the '<em>Settings</em>' class.
@@ -1249,6 +1258,17 @@ public interface ModelPackage extends EPackage {
     EAttribute getSettings_WhitelistedPluginIds();
 
     /**
+     * Returns the meta object for the attribute '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Problems Zip Etag</em>'.
+     * @see org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag()
+     * @see #getSettings()
+     * @generated
+     */
+    EAttribute getSettings_ProblemsZipEtag();
+
+    /**
      * Returns the meta object for enum '{@link org.eclipse.epp.internal.logging.aeri.ui.model.SendAction <em>Send Action</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1740,6 +1760,14 @@ public interface ModelPackage extends EPackage {
          * @generated
          */
         EAttribute SETTINGS__WHITELISTED_PLUGIN_IDS = eINSTANCE.getSettings_WhitelistedPluginIds();
+
+        /**
+         * The meta object literal for the '<em><b>Problems Zip Etag</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute SETTINGS__PROBLEMS_ZIP_ETAG = eINSTANCE.getSettings_ProblemsZipEtag();
 
         /**
          * The meta object literal for the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.SendAction <em>Send Action</em>}' enum.

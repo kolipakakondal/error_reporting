@@ -21,13 +21,13 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
- * </p>
  * <ul>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getClassName <em>Class Name</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getMessage <em>Message</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getCause <em>Cause</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getStackTrace <em>Stack Trace</em>}</li>
  * </ul>
+ * </p>
  *
  * @generated
  */

@@ -54,18 +54,64 @@ public class ReportHistory extends AbstractIdleService {
     private static final String F_IDENTITY = "identity";
     private static final String F_IDENTITY_TRACE = "identity-trace";
     private Directory index;
-    private IndexWriter writer;
-    private IndexReader reader;
-    private IndexSearcher searcher;
+    protected IndexWriter writer;
+    protected IndexReader reader;
+    protected IndexSearcher searcher;
 
-    public ReportHistory() {
+    protected String getIndexDirectoryName() {
+        return "history";
+    }
+
+    public boolean seen(ErrorReport report) {
+        return seen(new TermQuery(new Term(F_IDENTITY, exactIdentityHash(report))));
+    }
+
+    public boolean seenSimilar(ErrorReport report) {
+        return seen(new TermQuery(new Term(F_IDENTITY_TRACE, traceIdentityHash(report))));
+    }
+
+    private boolean seen(Query q) {
+        try {
+            renewReaderAndSearcher();
+            TopDocs results = searcher.search(q, 1);
+            boolean foundIdenticalReport = results.totalHits > 0;
+            return foundIdenticalReport;
+        } catch (Exception e) {
+            log(HISTORY_NOT_AVAILABLE, e);
+            return false;
+        }
+    }
+
+    public void remember(Iterable<ErrorReport> reports) {
+        for (ErrorReport report : reports) {
+            remember(report);
+        }
+    }
+
+    public void remember(ErrorReport report) {
+        if (seen(report)) {
+            return;
+        }
+        Document doc = new Document();
+        Field field = new Field(F_IDENTITY, exactIdentityHash(report), Store.NO, Index.NOT_ANALYZED);
+        doc.add(field);
+        if (report.isIgnoreSimilar()) {
+            field = new Field(F_IDENTITY_TRACE, traceIdentityHash(report), Store.NO, Index.NOT_ANALYZED);
+            doc.add(field);
+        }
+        try {
+            writer.addDocument(doc);
+            writer.commit();
+        } catch (Exception e) {
+            log(HISTORY_NOT_AVAILABLE, e);
+        }
     }
 
     @VisibleForTesting
     protected Directory createIndexDirectory() throws IOException {
         Bundle bundle = FrameworkUtil.getBundle(getClass());
         IPath stateLocation = Platform.getStateLocation(bundle);
-        File indexdir = new File(stateLocation.toFile(), "history");
+        File indexdir = new File(stateLocation.toFile(), getIndexDirectoryName());
         indexdir.mkdirs();
         return FSDirectory.open(indexdir);
     }
@@ -99,62 +145,17 @@ public class ReportHistory extends AbstractIdleService {
         searcher = new IndexSearcher(reader);
     }
 
-    public boolean seen(ErrorReport report) {
-        return seen(new TermQuery(new Term(F_IDENTITY, exactIdentityHash(report))));
-    }
-
-    public boolean seenSimilar(ErrorReport report) {
-        return seen(new TermQuery(new Term(F_IDENTITY_TRACE, traceIdentityHash(report))));
-    }
-
-    private boolean seen(Query q) {
-        try {
-            renewReaderAndSearcher();
-            TopDocs results = searcher.search(q, 1);
-            boolean foundIdenticalReport = results.totalHits > 0;
-            return foundIdenticalReport;
-        } catch (Exception e) {
-            log(HISTORY_NOT_AVAILABLE, e);
-            return false;
-        }
-    }
-
-    private void renewReaderAndSearcher() throws IOException {
+    protected void renewReaderAndSearcher() throws IOException {
         IndexReader tmp = openIfChanged(reader);
         if (tmp != null) {
             IOUtils.close(reader, searcher);
             searcher = new IndexSearcher(tmp);
             reader = tmp;
         }
-    };
-
-    public void remember(Iterable<ErrorReport> reports) {
-        for (ErrorReport report : reports) {
-            remember(report);
-        }
     }
-
-    public void remember(ErrorReport report) {
-        if (seen(report)) {
-            return;
-        }
-        Document doc = new Document();
-        Field field = new Field(F_IDENTITY, exactIdentityHash(report), Store.NO, Index.NOT_ANALYZED);
-        doc.add(field);
-        if (report.isIgnoreSimilar()) {
-            field = new Field(F_IDENTITY_TRACE, traceIdentityHash(report), Store.NO, Index.NOT_ANALYZED);
-            doc.add(field);
-        }
-        try {
-            writer.addDocument(doc);
-            writer.commit();
-        } catch (Exception e) {
-            log(HISTORY_NOT_AVAILABLE, e);
-        }
-    };
 
     @Override
     protected void shutDown() throws Exception {
         IOUtils.close(searcher, reader, writer, index);
-    }
+    };
 }

@@ -24,6 +24,7 @@ public final class Constants {
     }
 
     public static final String PLUGIN_ID = "org.eclipse.epp.logging.aeri.ui";
+    public static final String AERI_NAMESPACE = "org.eclipse.epp.logging.aeri";
 
     public static final String PREF_PAGE_ID = "org.eclipse.epp.logging.aeri.ui.preferencePages.preference";
 
@@ -36,10 +37,12 @@ public final class Constants {
     public static final String SYSPROP_ECLIPSE_BUILD_ID = "eclipse.buildId";
 
     // values for notifications
-    public static final String NOTIFY_CONFIGURATION = "org.eclipse.epp.logging.aeri.notifications.event.configure";
-    public static final String NOTIFY_REPORT = "org.eclipse.epp.logging.aeri.notifications.event.newReport";
-    public static final String NOTIFY_UPLOAD = "org.eclipse.epp.logging.aeri.notifications.event.response";
-    public static final String NOTIFY_MORE_INFO = "org.eclipse.epp.logging.aeri.notifications.event.moreinfo";
+    public static final String NOTIFY_CONFIGURATION = AERI_NAMESPACE + ".notifications.event.configure";
+    public static final String NOTIFY_REPORT = AERI_NAMESPACE + ".notifications.event.newReport";
+    public static final String NOTIFY_UPLOAD = AERI_NAMESPACE + ".notifications.event.response";
+    public static final String NOTIFY_MORE_INFO = AERI_NAMESPACE + ".notifications.event.moreinfo";
+    public static final String NOTIFY_NEED_INFO = AERI_NAMESPACE + ".notifications.event.needinfo";
+    public static final String NOTIFY_BUG_FIXED = AERI_NAMESPACE + ".notifications.event.fixed";
 
     public static final String HELP_URL = "https://dev.eclipse.org/recommenders/community/confess/";
     public static final String FEEDBACK_FORM_URL = "https://docs.google.com/a/codetrails.com/forms/d/1wd9AzydLv_TMa7ZBXHO7zQIhZjZCJRNMed-6J4fVNsc/viewform";
@@ -65,6 +68,8 @@ public final class Constants {
     public static final String SOURCE_BEGIN_MESSAGE = "----------------------------------- SOURCE BEGIN -------------------------------------";
     public static final String SOURCE_FILE_REMOVED = "source file contents removed";
 
+    public static final String F_VERSION = "version";
     public static final String VERSION = "0.6";
+    public static final String SERVER_PROBLEMS_SERVICE_INDEX_DIR = "remote-index";
 
 }

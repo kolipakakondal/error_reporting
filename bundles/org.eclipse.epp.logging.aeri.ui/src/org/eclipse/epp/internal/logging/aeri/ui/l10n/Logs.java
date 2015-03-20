@@ -98,6 +98,10 @@ public class Logs {
 
     }
 
+    public static IStatus toStatus(ILogMessage msg, Object... args) {
+        return toStatus(msg, null, args);
+    }
+
     public static IStatus toStatus(ILogMessage msg, Throwable t, Object... args) {
         checkNotNull(msg);
         String message = null;

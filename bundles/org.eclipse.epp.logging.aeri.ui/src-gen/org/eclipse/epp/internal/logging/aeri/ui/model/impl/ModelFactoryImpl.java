@@ -25,13 +25,15 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 
 /**
- * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
  * 
  * @generated
  */
 public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
     /**
-     * Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
      * 
      * @generated
      */
@@ -48,7 +50,8 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
     }
 
     /**
-     * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * Creates an instance of the factory. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
      * 
      * @generated
      */
@@ -196,10 +199,9 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
      */
     public SendAction createSendActionFromString(EDataType eDataType, String initialValue) {
         SendAction result = SendAction.get(initialValue);
-        if (result == null) {
-            throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '"
-                    + eDataType.getName() + "'");
-        }
+        if (result == null)
+            throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName()
+                    + "'");
         return result;
     }
 
@@ -219,10 +221,9 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
      */
     public RememberSendAction createRememberSendActionFromString(EDataType eDataType, String initialValue) {
         RememberSendAction result = RememberSendAction.get(initialValue);
-        if (result == null) {
-            throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '"
-                    + eDataType.getName() + "'");
-        }
+        if (result == null)
+            throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName()
+                    + "'");
         return result;
     }
 
@@ -258,6 +259,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
      * 
      * @generated
      */
+    @SuppressWarnings("unchecked")
     public List<String> createListOfStringsFromString(EDataType eDataType, String initialValue) {
         return Splitter.on(';').omitEmptyStrings().trimResults().splitToList(initialValue);
     }

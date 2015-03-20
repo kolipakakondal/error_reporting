@@ -25,12 +25,15 @@ import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogCanceled;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogCompleted;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigurePopupDisableRequested;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureRequestTimedOut;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.NeedInfoRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportLogged;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportShowNotificationRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseShowRequest;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ModelFactory;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
 import org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
@@ -49,6 +52,7 @@ public class ReportingControllerTest {
     private MylynNotificationService notifications;
     private ReportingController sut;
     private ReportHistory history;
+    private ProblemsDatabaseService problems;
 
     @Before
     public void setup() {
@@ -60,8 +64,16 @@ public class ReportingControllerTest {
                 return new RAMDirectory();
             }
         };
+
+        problems = new ProblemsDatabaseService(null) {
+            @Override
+            protected Directory createIndexDirectory() throws IOException {
+                return new RAMDirectory();
+            }
+
+        };
         bus = spy(new EventBus());
-        sut = spy(new ReportingController(bus, settings, notifications, history));
+        sut = spy(new ReportingController(bus, settings, notifications, history, problems));
         bus.register(sut);
         doNothing().when(sut).scheduleForSending(anyListOfReports());
     }
@@ -185,11 +197,18 @@ public class ReportingControllerTest {
     }
 
     @Test
-    public void showOnlyOneServerResponseRequest() {
+    public void testShowOnlyOneServerResponseRequest() {
         sut.on(new ServerResponseShowRequest(mock(ServerResponse.class)));
         sut.on(new ServerResponseShowRequest(mock(ServerResponse.class)));
 
         verify(notifications).showNewResponseNotification(any(ServerResponse.class));
+    }
+
+    @Test
+    public void testShowNeedInfoRequest() {
+        sut.on(new NeedInfoRequest(mock(ErrorReport.class), mock(ProblemStatus.class)));
+
+        verify(notifications).showNeedInfoNotification(any(ErrorReport.class), any(ProblemStatus.class));
     }
 
     private NewReportLogged newEvent() {

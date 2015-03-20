@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
- * </p>
  * <ul>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getEmail <em>Email</em>}</li>
@@ -26,7 +25,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerUrl <em>Server Url</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getWhitelistedPackages <em>Whitelisted Packages</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getWhitelistedPluginIds <em>Whitelisted Plugin Ids</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}</li>
  * </ul>
+ * </p>
  *
  * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings()
  * @model
@@ -351,5 +352,31 @@ public interface Settings extends EObject {
      * @generated
      */
     void setWhitelistedPluginIds(List<String> value);
+
+    /**
+     * Returns the value of the '<em><b>Problems Zip Etag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Problems Zip Etag</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Problems Zip Etag</em>' attribute.
+     * @see #setProblemsZipEtag(String)
+     * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_ProblemsZipEtag()
+     * @model
+     * @generated
+     */
+    String getProblemsZipEtag();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Problems Zip Etag</em>' attribute.
+     * @see #getProblemsZipEtag()
+     * @generated
+     */
+    void setProblemsZipEtag(String value);
 
 } // Settings

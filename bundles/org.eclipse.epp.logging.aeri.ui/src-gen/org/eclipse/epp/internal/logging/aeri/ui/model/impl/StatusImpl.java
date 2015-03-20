@@ -21,7 +21,6 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
- * </p>
  * <ul>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getPluginId <em>Plugin Id</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getPluginVersion <em>Plugin Version</em>}</li>
@@ -32,6 +31,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getChildren <em>Children</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getException <em>Exception</em>}</li>
  * </ul>
+ * </p>
  *
  * @generated
  */

@@ -11,6 +11,7 @@
 package org.eclipse.epp.internal.logging.aeri.ui;
 
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
 
@@ -56,7 +57,8 @@ public class Events {
     }
 
     /**
-     * Fired when the user explicitly dismissed the details dialog w/o sending the report.
+     * Fired when the user explicitly dismissed the details dialog w/o sending
+     * the report.
      */
     public static class NewReportNotificationSkipped {
 
@@ -68,8 +70,8 @@ public class Events {
     }
 
     /**
-     * Fired when the popup notification closed w/o any action (no matter it was dismissed by pressing on the x or timed
-     * out)
+     * Fired when the popup notification closed w/o any action (no matter it was
+     * dismissed by pressing on the x or timed out)
      */
     public static class NewReportNotificationTimedOut {
 
@@ -105,22 +107,38 @@ public class Events {
 
     }
 
-    public static class ServerResponseOpenBugzillaRequest {
+    public static class NeedInfoRequest {
 
-        public final ServerResponse response;
+        public ErrorReport report;
+        public ProblemStatus status;
 
-        public ServerResponseOpenBugzillaRequest(ServerResponse response) {
-            this.response = response;
+        public NeedInfoRequest(ErrorReport report, ProblemStatus status) {
+            this.report = report;
+            this.status = status;
         }
+    }
+
+    public static class BugIsFixedInfo {
+
+        public ErrorReport report;
+        public ProblemStatus status;
+
+        public BugIsFixedInfo(ErrorReport report, ProblemStatus status) {
+            this.report = report;
+            this.status = status;
+        }
+    }
+
+    public static class NeedInfoRequestdTimedOut {
 
     }
 
-    public static class ServerResponseOpenIncidentRequest {
+    public static class OpenUrlInBrowserRequest {
 
-        public final ServerResponse response;
+        public String url;
 
-        public ServerResponseOpenIncidentRequest(ServerResponse response) {
-            this.response = response;
+        public OpenUrlInBrowserRequest(String url) {
+            this.url = url;
         }
 
     }

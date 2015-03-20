@@ -23,7 +23,6 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Error Report</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
- * </p>
  * <ul>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ErrorReportImpl#getAnonymousId <em>Anonymous Id</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ErrorReportImpl#getName <em>Name</em>}</li>
@@ -41,6 +40,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ErrorReportImpl#getPresentBundles <em>Present Bundles</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ErrorReportImpl#getStatus <em>Status</em>}</li>
  * </ul>
+ * </p>
  *
  * @generated
  */

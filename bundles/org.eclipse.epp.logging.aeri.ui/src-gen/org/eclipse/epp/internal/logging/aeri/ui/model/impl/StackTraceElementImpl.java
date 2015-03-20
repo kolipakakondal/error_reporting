@@ -18,7 +18,6 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
- * </p>
  * <ul>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StackTraceElementImpl#getFileName <em>File Name</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StackTraceElementImpl#getClassName <em>Class Name</em>}</li>
@@ -26,6 +25,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement;
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StackTraceElementImpl#getLineNumber <em>Line Number</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StackTraceElementImpl#isNative <em>Native</em>}</li>
  * </ul>
+ * </p>
  *
  * @generated
  */

@@ -14,6 +14,7 @@ import static com.google.common.collect.Lists.newArrayList;
 
 import org.eclipse.epp.internal.logging.aeri.ui.INotificationService;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
 import org.eclipse.mylyn.commons.notifications.ui.NotificationsUi;
 
@@ -42,6 +43,16 @@ public class MylynNotificationService implements INotificationService {
     @Override
     public void showNewResponseNotification(ServerResponse state) {
         NotificationsUi.getService().notify(newArrayList(new ServerResponseNotification(state, bus)));
+    }
+
+    @Override
+    public void showNeedInfoNotification(ErrorReport report, ProblemStatus status) {
+        NotificationsUi.getService().notify(newArrayList(new NeedYourHelpNotification(report, status, bus)));
+    }
+
+    @Override
+    public void showBugFixedInfo(ErrorReport report, ProblemStatus status) {
+        NotificationsUi.getService().notify(newArrayList(new BugIsFixedNotification(report, status, bus)));
     }
 
 }

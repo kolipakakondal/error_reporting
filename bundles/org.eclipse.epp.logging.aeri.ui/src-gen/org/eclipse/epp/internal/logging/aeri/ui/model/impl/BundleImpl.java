@@ -18,11 +18,11 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
- * </p>
  * <ul>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.BundleImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.BundleImpl#getVersion <em>Version</em>}</li>
  * </ul>
+ * </p>
  *
  * @generated
  */

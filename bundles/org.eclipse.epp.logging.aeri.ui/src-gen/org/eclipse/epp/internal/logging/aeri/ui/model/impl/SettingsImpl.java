@@ -18,7 +18,6 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
- * </p>
  * <ul>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getEmail <em>Email</em>}</li>
@@ -32,7 +31,9 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getServerUrl <em>Server Url</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getWhitelistedPackages <em>Whitelisted Packages</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getWhitelistedPluginIds <em>Whitelisted Plugin Ids</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getProblemsZipEtag <em>Problems Zip Etag</em>}</li>
  * </ul>
+ * </p>
  *
  * @generated
  */
@@ -256,6 +257,26 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
      * @ordered
      */
     protected List<String> whitelistedPluginIds;
+
+    /**
+     * The default value of the '{@link #getProblemsZipEtag() <em>Problems Zip Etag</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getProblemsZipEtag()
+     * @generated
+     * @ordered
+     */
+    protected static final String PROBLEMS_ZIP_ETAG_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getProblemsZipEtag() <em>Problems Zip Etag</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getProblemsZipEtag()
+     * @generated
+     * @ordered
+     */
+    protected String problemsZipEtag = PROBLEMS_ZIP_ETAG_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -533,6 +554,27 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
      * <!-- end-user-doc -->
      * @generated
      */
+    public String getProblemsZipEtag() {
+        return problemsZipEtag;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setProblemsZipEtag(String newProblemsZipEtag) {
+        String oldProblemsZipEtag = problemsZipEtag;
+        problemsZipEtag = newProblemsZipEtag;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG, oldProblemsZipEtag, problemsZipEtag));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
@@ -560,6 +602,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
                 return getWhitelistedPackages();
             case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
                 return getWhitelistedPluginIds();
+            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
+                return getProblemsZipEtag();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -609,6 +653,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
             case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
                 setWhitelistedPluginIds((List<String>)newValue);
                 return;
+            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
+                setProblemsZipEtag((String)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
@@ -657,6 +704,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
             case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
                 setWhitelistedPluginIds((List<String>)null);
                 return;
+            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
+                setProblemsZipEtag(PROBLEMS_ZIP_ETAG_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -693,6 +743,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
                 return whitelistedPackages != null;
             case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
                 return whitelistedPluginIds != null;
+            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
+                return PROBLEMS_ZIP_ETAG_EDEFAULT == null ? problemsZipEtag != null : !PROBLEMS_ZIP_ETAG_EDEFAULT.equals(problemsZipEtag);
         }
         return super.eIsSet(featureID);
     }
@@ -731,6 +783,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
         result.append(whitelistedPackages);
         result.append(", whitelistedPluginIds: ");
         result.append(whitelistedPluginIds);
+        result.append(", problemsZipEtag: ");
+        result.append(problemsZipEtag);
         result.append(')');
         return result.toString();
     }

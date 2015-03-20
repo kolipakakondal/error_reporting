@@ -27,25 +27,28 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.BugIsFixedInfo;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogCanceled;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogCompleted;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigurePopupDisableRequested;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureRequestTimedOut;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureShowDialogRequest;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.NeedInfoRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportLogged;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportNotificationSkipped;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportNotificationTimedOut;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportShowDetailsRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportShowNotificationRequest;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.OpenUrlInBrowserRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.SendReportsRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseNotificationTimedOut;
-import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseOpenBugzillaRequest;
-import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseOpenIncidentRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseShowRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages;
 import org.eclipse.epp.internal.logging.aeri.ui.l10n.Messages;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
 import org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
@@ -83,13 +86,15 @@ public class ReportingController {
     private boolean notificationInProgress;
     private long notificationInProgressTimeout = Long.MAX_VALUE;
     private ReportHistory history;
+    private ProblemsDatabaseService problemsDb;
 
-    public ReportingController(EventBus bus, Settings settings, INotificationService notifications,
-            ReportHistory history) {
+    public ReportingController(EventBus bus, Settings settings, INotificationService notifications, ReportHistory history,
+            ProblemsDatabaseService problemsDb) {
         this.bus = bus;
         this.settings = settings;
         this.notifications = notifications;
         this.history = history;
+        this.problemsDb = problemsDb;
         initalizeLists();
     }
 
@@ -118,6 +123,28 @@ public class ReportingController {
             return;
         }
 
+        ProblemStatus status = problemsDb.seen(report).orNull();
+        if (status != null) {
+            switch (status.getAction()) {
+            case NEEDINFO:
+                requestShowNeedInfoRequest(report, status);
+                // TODO if this popu dialog fades out, what should we do?
+                // handling this case is not very clean yet
+                // we also do not store that this problem was seen, right?
+                // needs intensive unit tests...
+                return;
+            case FIXED:
+                requestShowFixedInfo(report, status);
+                // TODO if this popu dialog fades out, what should we do?
+                // handling this case is not very clean yet
+                // we also do not store that this problem was seen, right?
+                // needs intensive unit tests...
+                return;
+            default:
+                return;
+            }
+        }
+
         if (isSentSilently()) {
             requestSendSilently();
         } else if (!isNotificationInProgress()) {
@@ -125,6 +152,14 @@ public class ReportingController {
         } else {
             // if something is going on already, don't notify
         }
+    }
+
+    private void requestShowNeedInfoRequest(ErrorReport report, ProblemStatus seen) {
+        bus.post(new NeedInfoRequest(report, seen));
+    }
+
+    private void requestShowFixedInfo(ErrorReport report, ProblemStatus status) {
+        bus.post(new Events.BugIsFixedInfo(report, status));
     }
 
     private void requestSendSilently() {
@@ -340,7 +375,8 @@ public class ReportingController {
                     break;
                 }
                 case ESC_CANCEL: {
-                    // TODO: better behaviour than review the configuration on the next event?
+                    // TODO: better behaviour than review the configuration on
+                    // the next event?
                     settings.setConfigured(false);
                     for (Object report : queueUI) {
                         bus.post(new NewReportNotificationSkipped((ErrorReport) report));
@@ -369,6 +405,20 @@ public class ReportingController {
     }
 
     @Subscribe
+    public void on(NeedInfoRequest e) {
+        setNotificationInProgress(true);
+        setNotificationInProgressTimeout();
+        notifications.showNeedInfoNotification(e.report, e.status);
+    }
+
+    @Subscribe
+    public void on(BugIsFixedInfo e) {
+        setNotificationInProgress(true);
+        setNotificationInProgressTimeout();
+        notifications.showBugFixedInfo(e.report, e.status);
+    }
+
+    @Subscribe
     public void on(SendReportsRequest e) {
         ImmutableList<ErrorReport> tmp = copyOf(queueRO);
         clearIncoming();
@@ -392,20 +442,11 @@ public class ReportingController {
     }
 
     @Subscribe
-    public void on(ServerResponseOpenBugzillaRequest e) {
+    public void on(OpenUrlInBrowserRequest e) {
         setNotificationInProgress(false);
-        String url = e.response.getBugUrl().orNull();
-        if (!isEmpty(url)) {
-            Browsers.openInExternalBrowser(url);
+        if (!isEmpty(e.url)) {
+            Browsers.openInExternalBrowser(e.url);
         }
     }
 
-    @Subscribe
-    public void on(ServerResponseOpenIncidentRequest e) {
-        setNotificationInProgress(false);
-        String url = e.response.getIncidentUrl();
-        if (!isEmpty(url)) {
-            Browsers.openInExternalBrowser(url);
-        }
-    }
 }

@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.epp.internal.logging.aeri.ui.Constants;
 import org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages;
+import org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
@@ -46,8 +47,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
     public static final String PROP_EMAIL = PKG.getSettings_Email().getName();
     public static final String PROP_NAME = PKG.getSettings_Name().getName();
     public static final String PROP_REMEMBER_SEND_ACTION = PKG.getSettings_RememberSendAction().getName();
-    public static final String PROP_REMEMBER_SETTING_PERIOD_START = PKG.getSettings_RememberSendActionPeriodStart()
-            .getName();
+    public static final String PROP_REMEMBER_SETTING_PERIOD_START = PKG.getSettings_RememberSendActionPeriodStart().getName();
     public static final String PROP_SEND_ACTION = PKG.getSettings_Action().getName();
     public static final String PROP_SERVER = PKG.getSettings_ServerUrl().getName();
     public static final String PROP_SKIP_SIMILAR_ERRORS = PKG.getSettings_SkipSimilarErrors().getName();
@@ -55,8 +55,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
     public static final String PROP_WHITELISTED_PLUGINS = PKG.getSettings_WhitelistedPluginIds().getName();
 
     private static String getServerUrl() {
-        return System.getProperty(PLUGIN_ID + "." + PROP_SERVER,
-                "https://dev.eclipse.org/recommenders/community/confess/0.5/reports/");
+        return System.getProperty(PLUGIN_ID + "." + PROP_SERVER, "https://dev.eclipse.org/recommenders/community/confess/0.5/reports/");
     }
 
     public static final String SERVER_URL = getServerUrl();
@@ -117,8 +116,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         });
     }
 
-    private static void registerPreferenceStoreChangeListener(final ScopedPreferenceStore store,
-            final Settings settings, final EClass eClass) {
+    private static void registerPreferenceStoreChangeListener(final ScopedPreferenceStore store, final Settings settings,
+            final EClass eClass) {
         store.addPropertyChangeListener(new IPropertyChangeListener() {
 
             @Override
@@ -136,8 +135,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         });
     }
 
-    private static void loadFromPreferences(final ScopedPreferenceStore store, final Settings settings,
-            final EClass eClass) {
+    private static void loadFromPreferences(final ScopedPreferenceStore store, final Settings settings, final EClass eClass) {
         settings.eSetDeliver(false);
         for (EAttribute attr : eClass.getEAllAttributes()) {
             EDataType type = attr.getEAttributeType();
@@ -147,7 +145,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
                 Object data = EcoreUtil.createFromString(type, value);
                 settings.eSet(attr, data);
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs.log(LogMessages.FAILED_TO_PARSE_PREFERENCE_VALUE, attr, value);
             }
         }
         settings.eSetDeliver(true);
