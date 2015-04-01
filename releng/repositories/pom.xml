@@ -21,9 +21,9 @@
 	</modules>
 
 	<properties>
-		<p2MirrorsURL>http://www.eclipse.org/downloads/download.php?file=/epp/updates/${project.artifactId}&amp;format=xml</p2MirrorsURL>
-		<p2StatsURL>http://download.eclipse.org/stats/epp/${project.artifactId}</p2StatsURL>
-		<statsTrackedArtifacts>org.eclipse.epp.logging.aeri.ui.feature</statsTrackedArtifacts>
+		<p2MirrorsURL>http://www.eclipse.org/downloads/download.php?file=/technology/epp/logging/${project.artifactId}&amp;format=xml</p2MirrorsURL>
+		<p2StatsURL>http://download.eclipse.org/stats/technology/epp/logging/${project.artifactId}</p2StatsURL>
+		<statsTrackedArtifacts>org.eclipse.epp.logging.aeri.feature</statsTrackedArtifacts>
 	</properties>
 
 	<repositories>
