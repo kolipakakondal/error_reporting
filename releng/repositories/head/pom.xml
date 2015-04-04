@@ -13,7 +13,7 @@
 	<artifactId>head</artifactId>
 	<packaging>eclipse-repository</packaging>
 
-	<name>Head Update Site</name>
+	<name>EPP Logging Head Update Site</name>
 
 	<profiles>
 		<profile>
