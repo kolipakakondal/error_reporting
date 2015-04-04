@@ -13,7 +13,7 @@
 	<artifactId>milestones</artifactId>
 	<packaging>eclipse-repository</packaging>
 
-	<name>Milestones Update Site</name>
+	<name>EPP Logging Milestones Update Site</name>
 
 	<profiles>
 		<profile>
