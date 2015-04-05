@@ -179,12 +179,10 @@ public class Reports {
         public Object caseStatus(Status status) {
             appendHeadline("STATUS", statusStringBuilder);
             appendAttributes(status, statusStringBuilder);
-            statusStringBuilder.append("Exception:");
             Throwable exception = status.getException();
             if (exception != null) {
+                statusStringBuilder.append("Exception:");
                 append(exception, statusStringBuilder);
-            } else {
-                statusStringBuilder.append("null");
             }
             return Boolean.TRUE;
         }
@@ -209,8 +207,8 @@ public class Reports {
         }
 
         public String print() {
-            return new StringBuilder().append(statusStringBuilder).append("\n").append(reportStringBuilder).append(bundlesStringBuilder)
-                    .toString();
+            return new StringBuilder().append(statusStringBuilder).append("\n").append(reportStringBuilder)
+                    .append(bundlesStringBuilder).toString();
         }
 
     }
@@ -235,8 +233,8 @@ public class Reports {
                 }
             }
             if (removedCount > 0) {
-                status.setMessage(String.format("%s [%d child-status duplicates removed by Error Reporting]", status.getMessage(),
-                        removedCount));
+                status.setMessage(String.format("%s [%d child-status duplicates removed by Error Reporting]",
+                        status.getMessage(), removedCount));
             }
         }
 
@@ -390,7 +388,8 @@ public class Reports {
             mChildren.add(newStatus(child, settings));
         }
         // some stacktraces from ui.monitoring should be filtered
-        boolean needFiltering = "org.eclipse.ui.monitoring".equals(status.getPlugin()) && (status.getCode() == 0 || status.getCode() == 1);
+        boolean needFiltering = "org.eclipse.ui.monitoring".equals(status.getPlugin())
+                && (status.getCode() == 0 || status.getCode() == 1);
         if (needFiltering) {
             MultiStatusFilter.filter(mStatus);
         }
@@ -406,7 +405,8 @@ public class Reports {
     }
 
     public static String computeFingerprintFor(Status status, Settings settings) {
-        ThrowableFingerprintComputer fingerprintComputer = new ThrowableFingerprintComputer(settings.getWhitelistedPackages(), 1024);
+        ThrowableFingerprintComputer fingerprintComputer = new ThrowableFingerprintComputer(
+                settings.getWhitelistedPackages(), 1024);
         visit(status, fingerprintComputer);
         return fingerprintComputer.hash();
     }
