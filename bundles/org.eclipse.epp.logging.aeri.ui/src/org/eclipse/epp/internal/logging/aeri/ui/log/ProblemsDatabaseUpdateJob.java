@@ -78,7 +78,7 @@ public class ProblemsDatabaseUpdateJob extends Job {
             }
             return Status.OK_STATUS;
         } finally {
-            progress.done();
+            monitor.done();
         }
     }
 
