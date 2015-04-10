@@ -26,6 +26,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.property.Properties;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.BugIsFixedInfo;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogCanceled;
@@ -88,8 +91,8 @@ public class ReportingController {
     private ReportHistory history;
     private ProblemsDatabaseService problemsDb;
 
-    public ReportingController(EventBus bus, Settings settings, INotificationService notifications, ReportHistory history,
-            ProblemsDatabaseService problemsDb) {
+    public ReportingController(EventBus bus, Settings settings, INotificationService notifications,
+            ReportHistory history, ProblemsDatabaseService problemsDb) {
         this.bus = bus;
         this.settings = settings;
         this.notifications = notifications;
@@ -270,15 +273,28 @@ public class ReportingController {
     }
 
     @VisibleForTesting
-    public void scheduleForSending(List<ErrorReport> reports) {
-        URI target = URI.create(settings.getServerUrl());
-        List<Job> jobs = Lists.newLinkedList();
-        history.remember(reports);
-        for (ErrorReport report : reports) {
-            UploadJob job = new UploadJob(report, settings, target, bus);
-            jobs.add(job);
-        }
-        Jobs.sequential(format(Messages.UPLOADJOB_NAME, target), jobs);
+    public void scheduleForSending(final List<ErrorReport> reports) {
+        final URI target = URI.create(settings.getServerUrl());
+        new Job("Schedule Reports for sending") {
+
+            @Override
+            protected IStatus run(IProgressMonitor monitor) {
+                monitor.beginTask("Scheduling...", reports.size());
+                List<Job> jobs = Lists.newLinkedList();
+                for (ErrorReport report : reports) {
+                    history.remember(report);
+                    UploadJob job = new UploadJob(report, settings, target, bus);
+                    jobs.add(job);
+                    monitor.worked(1);
+                    if (monitor.isCanceled()) {
+                        break;
+                    }
+                }
+                monitor.done();
+                Jobs.sequential(format(Messages.UPLOADJOB_NAME, target), jobs);
+                return Status.OK_STATUS;
+            }
+        }.schedule();
     }
 
     @Subscribe
