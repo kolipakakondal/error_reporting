@@ -93,4 +93,5 @@ public class FiltersTest {
         history.awaitRunning();
         assertThat(sut.apply(null), is(true));
     }
+
 }

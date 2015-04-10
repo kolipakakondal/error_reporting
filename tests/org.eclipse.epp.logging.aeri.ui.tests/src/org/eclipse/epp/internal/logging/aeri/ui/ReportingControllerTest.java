@@ -16,11 +16,13 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.BugIsFixedInfo;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogCanceled;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogCompleted;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigurePopupDisableRequested;
@@ -28,12 +30,14 @@ import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureRequestTimedOut;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NeedInfoRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportLogged;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportShowNotificationRequest;
+import org.eclipse.epp.internal.logging.aeri.ui.Events.SendReportsRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseShowRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ModelFactory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus.RequiredAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
@@ -43,9 +47,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 
+import com.google.common.base.Optional;
 import com.google.common.eventbus.EventBus;
 
 public class ReportingControllerTest {
+
+    protected class TestProblemsDatabaseService extends ProblemsDatabaseService {
+        private TestProblemsDatabaseService(File indexDirectory) {
+            super(indexDirectory);
+        }
+
+        @Override
+        protected Directory createIndexDirectory() throws IOException {
+            return new RAMDirectory();
+        }
+    }
 
     private EventBus bus;
     private Settings settings;
@@ -65,13 +81,7 @@ public class ReportingControllerTest {
             }
         };
 
-        problems = new ProblemsDatabaseService(null) {
-            @Override
-            protected Directory createIndexDirectory() throws IOException {
-                return new RAMDirectory();
-            }
-
-        };
+        problems = spy(new TestProblemsDatabaseService(null));
         bus = spy(new EventBus());
         sut = spy(new ReportingController(bus, settings, notifications, history, problems));
         bus.register(sut);
@@ -110,6 +120,38 @@ public class ReportingControllerTest {
 
         verify(notifications, never()).showWelcomeNotification();
         verify(notifications, times(1)).showNewReportsAvailableNotification(anyReport());
+    }
+
+    @Test
+    public void testNeedInfoStatus() {
+        settings.setConfigured(true);
+
+        ErrorReport report = createTestReport();
+
+        ProblemStatus status = new ProblemStatus();
+        status.setAction(RequiredAction.NEEDINFO);
+        when(problems.seen(report)).thenReturn(Optional.of(status));
+
+        sut.on(new NewReportLogged(report));
+
+        verify(bus).post(isA(NeedInfoRequest.class));
+        verifyNoReportSendOrShown();
+    }
+
+    @Test
+    public void testFixedStatus() {
+        settings.setConfigured(true);
+
+        ErrorReport report = createTestReport();
+
+        ProblemStatus status = new ProblemStatus();
+        status.setAction(RequiredAction.FIXED);
+        when(problems.seen(report)).thenReturn(Optional.of(status));
+
+        sut.on(new NewReportLogged(report));
+
+        verify(bus).post(isA(BugIsFixedInfo.class));
+        verifyNoReportSendOrShown();
     }
 
     @Test
@@ -209,6 +251,11 @@ public class ReportingControllerTest {
         sut.on(new NeedInfoRequest(mock(ErrorReport.class), mock(ProblemStatus.class)));
 
         verify(notifications).showNeedInfoNotification(any(ErrorReport.class), any(ProblemStatus.class));
+    }
+
+    private void verifyNoReportSendOrShown() {
+        verify(bus, never()).post(isA(SendReportsRequest.class));
+        verify(notifications, never()).showNewReportsAvailableNotification(anyReport());
     }
 
     private NewReportLogged newEvent() {

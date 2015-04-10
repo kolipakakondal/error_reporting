@@ -51,10 +51,6 @@ public class ExpiringReportHistory {
         return ImmutableList.copyOf(history);
     }
 
-    public void clear() {
-        history.clear();
-    }
-
     private long expiresOn() {
         return System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(EXPIRES_ON_IN_MINUTES);
     }

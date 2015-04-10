@@ -52,6 +52,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus.RequiredAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
@@ -73,6 +74,12 @@ public class ReportingController {
 
     private static final long NOTIFICATION_IDLE_TIMEOUT_MS = TimeUnit.SECONDS.toMillis(30);
     private static final long CONFIGURATION_PROCESS_TIMEOUT_MS = TimeUnit.MINUTES.toMillis(5);
+    private static final ProblemStatus UNKNOWN_STATUS = new ProblemStatus();
+
+    static {
+        UNKNOWN_STATUS.setAction(RequiredAction.NONE);
+    }
+
     private IObservableList queueUI;
     // careful! do never make any modifications to this list! It's a means to
     // access the queued reports outside the UI
@@ -126,28 +133,35 @@ public class ReportingController {
             return;
         }
 
-        ProblemStatus status = problemsDb.seen(report).orNull();
-        if (status != null) {
-            switch (status.getAction()) {
-            case NEEDINFO:
-                requestShowNeedInfoRequest(report, status);
-                // TODO if this popu dialog fades out, what should we do?
-                // handling this case is not very clean yet
-                // we also do not store that this problem was seen, right?
-                // needs intensive unit tests...
-                return;
-            case FIXED:
-                requestShowFixedInfo(report, status);
-                // TODO if this popu dialog fades out, what should we do?
-                // handling this case is not very clean yet
-                // we also do not store that this problem was seen, right?
-                // needs intensive unit tests...
-                return;
-            default:
-                return;
-            }
+        ProblemStatus status = problemsDb.seen(report).or(UNKNOWN_STATUS);
+        switch (status.getAction()) {
+        case NEEDINFO: {
+            requestShowNeedInfoRequest(report, status);
+            // TODO if this popu dialog fades out, what should we do?
+            // handling this case is not very clean yet
+            // we also do not store that this problem was seen, right?
+            // needs intensive unit tests...
+            break;
         }
+        case FIXED: {
+            requestShowFixedInfo(report, status);
+            // TODO if this popu dialog fades out, what should we do?
+            // handling this case is not very clean yet
+            // we also do not store that this problem was seen, right?
+            // needs intensive unit tests...
+            break;
+        }
+        case NONE: {
+            sendOrNotify(report);
+            break;
+        }
+        default: {
+            break;
+        }
+        }
+    }
 
+    private void sendOrNotify(ErrorReport report) {
         if (isSentSilently()) {
             requestSendSilently();
         } else if (!isNotificationInProgress()) {

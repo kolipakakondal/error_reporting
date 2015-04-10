@@ -165,9 +165,9 @@ public class Startup implements IStartup {
 
     private void scheduleJobs() {
         try {
-            // TODO for testing, use server url later on
-            URL indexZipUrl = new URL("https://dev.eclipse.org/recommenders/community/confess/problems.zip");
-            new ProblemsDatabaseUpdateJob(problemsDb, indexZipUrl, settings).schedule(TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES));
+            URL indexZipUrl = new URL(Constants.PROBLEMS_STATUS_INDEX_ZIP_URL);
+            new ProblemsDatabaseUpdateJob(problemsDb, indexZipUrl, settings)
+                    .schedule(TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES));
         } catch (MalformedURLException e) {
             Throwables.propagate(e);
         }
@@ -178,9 +178,9 @@ public class Startup implements IStartup {
     public static LogListener createLogListener(Settings settings, ReportHistory history, EventBus bus,
             ExpiringReportHistory expiringReportHistory, ProblemsDatabaseService serverProblemsStatusIndex) {
         Predicate<IStatus> statusFilters = Predicates.and(new ReporterNotDisabledPredicate(settings),
-                new WhitelistedPluginIdPresentPredicate(settings), new SkipReportsAbsentPredicate(), new EclipseBuildIdPresentPredicate(),
-                new ErrorStatusOnlyPredicate(), new WorkbenchRunningPredicate(PlatformUI.getWorkbench()),
-                new HistoryReadyPredicate(history));
+                new WhitelistedPluginIdPresentPredicate(settings), new SkipReportsAbsentPredicate(),
+                new EclipseBuildIdPresentPredicate(), new ErrorStatusOnlyPredicate(),
+                new WorkbenchRunningPredicate(PlatformUI.getWorkbench()), new HistoryReadyPredicate(history));
         Predicate<ErrorReport> reportFilters = Predicates.and(new UnseenErrorReportPredicate(history, settings),
                 new CompleteErrorReportPredicate(), new ReportsHistoryPredicate(expiringReportHistory, settings),
                 new ReportPredicates.ProblemDatabaseIgnoredPredicate(serverProblemsStatusIndex));

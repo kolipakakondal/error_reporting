@@ -29,9 +29,8 @@ public final class Constants {
     public static final String PREF_PAGE_ID = "org.eclipse.epp.logging.aeri.ui.preferencePages.preference";
 
     /**
-     * Specifying '-Dorg.eclipse.epp.logging.aeri.rcp.skipReports=true' as vmarg
-     * in eclipse launch configurations lets the log listener skip automated
-     * error reporting.
+     * Specifying '-Dorg.eclipse.epp.logging.aeri.rcp.skipReports=true' as vmarg in eclipse launch configurations lets
+     * the log listener skip automated error reporting.
      */
     public static final String SYSPROP_SKIP_REPORTS = PLUGIN_ID + ".skipReports";
     public static final String SYSPROP_ECLIPSE_BUILD_ID = "eclipse.buildId";
@@ -58,8 +57,10 @@ public final class Constants {
     // Classes removed from top of stand-in-stacktrace
     public static final Set<String> STAND_IN_STACKTRACE_BLACKLIST = ImmutableSet.of("java.security.AccessController",
             "org.eclipse.core.internal.runtime.Log", "org.eclipse.core.internal.runtime.RuntimeLog",
-            "org.eclipse.core.internal.runtime.PlatformLogWriter", "org.eclipse.osgi.internal.log.ExtendedLogReaderServiceFactory",
-            "org.eclipse.osgi.internal.log.ExtendedLogReaderServiceFactory$3", "org.eclipse.osgi.internal.log.ExtendedLogServiceFactory",
+            "org.eclipse.core.internal.runtime.PlatformLogWriter",
+            "org.eclipse.osgi.internal.log.ExtendedLogReaderServiceFactory",
+            "org.eclipse.osgi.internal.log.ExtendedLogReaderServiceFactory$3",
+            "org.eclipse.osgi.internal.log.ExtendedLogServiceFactory",
             "org.eclipse.osgi.internal.log.ExtendedLogServiceImpl", "org.eclipse.osgi.internal.log.LoggerImpl",
             StandInStacktraceProvider.class.getName(), LogListener.class.getName());
 
@@ -71,5 +72,6 @@ public final class Constants {
     public static final String F_VERSION = "version";
     public static final String VERSION = "0.6";
     public static final String SERVER_PROBLEMS_SERVICE_INDEX_DIR = "remote-index";
+    public static final String PROBLEMS_STATUS_INDEX_ZIP_URL = "https://dev.eclipse.org/recommenders/community/confess/problems.zip";
 
 }

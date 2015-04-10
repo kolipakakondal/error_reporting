@@ -57,8 +57,7 @@ public class Events {
     }
 
     /**
-     * Fired when the user explicitly dismissed the details dialog w/o sending
-     * the report.
+     * Fired when the user explicitly dismissed the details dialog w/o sending the report.
      */
     public static class NewReportNotificationSkipped {
 
@@ -70,8 +69,8 @@ public class Events {
     }
 
     /**
-     * Fired when the popup notification closed w/o any action (no matter it was
-     * dismissed by pressing on the x or timed out)
+     * Fired when the popup notification closed w/o any action (no matter it was dismissed by pressing on the x or timed
+     * out)
      */
     public static class NewReportNotificationTimedOut {
 
@@ -109,8 +108,8 @@ public class Events {
 
     public static class NeedInfoRequest {
 
-        public ErrorReport report;
-        public ProblemStatus status;
+        public final ErrorReport report;
+        public final ProblemStatus status;
 
         public NeedInfoRequest(ErrorReport report, ProblemStatus status) {
             this.report = report;
@@ -120,8 +119,8 @@ public class Events {
 
     public static class BugIsFixedInfo {
 
-        public ErrorReport report;
-        public ProblemStatus status;
+        public final ErrorReport report;
+        public final ProblemStatus status;
 
         public BugIsFixedInfo(ErrorReport report, ProblemStatus status) {
             this.report = report;
