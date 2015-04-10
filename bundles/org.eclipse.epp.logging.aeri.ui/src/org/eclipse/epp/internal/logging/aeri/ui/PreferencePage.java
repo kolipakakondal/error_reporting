@@ -18,6 +18,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.l10n.Messages;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Browsers;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -30,9 +31,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -54,15 +57,16 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         addField(new StringFieldEditor(PROP_SERVER, Messages.FIELD_LABEL_SERVER, getFieldEditorParent()));
 
         addField(createStringFieldEditorAndToolTip(PROP_NAME, Messages.FIELD_LABEL_NAME, Messages.FIELD_MESSAGE_NAME));
-        addField(createStringFieldEditorAndToolTip(PROP_EMAIL, Messages.FIELD_LABEL_EMAIL, Messages.FIELD_MESSAGE_EMAIL
-                + " \n" + Messages.FIELD_DESC_EMAIL)); //$NON-NLS-1$
+        addField(createStringFieldEditorAndToolTip(PROP_EMAIL, Messages.FIELD_LABEL_EMAIL,
+                Messages.FIELD_MESSAGE_EMAIL + " \n" + Messages.FIELD_DESC_EMAIL)); //$NON-NLS-1$
 
-        addField(new ComboFieldEditor(PROP_SEND_ACTION, Messages.FIELD_LABEL_ACTION, createModeLabelAndValues(), getFieldEditorParent()));
+        addField(new ComboFieldEditor(PROP_SEND_ACTION, Messages.FIELD_LABEL_ACTION, createModeLabelAndValues(),
+                getFieldEditorParent()));
 
         addField(createBooleanFieldEditorAndToolTip(PROP_SKIP_SIMILAR_ERRORS, Messages.FIELD_LABEL_SKIP_SIMILAR_ERRORS,
                 Messages.TOOLTIP_SKIP_SIMILAR));
-        addField(createBooleanFieldEditorAndToolTip(PROP_ANONYMIZE_STACKTRACES, Messages.FIELD_LABEL_ANONYMIZE_STACKTRACES,
-                Messages.TOOLTIP_MAKE_STACKTRACE_ANONYMOUS));
+        addField(createBooleanFieldEditorAndToolTip(PROP_ANONYMIZE_STACKTRACES,
+                Messages.FIELD_LABEL_ANONYMIZE_STACKTRACES, Messages.TOOLTIP_MAKE_STACKTRACE_ANONYMOUS));
         addField(createBooleanFieldEditorAndToolTip(PROP_ANONYMIZE_MESSAGES, Messages.FIELD_LABEL_ANONYMIZE_MESSAGES,
                 Messages.TOOLTIP_MAKE_MESSAGES_ANONYMOUS));
 
@@ -78,8 +82,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         return stringFieldEditor;
     }
 
-    private BooleanFieldEditor createBooleanFieldEditorAndToolTip(String fieldEditorName, String fieldEditorLabel, String toolTipText) {
-        BooleanFieldEditor booleanFieldEditor = new BooleanFieldEditor(fieldEditorName, fieldEditorLabel, getFieldEditorParent());
+    private BooleanFieldEditor createBooleanFieldEditorAndToolTip(String fieldEditorName, String fieldEditorLabel,
+            String toolTipText) {
+        BooleanFieldEditor booleanFieldEditor = new BooleanFieldEditor(fieldEditorName, fieldEditorLabel,
+                getFieldEditorParent());
         DefaultToolTip toolTip = new DefaultToolTip(booleanFieldEditor.getDescriptionControl(getFieldEditorParent()));
         calibrateTooltip(toolTip, toolTipText);
 
@@ -94,11 +100,30 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
     }
 
     private void addLinks(Composite parent) {
-        Composite feedback = new Composite(parent, SWT.NONE);
-        feedback.setLayout(new RowLayout(SWT.VERTICAL));
+        Composite links = new Composite(parent, SWT.NONE);
+        links.setLayout(new RowLayout(SWT.VERTICAL));
+        GridDataFactory.fillDefaults().span(2, 1).grab(true, false).applyTo(links);
 
-        createAndConfigureLink(feedback, Messages.LINK_LEARN_MORE, HELP_URL);
-        createAndConfigureLink(feedback, Messages.LINK_PROVIDE_FEEDBACK, FEEDBACK_FORM_URL);
+        createNotificationsLabelAndLink(links);
+
+        // placeholder
+        new Label(links, SWT.NONE);
+
+        createAndConfigureLink(links, Messages.LINK_LEARN_MORE, HELP_URL);
+        createAndConfigureLink(links, Messages.LINK_PROVIDE_FEEDBACK, FEEDBACK_FORM_URL);
+    }
+
+    private void createNotificationsLabelAndLink(Composite links) {
+        Link link = new Link(links, SWT.NONE);
+        link.setText("Notifications are configured on the <a>Notifications</a> preference page.");
+        link.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                PreferencesUtil.createPreferenceDialogOn(getShell(),
+                        "org.eclipse.mylyn.commons.notifications.preferencePages.Notifications", null, null);
+            }
+        });
+
     }
 
     private Link createAndConfigureLink(Composite parent, String text, final String url) {
