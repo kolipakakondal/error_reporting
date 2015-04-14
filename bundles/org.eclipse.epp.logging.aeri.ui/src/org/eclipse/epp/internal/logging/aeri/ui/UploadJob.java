@@ -90,7 +90,7 @@ public class UploadJob extends Job {
             result.setCommitterMessage(response05.information);
 
             bus.post(new ServerResponseShowRequest(result));
-            return new Status(IStatus.INFO, PLUGIN_ID, format(Messages.UPLOADJOB_THANK_YOU, details));
+            return new Status(IStatus.OK, PLUGIN_ID, format(Messages.UPLOADJOB_THANK_YOU, details));
         } catch (Exception e) {
             return new Status(WARNING, PLUGIN_ID, Messages.UPLOADJOB_FAILED_WITH_EXCEPTION, e);
         } finally {
