@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.epp.internal.logging.aeri.ui.log.CheckServerAvailabilityJob;
 import org.eclipse.epp.internal.logging.aeri.ui.log.LogListener;
@@ -71,14 +72,32 @@ public class Startup implements IStartup {
 
             @Override
             protected IStatus run(IProgressMonitor monitor) {
+                SubMonitor progress = SubMonitor.convert(monitor, "Initializing error reporting", 8);
+                progress.subTask("history");
                 initializeHistory();
+                progress.worked(1);
+                progress.subTask("expiring history");
                 initializeExpiringHistory();
+                progress.worked(1);
+                progress.subTask("problem database");
                 initializeProblemsDatabase();
+                progress.worked(1);
+                progress.subTask("settings");
                 initalizeSettings();
+                progress.worked(1);
+                progress.subTask("eventbus");
                 initalizeEventBus();
+                progress.worked(1);
+                progress.subTask("controller");
                 initalizeController();
+                progress.worked(1);
+                progress.subTask("log listener");
                 initalizeLogListener();
+                progress.worked(1);
+                progress.subTask("jobs");
                 scheduleJobs();
+                progress.worked(1);
+                monitor.done();
                 return Status.OK_STATUS;
             }
         }.schedule();
@@ -105,8 +124,8 @@ public class Startup implements IStartup {
                 public void postShutdown(IWorkbench workbench) {
                 }
             });
-        } catch (Exception e1) {
-            log(HISTORY_START_FAILED);
+        } catch (Exception e) {
+            log(HISTORY_START_FAILED, e);
         }
     }
 
@@ -135,8 +154,8 @@ public class Startup implements IStartup {
                 public void postShutdown(IWorkbench workbench) {
                 }
             });
-        } catch (Exception e1) {
-            log(INDEX_START_FAILED);
+        } catch (Exception e) {
+            log(INDEX_START_FAILED, e);
         }
     }
 
