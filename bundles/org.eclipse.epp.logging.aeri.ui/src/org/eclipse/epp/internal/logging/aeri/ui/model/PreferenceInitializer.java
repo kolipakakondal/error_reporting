@@ -163,8 +163,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
             if (isDayElapsed) {
                 log(LogMessages.PAUSE_PERIOD_ELAPSED);
                 settings.setAction(ASK);
+                settings.setRememberSendAction(NONE);
             }
-            settings.setRememberSendAction(NONE);
             break;
         default:
             // do nothing

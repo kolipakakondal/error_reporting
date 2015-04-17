@@ -41,8 +41,6 @@ public class LogListener implements ILogListener {
     @Override
     public void logging(final IStatus status, String nouse) {
         try {
-            // TODO check whether 24h timeout passed
-
             if (!statusFilters.apply(status)) {
                 return;
             }
