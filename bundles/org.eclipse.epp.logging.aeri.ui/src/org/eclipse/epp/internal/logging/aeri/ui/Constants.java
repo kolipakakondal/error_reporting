@@ -73,5 +73,6 @@ public final class Constants {
     public static final String VERSION = "0.6";
     public static final String SERVER_PROBLEMS_SERVICE_INDEX_DIR = "remote-index";
     public static final String PROBLEMS_STATUS_INDEX_ZIP_URL = "https://dev.eclipse.org/recommenders/community/confess/problems.zip";
+    public static final String MISSING = "MISSING";
 
 }

@@ -14,6 +14,8 @@ import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Optional.fromNullable;
 import static org.apache.commons.lang3.StringUtils.*;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
 import java.util.HashSet;
 import java.util.List;
@@ -190,8 +192,8 @@ public class Reports {
         private void append(Throwable throwable, StringBuilder builder) {
             builder.append(String.format("%s: %s\n", throwable.getClassName(), throwable.getMessage()));
             for (StackTraceElement element : throwable.getStackTrace()) {
-                builder.append(String.format("\t at %s.%s(%s:%s)\n", element.getClassName(), element.getMethodName(),
-                        element.getFileName(), element.getLineNumber()));
+                builder.append(String.format("\t at %s.%s(%s:%s)\n", element.getClassName(), element.getMethodName(), element.getFileName(),
+                        element.getLineNumber()));
             }
             Throwable cause = throwable.getCause();
             if (cause != null) {
@@ -207,8 +209,8 @@ public class Reports {
         }
 
         public String print() {
-            return new StringBuilder().append(statusStringBuilder).append("\n").append(reportStringBuilder)
-                    .append(bundlesStringBuilder).toString();
+            return new StringBuilder().append(statusStringBuilder).append("\n").append(reportStringBuilder).append(bundlesStringBuilder)
+                    .toString();
         }
 
     }
@@ -233,8 +235,8 @@ public class Reports {
                 }
             }
             if (removedCount > 0) {
-                status.setMessage(String.format("%s [%d child-status duplicates removed by Error Reporting]",
-                        status.getMessage(), removedCount));
+                status.setMessage(
+                        String.format("%s [%d child-status duplicates removed by Error Reporting]", status.getMessage(), removedCount));
             }
         }
 
@@ -388,8 +390,7 @@ public class Reports {
             mChildren.add(newStatus(child, settings));
         }
         // some stacktraces from ui.monitoring should be filtered
-        boolean needFiltering = "org.eclipse.ui.monitoring".equals(status.getPlugin())
-                && (status.getCode() == 0 || status.getCode() == 1);
+        boolean needFiltering = "org.eclipse.ui.monitoring".equals(status.getPlugin()) && (status.getCode() == 0 || status.getCode() == 1);
         if (needFiltering) {
             MultiStatusFilter.filter(mStatus);
         }
@@ -405,8 +406,7 @@ public class Reports {
     }
 
     public static String computeFingerprintFor(Status status, Settings settings) {
-        ThrowableFingerprintComputer fingerprintComputer = new ThrowableFingerprintComputer(
-                settings.getWhitelistedPackages(), 1024);
+        ThrowableFingerprintComputer fingerprintComputer = new ThrowableFingerprintComputer(settings.getWhitelistedPackages(), 1024);
         visit(status, fingerprintComputer);
         return fingerprintComputer.hash();
     }
@@ -427,19 +427,30 @@ public class Reports {
         for (java.lang.StackTraceElement stackTraceElement : throwable.getStackTrace()) {
             StackTraceElement mStackTraceElement = factory.createStackTraceElement();
             mStackTraceElement.setFileName(stackTraceElement.getFileName());
-            mStackTraceElement.setClassName(stackTraceElement.getClassName());
-            mStackTraceElement.setMethodName(stackTraceElement.getMethodName());
+            mStackTraceElement.setClassName(ensureNotBlank(stackTraceElement.getClassName(), throwable));
+            mStackTraceElement.setMethodName(ensureNotBlank(stackTraceElement.getMethodName(), throwable));
             mStackTraceElement.setLineNumber(stackTraceElement.getLineNumber());
             mStackTrace.add(mStackTraceElement);
         }
         java.lang.Throwable cause = throwable.getCause();
         if (cause != null) {
             if (cause == throwable) {
-                System.out.println("err");
+                log(WARN_CYCLIC_EXCEPTION, cause.toString());
+                return mThrowable;
             }
             mThrowable.setCause(newThrowable(cause));
         }
         return mThrowable;
+    }
+
+    private static String ensureNotBlank(String str, java.lang.Throwable throwable) {
+        if (isBlank(str)) {
+            // Note: we cannot call throwable.toString()) nor
+            // reflectionToString() --> NPE:
+            log(WARN_STACKTRACE_WITH_NULL);
+            return Constants.MISSING;
+        }
+        return str;
     }
 
     public static void clearMessages(ErrorReport report) {
