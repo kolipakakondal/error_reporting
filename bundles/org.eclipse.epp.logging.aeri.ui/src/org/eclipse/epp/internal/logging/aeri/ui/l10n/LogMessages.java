@@ -42,8 +42,7 @@ public final class LogMessages extends DefaultLogMessage {
             "The paused interval for error reporting is elapsed, returning to 'ASK'-Mode"); //$NON-NLS-1$
     public static final LogMessages SAVE_PREFERENCES_FAILED = new LogMessages(ERROR, "Saving preferences failed"); //$NON-NLS-1$
 
-    public static final LogMessages REPORTING_ERROR = new LogMessages(
-            WARNING,
+    public static final LogMessages REPORTING_ERROR = new LogMessages(WARNING,
             "Unexpected Error occured while handling an error report. Please open a bug at https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Recommenders.Incubator&component=Stacktraces");
 
     public static final LogMessages FIRST_CONFIGURATION_FAILED = new LogMessages(WARNING,
@@ -64,6 +63,10 @@ public final class LogMessages extends DefaultLogMessage {
 
     public static final LogMessages CONFIGURATION_TIMED_OUT = new LogMessages(WARNING, "The configuration timed out"); //$NON-NLS-1$
     public static final LogMessages NOTIFICATION_TIMED_OUT = new LogMessages(WARNING, "The notification timed out"); //$NON-NLS-1$
+
+    public static final LogMessages SERVER_AVAILABILITY_CHECK_FAILED = new LogMessages(WARNING, "The server availability check failed"); //$NON-NLS-1$
+    public static final LogMessages SERVER_NOT_AVAILABLE = new LogMessages(WARNING,
+            "The server seems to be unavailable. Error Reporting will be disabled till next restart."); //$NON-NLS-1$
 
     public LogMessages(int severity, String message) {
         super(severity, code++, String.format("%s %s", message, VERSION));

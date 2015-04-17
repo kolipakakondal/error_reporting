@@ -10,13 +10,12 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui;
 
+import static java.util.concurrent.TimeUnit.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,6 +23,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.epp.internal.logging.aeri.ui.log.CheckServerAvailabilityJob;
 import org.eclipse.epp.internal.logging.aeri.ui.log.LogListener;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseUpdateJob;
@@ -158,17 +158,17 @@ public class Startup implements IStartup {
     }
 
     private void initalizeLogListener() {
-        org.eclipse.epp.internal.logging.aeri.ui.log.LogListener listener = createLogListener(settings, history, bus,
-                expiringReportHistory, problemsDb);
+        org.eclipse.epp.internal.logging.aeri.ui.log.LogListener listener = createLogListener(settings, history, bus, expiringReportHistory,
+                problemsDb);
         Platform.addLogListener(listener);
     }
 
     private void scheduleJobs() {
         try {
             URL indexZipUrl = new URL(Constants.PROBLEMS_STATUS_INDEX_ZIP_URL);
-            new ProblemsDatabaseUpdateJob(problemsDb, indexZipUrl, settings)
-                    .schedule(TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES));
-        } catch (MalformedURLException e) {
+            new CheckServerAvailabilityJob(settings).schedule(MILLISECONDS.convert(10, SECONDS));
+            new ProblemsDatabaseUpdateJob(problemsDb, indexZipUrl, settings).schedule(MILLISECONDS.convert(1, MINUTES));
+        } catch (Exception e) {
             Throwables.propagate(e);
         }
     }
@@ -178,9 +178,9 @@ public class Startup implements IStartup {
     public static LogListener createLogListener(Settings settings, ReportHistory history, EventBus bus,
             ExpiringReportHistory expiringReportHistory, ProblemsDatabaseService serverProblemsStatusIndex) {
         Predicate<IStatus> statusFilters = Predicates.and(new ReporterNotDisabledPredicate(settings),
-                new WhitelistedPluginIdPresentPredicate(settings), new SkipReportsAbsentPredicate(),
-                new EclipseBuildIdPresentPredicate(), new ErrorStatusOnlyPredicate(),
-                new WorkbenchRunningPredicate(PlatformUI.getWorkbench()), new HistoryReadyPredicate(history));
+                new WhitelistedPluginIdPresentPredicate(settings), new SkipReportsAbsentPredicate(), new EclipseBuildIdPresentPredicate(),
+                new ErrorStatusOnlyPredicate(), new WorkbenchRunningPredicate(PlatformUI.getWorkbench()),
+                new HistoryReadyPredicate(history));
         Predicate<ErrorReport> reportFilters = Predicates.and(new UnseenErrorReportPredicate(history, settings),
                 new CompleteErrorReportPredicate(), new ReportsHistoryPredicate(expiringReportHistory, settings),
                 new ReportPredicates.ProblemDatabaseIgnoredPredicate(serverProblemsStatusIndex));
