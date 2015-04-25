@@ -14,7 +14,7 @@ import static com.google.common.base.Optional.absent;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.lucene.index.IndexReader.openIfChanged;
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.*;
-import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.STATUS_INDEX_NOT_AVAILABLE;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.WARN_STATUS_INDEX_NOT_AVAILABLE;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
 import java.io.File;
@@ -84,7 +84,7 @@ public class ProblemsDatabaseService extends AbstractIdleService {
                 return Optional.of(status);
             }
         } catch (Exception e) {
-            log(STATUS_INDEX_NOT_AVAILABLE, e);
+            log(WARN_STATUS_INDEX_NOT_AVAILABLE, e);
         }
         return Optional.absent();
     }

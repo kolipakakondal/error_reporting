@@ -48,10 +48,10 @@ public class CheckServerAvailabilityJob extends Job {
             if (response.returnResponse().getStatusLine().getStatusCode() != 200) {
                 settings.setAction(SendAction.IGNORE);
                 settings.setRememberSendAction(RememberSendAction.RESTART);
-                log(SERVER_NOT_AVAILABLE);
+                log(INFO_SERVER_NOT_AVAILABLE);
             }
         } catch (Exception e) {
-            log(SERVER_AVAILABILITY_CHECK_FAILED, e);
+            log(WARN_SERVER_AVAILABILITY_CHECK_FAILED, e);
         }
         return Status.OK_STATUS;
     }

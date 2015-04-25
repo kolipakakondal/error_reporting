@@ -11,7 +11,7 @@
 package org.eclipse.epp.internal.logging.aeri.ui.log;
 
 import static org.apache.lucene.index.IndexReader.openIfChanged;
-import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.HISTORY_NOT_AVAILABLE;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.WARN_HISTORY_NOT_AVAILABLE;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.model.Reports.*;
 
@@ -77,7 +77,7 @@ public class ReportHistory extends AbstractIdleService {
             boolean foundIdenticalReport = results.totalHits > 0;
             return foundIdenticalReport;
         } catch (Exception e) {
-            log(HISTORY_NOT_AVAILABLE, e);
+            log(WARN_HISTORY_NOT_AVAILABLE, e);
             return false;
         }
     }
@@ -103,7 +103,7 @@ public class ReportHistory extends AbstractIdleService {
             writer.addDocument(doc);
             writer.commit();
         } catch (Exception e) {
-            log(HISTORY_NOT_AVAILABLE, e);
+            log(WARN_HISTORY_NOT_AVAILABLE, e);
         }
     }
 

@@ -11,6 +11,7 @@
 package org.eclipse.epp.internal.logging.aeri.ui.model;
 
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.PLUGIN_ID;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction.NONE;
 import static org.eclipse.epp.internal.logging.aeri.ui.model.SendAction.ASK;
@@ -30,8 +31,6 @@ import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.epp.internal.logging.aeri.ui.Constants;
-import org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages;
-import org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
@@ -145,7 +144,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
                 Object data = EcoreUtil.createFromString(type, value);
                 settings.eSet(attr, data);
             } catch (Exception e) {
-                Logs.log(LogMessages.FAILED_TO_PARSE_PREFERENCE_VALUE, attr, value);
+                log(ERROR_FAILED_TO_PARSE_PREFERENCE_VALUE, attr, value);
             }
         }
         settings.eSetDeliver(true);
@@ -161,7 +160,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
             long elapsedTime = System.currentTimeMillis() - settings.getRememberSendActionPeriodStart();
             boolean isDayElapsed = elapsedTime >= MS_PER_DAY;
             if (isDayElapsed) {
-                log(LogMessages.PAUSE_PERIOD_ELAPSED);
+                log(INFO_PAUSE_PERIOD_ELAPSED);
                 settings.setAction(ASK);
                 settings.setRememberSendAction(NONE);
             }

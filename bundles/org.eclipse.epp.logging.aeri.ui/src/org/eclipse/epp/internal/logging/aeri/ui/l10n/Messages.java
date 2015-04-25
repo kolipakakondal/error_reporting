@@ -22,6 +22,8 @@ public class Messages extends NLS {
     public static String CONFIGURATIONDIALOG_PLEASE_TAKE_MOMENT_TO_CONFIGURE;
     public static String CONFIGURATIONDIALOG_PREFERENCE_PAGE_LINK;
     public static String CONFIGURATIONDIALOG_REPORTING_STARTED_FIRST_TIME;
+    public static String ERROR_FAILED_TO_PARSE_PREFERENCE_VALUE;
+    public static String ERROR_SAVE_PREFERENCES_FAILED;
     public static String ERRORREPORTWIZARD_WE_NOTICED_ERROR;
     public static String FIELD_LABEL_SERVER;
     public static String FIELD_LABEL_ACTION;
@@ -41,6 +43,7 @@ public class Messages extends NLS {
     public static String FIELD_LABEL_EMAIL;
     public static String FIELD_DESC_EMAIL;
     public static String FIELD_MESSAGE_EMAIL;
+    public static String INFO_PAUSE_PERIOD_ELAPSED;
     public static String SETTINGSPAGE_TITLE;
     public static String SETTINGSPAGE_DESC;
     public static String SETTINGSPAGE_GROUPLABEL_PERSONAL;
@@ -79,6 +82,27 @@ public class Messages extends NLS {
     public static String UPLOADJOB_NEED_FURTHER_INFORMATION;
     public static String UPLOADJOB_TASKNAME;
     public static String UPLOADJOB_THANK_YOU;
+    public static String WARN_CONFIGURATION_TIMED_OUT;
+    public static String WARN_FAILED_TO_FETCH_PROBLEM_DB_ETAG;
+    public static String WARN_FAILED_TO_PARSE_REMEMBER_SEND_MODE;
+    public static String WARN_FAILED_TO_PARSE_SEND_MODE;
+    public static String WARN_FIRST_CONFIGURATION_FAILED;
+    public static String WARN_HISTORY_NO_FINGERPRINT;
+    public static String WARN_HISTORY_NOT_AVAILABLE;
+    public static String WARN_HISTORY_START_FAILED;
+    public static String WARN_HISTORY_STOP_FAILED;
+    public static String WARN_ILLEGAL_STATE_NO_DISPLAY;
+    public static String WARN_INDEX_START_FAILED;
+    public static String WARN_INDEX_STOP_FAILED;
+    public static String WARN_INDEX_UPDATE_FAILED;
+    public static String WARN_NO_INTERNET;
+    public static String WARN_NOTIFICATION_TIMED_OUT;
+    public static String WARN_REFLECTION_FAILED;
+    public static String WARN_REPORTING_ERROR;
+    public static String WARN_SERVER_AVAILABILITY_CHECK_FAILED;
+    public static String INFO_SERVER_NOT_AVAILABLE;
+    public static String WARN_STATUS_INDEX_NOT_AVAILABLE;
+    public static String WARN_THANK_YOU_DIALOG_ERROR;
     static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);

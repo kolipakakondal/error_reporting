@@ -10,7 +10,7 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui.log;
 
-import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.REPORTING_ERROR;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.WARN_REPORTING_ERROR;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.model.Reports.*;
 
@@ -50,7 +50,7 @@ public class LogListener implements ILogListener {
             }
             bus.post(new NewReportLogged(report));
         } catch (Exception e) {
-            log(REPORTING_ERROR, e);
+            log(WARN_REPORTING_ERROR, e);
         }
     }
 

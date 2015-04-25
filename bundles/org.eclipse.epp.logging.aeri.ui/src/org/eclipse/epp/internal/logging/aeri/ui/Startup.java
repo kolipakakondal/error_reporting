@@ -115,7 +115,7 @@ public class Startup implements IStartup {
                         history.stopAsync();
                         history.awaitTerminated();
                     } catch (Exception e) {
-                        log(HISTORY_STOP_FAILED);
+                        log(WARN_HISTORY_STOP_FAILED);
                     }
                     return true;
                 }
@@ -125,7 +125,7 @@ public class Startup implements IStartup {
                 }
             });
         } catch (Exception e) {
-            log(HISTORY_START_FAILED, e);
+            log(WARN_HISTORY_START_FAILED, e);
         }
     }
 
@@ -145,7 +145,7 @@ public class Startup implements IStartup {
                         problemsDb.stopAsync();
                         problemsDb.awaitTerminated();
                     } catch (Exception e) {
-                        log(INDEX_STOP_FAILED);
+                        log(WARN_INDEX_STOP_FAILED);
                     }
                     return true;
                 }
@@ -155,7 +155,7 @@ public class Startup implements IStartup {
                 }
             });
         } catch (Exception e) {
-            log(INDEX_START_FAILED, e);
+            log(WARN_INDEX_START_FAILED, e);
         }
     }
 

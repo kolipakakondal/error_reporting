@@ -10,7 +10,7 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui.log;
 
-import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.FAILED_TO_FETCH_PROBLEM_DB_ETAG;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.proxy;
 
@@ -29,7 +29,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages;
 import org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Zips;
@@ -58,7 +57,7 @@ public class ProblemsDatabaseUpdateJob extends Job {
             String etag = getEtag().orNull();
             progress.worked(1);
             if (etag == null) {
-                return Logs.toStatus(FAILED_TO_FETCH_PROBLEM_DB_ETAG);
+                return Logs.toStatus(WARN_FAILED_TO_FETCH_PROBLEM_DB_ETAG);
             }
             try {
                 if (isLocalIndexOutdated(etag)) {
@@ -74,7 +73,7 @@ public class ProblemsDatabaseUpdateJob extends Job {
                     FileUtils.deleteQuietly(tempDir);
                 }
             } catch (Exception e) {
-                log(LogMessages.INDEX_UPDATE_FAILED, e);
+                log(WARN_INDEX_UPDATE_FAILED, e);
             }
             return Status.OK_STATUS;
         } finally {
@@ -95,7 +94,7 @@ public class ProblemsDatabaseUpdateJob extends Job {
 
             return Optional.fromNullable(response.returnResponse().getFirstHeader("ETAG").getValue());
         } catch (Exception e) {
-            log(LogMessages.INDEX_UPDATE_FAILED, e);
+            log(WARN_INDEX_UPDATE_FAILED, e);
             return Optional.absent();
         }
     }

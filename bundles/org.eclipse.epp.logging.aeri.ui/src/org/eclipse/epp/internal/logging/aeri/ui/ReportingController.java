@@ -15,6 +15,7 @@ import static com.google.common.collect.ImmutableList.copyOf;
 import static java.text.MessageFormat.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.eclipse.epp.internal.logging.aeri.ui.ConfigurationDialog.ESC_CANCEL;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.utils.Shells.isUIThread;
 import static org.eclipse.jface.window.Window.*;
@@ -46,7 +47,6 @@ import org.eclipse.epp.internal.logging.aeri.ui.Events.OpenUrlInBrowserRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.SendReportsRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseNotificationTimedOut;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseShowRequest;
-import org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages;
 import org.eclipse.epp.internal.logging.aeri.ui.l10n.Messages;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
@@ -98,8 +98,8 @@ public class ReportingController {
     private ReportHistory history;
     private ProblemsDatabaseService problemsDb;
 
-    public ReportingController(EventBus bus, Settings settings, INotificationService notifications,
-            ReportHistory history, ProblemsDatabaseService problemsDb) {
+    public ReportingController(EventBus bus, Settings settings, INotificationService notifications, ReportHistory history,
+            ProblemsDatabaseService problemsDb) {
         this.bus = bus;
         this.settings = settings;
         this.notifications = notifications;
@@ -216,7 +216,7 @@ public class ReportingController {
             if (display.isPresent()) {
                 display.get().asyncExec(run);
             } else {
-                log(LogMessages.ILLEGAL_STATE_NO_DISPLAY);
+                log(WARN_ILLEGAL_STATE_NO_DISPLAY);
             }
         }
     }
@@ -232,7 +232,7 @@ public class ReportingController {
         if (isConfigurationProcessTimedOut()) {
             resetConfigureRequestTimeout();
             setConfigureInProgress(false);
-            log(LogMessages.CONFIGURATION_TIMED_OUT);
+            log(WARN_CONFIGURATION_TIMED_OUT);
         }
         return configureInProgress;
     }
@@ -265,7 +265,7 @@ public class ReportingController {
         if (isNotificationTimedOut()) {
             resetNotificationInProgress();
             setNotificationInProgress(false);
-            log(LogMessages.NOTIFICATION_TIMED_OUT);
+            log(WARN_NOTIFICATION_TIMED_OUT);
         }
         return notificationInProgress;
     }
