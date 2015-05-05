@@ -11,6 +11,8 @@
 package org.eclipse.epp.internal.logging.aeri.ui.log;
 
 import static com.google.common.base.Objects.equal;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.WARN_HISTORY_NOT_AVAILABLE;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
 import org.eclipse.epp.internal.logging.aeri.ui.ExpiringReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
@@ -62,7 +64,7 @@ public class ReportPredicates {
             boolean seen =
             // exact identity
             history.seenExact(report) ||
-            // similar trace
+                    // similar trace
                     history.seenSimilarTrace(report);
             if (!seen) {
                 history.add(report);
@@ -87,11 +89,16 @@ public class ReportPredicates {
             if (!settings.isSkipSimilarErrors()) {
                 return true;
             }
+            if (!history.isRunning()) {
+                log(WARN_HISTORY_NOT_AVAILABLE);
+                return true;
+            }
+
             return
             // did we send a similar error before?
             !(history.seenSimilar(report) ||
-            // did we send exactly this error before?
-            history.seen(report));
+                    // did we send exactly this error before?
+                    history.seen(report));
         }
     }
 
