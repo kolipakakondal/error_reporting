@@ -13,6 +13,7 @@ package org.eclipse.epp.internal.logging.aeri.ui.model;
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Optional.fromNullable;
+import static java.text.MessageFormat.format;
 import static org.apache.commons.lang3.StringUtils.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
@@ -192,8 +193,8 @@ public class Reports {
         private void append(Throwable throwable, StringBuilder builder) {
             builder.append(String.format("%s: %s\n", throwable.getClassName(), throwable.getMessage()));
             for (StackTraceElement element : throwable.getStackTrace()) {
-                builder.append(String.format("\t at %s.%s(%s:%s)\n", element.getClassName(), element.getMethodName(), element.getFileName(),
-                        element.getLineNumber()));
+                builder.append(String.format("\t at %s.%s(%s:%s)\n", element.getClassName(), element.getMethodName(),
+                        element.getFileName(), element.getLineNumber()));
             }
             Throwable cause = throwable.getCause();
             if (cause != null) {
@@ -209,8 +210,8 @@ public class Reports {
         }
 
         public String print() {
-            return new StringBuilder().append(statusStringBuilder).append("\n").append(reportStringBuilder).append(bundlesStringBuilder)
-                    .toString();
+            return new StringBuilder().append(statusStringBuilder).append("\n").append(reportStringBuilder)
+                    .append(bundlesStringBuilder).toString();
         }
 
     }
@@ -235,8 +236,8 @@ public class Reports {
                 }
             }
             if (removedCount > 0) {
-                status.setMessage(
-                        String.format("%s [%d child-status duplicates removed by Error Reporting]", status.getMessage(), removedCount));
+                status.setMessage(String.format("%s [%d child-status duplicates removed by Error Reporting]",
+                        status.getMessage(), removedCount));
             }
         }
 
@@ -378,11 +379,20 @@ public class Reports {
         }
 
         List<Status> mChildren = mStatus.getChildren();
-        if (status.getException() instanceof CoreException) {
-            CoreException coreException = (CoreException) status.getException();
-            IStatus coreExceptionStatus = coreException.getStatus();
-            if (coreExceptionStatus != null) {
-                mChildren.add(newStatus(coreExceptionStatus, settings));
+        java.lang.Throwable exception = status.getException();
+        // CoreException handling
+        for (java.lang.Throwable cur = exception; cur != null; cur = cur.getCause()) {
+            if (cur instanceof CoreException) {
+                CoreException coreException = (CoreException) cur;
+                IStatus coreExceptionStatus = coreException.getStatus();
+                Status mCoreExceptionStatus = newStatus(coreExceptionStatus, settings);
+                String detachedMessage = format(
+                        "{0} [detached from CoreException of Status ''{1}'' by Error Reporting]",
+                        mCoreExceptionStatus.getMessage(), mStatus.getMessage());
+                mCoreExceptionStatus.setMessage(detachedMessage);
+                mChildren.add(mCoreExceptionStatus);
+                // further CoreExceptions are handled in the detached Status
+                break;
             }
         }
         // Multistatus handling
@@ -390,13 +400,14 @@ public class Reports {
             mChildren.add(newStatus(child, settings));
         }
         // some stacktraces from ui.monitoring should be filtered
-        boolean needFiltering = "org.eclipse.ui.monitoring".equals(status.getPlugin()) && (status.getCode() == 0 || status.getCode() == 1);
+        boolean needFiltering = "org.eclipse.ui.monitoring".equals(status.getPlugin())
+                && (status.getCode() == 0 || status.getCode() == 1);
         if (needFiltering) {
             MultiStatusFilter.filter(mStatus);
         }
 
-        if (status.getException() != null) {
-            Throwable mException = newThrowable(status.getException());
+        if (exception != null) {
+            Throwable mException = newThrowable(exception);
             mStatus.setException(mException);
         }
 
@@ -406,7 +417,8 @@ public class Reports {
     }
 
     public static String computeFingerprintFor(Status status, Settings settings) {
-        ThrowableFingerprintComputer fingerprintComputer = new ThrowableFingerprintComputer(settings.getWhitelistedPackages(), 1024);
+        ThrowableFingerprintComputer fingerprintComputer = new ThrowableFingerprintComputer(
+                settings.getWhitelistedPackages(), 1024);
         visit(status, fingerprintComputer);
         return fingerprintComputer.hash();
     }
