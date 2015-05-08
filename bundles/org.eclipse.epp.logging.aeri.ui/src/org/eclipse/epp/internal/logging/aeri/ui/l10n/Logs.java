@@ -41,8 +41,7 @@ public class Logs {
     public interface ILogMessage {
 
         /**
-         * The severity of a log message. One of {@link IStatus#ERROR},
-         * {@link IStatus#WARNING}, {@link IStatus#INFO}, {@link IStatus#OK},
+         * The severity of a log message. One of {@link IStatus#ERROR}, {@link IStatus#WARNING}, {@link IStatus#INFO}, {@link IStatus#OK},
          * {@link IStatus#CANCEL}
          */
         int severity();
@@ -53,8 +52,7 @@ public class Logs {
         int code();
 
         /**
-         * A message string that may contain {@link MessageFormat} compatible
-         * placeholders (e.g., {0}).
+         * A message string that may contain {@link MessageFormat} compatible placeholders (e.g., {0}).
          */
         String message();
 

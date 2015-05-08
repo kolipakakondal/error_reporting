@@ -64,8 +64,8 @@ public class TestReports {
         RuntimeException cause = new RuntimeException("cause");
         Exception exception = new RuntimeException("exception message", cause);
         exception.fillInStackTrace();
-        IStatus status = new org.eclipse.core.runtime.Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri",
-                "some error message", exception);
+        IStatus status = new org.eclipse.core.runtime.Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "some error message",
+                exception);
 
         Settings settings = ModelFactory.eINSTANCE.createSettings();
         settings.setWhitelistedPackages(newArrayList("org."));

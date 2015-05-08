@@ -12,11 +12,14 @@ package org.eclipse.epp.internal.logging.aeri.ui;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.SYSPROP_ECLIPSE_BUILD_ID;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -47,7 +50,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
@@ -70,17 +72,6 @@ public class LogListenerTest {
     public RetainSystemProperties retainSystemProperties = new RetainSystemProperties();
 
     private static class TestHistory extends ReportHistory {
-        @Override
-        protected Directory createIndexDirectory() throws IOException {
-            return new RAMDirectory();
-        }
-    }
-
-    private static class TestServerProblemStatusIndex extends ProblemsDatabaseService {
-        public TestServerProblemStatusIndex(File indexDirectory) {
-            super(indexDirectory);
-        }
-
         @Override
         protected Directory createIndexDirectory() throws IOException {
             return new RAMDirectory();
@@ -113,7 +104,7 @@ public class LogListenerTest {
         problemStatusIndex = mock(ProblemsDatabaseService.class);
         Optional<ProblemStatus> noStatus = Optional.absent();
 
-        when(problemStatusIndex.seen(Mockito.any(ErrorReport.class))).thenReturn(noStatus);
+        when(problemStatusIndex.seen(org.mockito.Matchers.any(ErrorReport.class))).thenReturn(noStatus);
 
         sut = Startup.createLogListener(settings, history, bus, expiringHistory, problemStatusIndex);
     }
@@ -338,10 +329,10 @@ public class LogListenerTest {
     }
 
     @Test
-    public void testMonitoringStatusWithNoChildsFiltered() throws IllegalAccessException, IllegalArgumentException,
-            InvocationTargetException, NoSuchMethodException, SecurityException {
-        MultiStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, "UI freeze of 6,0s at 11:24:59.108", new RuntimeException(
-                "stand-in-stacktrace"));
+    public void testMonitoringStatusWithNoChildsFiltered()
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+        MultiStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, "UI freeze of 6,0s at 11:24:59.108",
+                new RuntimeException("stand-in-stacktrace"));
         Method method = Status.class.getDeclaredMethod("setSeverity", Integer.TYPE);
         method.setAccessible(true);
         method.invoke(multi, IStatus.ERROR);
@@ -383,7 +374,7 @@ public class LogListenerTest {
         status.setBugUrl("http://the.url");
         status.setAction(RequiredAction.IGNORE);
 
-        when(problemStatusIndex.seen(Mockito.any(ErrorReport.class))).thenReturn(Optional.of(status));
+        when(problemStatusIndex.seen(org.mockito.Matchers.any(ErrorReport.class))).thenReturn(Optional.of(status));
 
         sut.logging(s1, "");
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
 	<feature id="org.eclipse.epp.logging.aeri.feature">
-		<category name="main"/>
+		<category name="main" />
 	</feature>
 	<feature id="org.eclipse.epp.logging.aeri.feature.source">
-		<category name="sources"/>
+		<category name="sources" />
 	</feature>
-	<feature id="org.eclipse.epp.logging.3rd.feature"/>
-	<feature id="org.eclipse.epp.logging.3rd.feature.source"/>
-	<category-def name="main" label="EPP Logging"/>
-	<category-def name="sources" label="EPP Logging Sources"/>
+	<feature id="org.eclipse.epp.logging.3rd.feature" />
+	<feature id="org.eclipse.epp.logging.3rd.feature.source" />
+	<category-def name="main" label="EPP Logging" />
+	<category-def name="sources" label="EPP Logging Sources" />
 </site>

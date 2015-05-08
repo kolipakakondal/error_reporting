@@ -60,13 +60,12 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         addField(createStringFieldEditorAndToolTip(PROP_EMAIL, Messages.FIELD_LABEL_EMAIL,
                 Messages.FIELD_MESSAGE_EMAIL + " \n" + Messages.FIELD_DESC_EMAIL)); //$NON-NLS-1$
 
-        addField(new ComboFieldEditor(PROP_SEND_ACTION, Messages.FIELD_LABEL_ACTION, createModeLabelAndValues(),
-                getFieldEditorParent()));
+        addField(new ComboFieldEditor(PROP_SEND_ACTION, Messages.FIELD_LABEL_ACTION, createModeLabelAndValues(), getFieldEditorParent()));
 
         addField(createBooleanFieldEditorAndToolTip(PROP_SKIP_SIMILAR_ERRORS, Messages.FIELD_LABEL_SKIP_SIMILAR_ERRORS,
                 Messages.TOOLTIP_SKIP_SIMILAR));
-        addField(createBooleanFieldEditorAndToolTip(PROP_ANONYMIZE_STACKTRACES,
-                Messages.FIELD_LABEL_ANONYMIZE_STACKTRACES, Messages.TOOLTIP_MAKE_STACKTRACE_ANONYMOUS));
+        addField(createBooleanFieldEditorAndToolTip(PROP_ANONYMIZE_STACKTRACES, Messages.FIELD_LABEL_ANONYMIZE_STACKTRACES,
+                Messages.TOOLTIP_MAKE_STACKTRACE_ANONYMOUS));
         addField(createBooleanFieldEditorAndToolTip(PROP_ANONYMIZE_MESSAGES, Messages.FIELD_LABEL_ANONYMIZE_MESSAGES,
                 Messages.TOOLTIP_MAKE_MESSAGES_ANONYMOUS));
 
@@ -82,10 +81,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         return stringFieldEditor;
     }
 
-    private BooleanFieldEditor createBooleanFieldEditorAndToolTip(String fieldEditorName, String fieldEditorLabel,
-            String toolTipText) {
-        BooleanFieldEditor booleanFieldEditor = new BooleanFieldEditor(fieldEditorName, fieldEditorLabel,
-                getFieldEditorParent());
+    private BooleanFieldEditor createBooleanFieldEditorAndToolTip(String fieldEditorName, String fieldEditorLabel, String toolTipText) {
+        BooleanFieldEditor booleanFieldEditor = new BooleanFieldEditor(fieldEditorName, fieldEditorLabel, getFieldEditorParent());
         DefaultToolTip toolTip = new DefaultToolTip(booleanFieldEditor.getDescriptionControl(getFieldEditorParent()));
         calibrateTooltip(toolTip, toolTipText);
 

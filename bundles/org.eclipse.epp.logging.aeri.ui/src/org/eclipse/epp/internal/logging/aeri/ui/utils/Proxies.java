@@ -41,8 +41,7 @@ public final class Proxies {
      * Returns the domain of the current machine- if any.
      *
      * @param userName
-     *            the user name which may be null. On windows it may contain the
-     *            domain name as prefix "domain\\username".
+     *            the user name which may be null. On windows it may contain the domain name as prefix "domain\\username".
      */
     public static Optional<String> getUserDomain(String userName) {
 

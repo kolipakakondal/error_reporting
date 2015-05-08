@@ -55,6 +55,7 @@ public class LogErrorsAction implements IWorkbenchWindowActionDelegate {
         job.schedule();
     }
 
+    @SuppressWarnings("unused")
     private void logMultiStatusDelayed() {
         int counter = 0;
         IStatus[] children = new IStatus[3];
@@ -63,8 +64,7 @@ public class LogErrorsAction implements IWorkbenchWindowActionDelegate {
             cause.setStackTrace(createTrace(3));
             Exception exception = new RuntimeException("exception message", cause);
             exception.setStackTrace(createTrace(3));
-            children[i] = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri",
-                    "status error message " + ++counter, exception);
+            children[i] = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "status error message " + ++counter, exception);
         }
         try {
             Thread.sleep(750);

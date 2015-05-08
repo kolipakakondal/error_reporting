@@ -62,8 +62,7 @@ import com.google.common.eventbus.EventBus;
 
 public class ReportDialog extends MessageDialog {
 
-    private static final Image ERROR_ICON = PlatformUI.getWorkbench().getSharedImages()
-            .getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
+    private static final Image ERROR_ICON = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
     private Settings settings;
     private TableViewer tableViewer;
     private StyledText messageText;
@@ -77,10 +76,7 @@ public class ReportDialog extends MessageDialog {
     private Button ignoreSimilarButton;
 
     public ReportDialog(Shell parentShell, Settings settings, IObservableList errors, EventBus bus) {
-        super(
-                parentShell,
-                "An Error Was Logged",
-                null,
+        super(parentShell, "An Error Was Logged", null,
                 "We noticed a new error event was logged. Such error events may reveal issues in the Eclipse codebase, and thus we kindly ask you to report them to eclipse.org.",
                 MessageDialog.WARNING, new String[] { "Send", "Don't Send" }, 0);
         setShellStyle(SWT.MODELESS | SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX);
@@ -111,8 +107,7 @@ public class ReportDialog extends MessageDialog {
         createDetailsContainer(parent, container);
 
         Composite settingsComposite = createSettingsComposite(parent);
-        GridDataFactory.fillDefaults().grab(true, false).indent(0, 5).align(SWT.BEGINNING, SWT.CENTER)
-                .applyTo(settingsComposite);
+        GridDataFactory.fillDefaults().grab(true, false).indent(0, 5).align(SWT.BEGINNING, SWT.CENTER).applyTo(settingsComposite);
         return container;
     }
 
@@ -126,8 +121,8 @@ public class ReportDialog extends MessageDialog {
         GridLayoutFactory.fillDefaults().applyTo(commentContent);
 
         commentText = new Text(commentContent, SWT.BORDER | SWT.MULTI | SWT.WRAP);
-        commentText.setToolTipText("If possible, please provide additional information "
-                + "such as steps that allow committers to reproduce this error.");
+        commentText.setToolTipText(
+                "If possible, please provide additional information " + "such as steps that allow committers to reproduce this error.");
         commentText.addModifyListener(new ModifyListener() {
             @Override
             public void modifyText(ModifyEvent event) {
@@ -179,8 +174,7 @@ public class ReportDialog extends MessageDialog {
 
     private Composite createTableComposite(Composite parent) {
         Composite tableComposite = new Composite(parent, SWT.NONE);
-        tableViewer = new TableViewer(tableComposite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION
-                | SWT.BORDER);
+        tableViewer = new TableViewer(tableComposite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
         TableViewerColumn column = new TableViewerColumn(tableViewer, SWT.NONE);
         column.setLabelProvider(new ColumnLabelProvider() {
 
@@ -249,14 +243,12 @@ public class ReportDialog extends MessageDialog {
         GridDataFactory.fillDefaults().grab(true, true).applyTo(messageComposite);
         messageText = new StyledText(messageComposite, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
         messageText.setEditable(false);
-        messageText.setMargins(5, messageText.getTopMargin(), messageText.getRightMargin(),
-                messageText.getBottomMargin());
+        messageText.setMargins(5, messageText.getTopMargin(), messageText.getRightMargin(), messageText.getBottomMargin());
         messageText.setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
         messageText.setForeground(new Color(container.getDisplay(), 80, 80, 80));
         GridDataFactory.fillDefaults().minSize(100, 1).hint(100, 300).grab(true, true).applyTo(messageText);
 
-        logMessageButton = createAndConfigureCheckbox(container, Messages.FIELD_LABEL_NOT_AN_ERROR,
-                Messages.TOOLTIP_NOT_AN_ERROR);
+        logMessageButton = createAndConfigureCheckbox(container, Messages.FIELD_LABEL_NOT_AN_ERROR, Messages.TOOLTIP_NOT_AN_ERROR);
         logMessageButton.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -264,8 +256,8 @@ public class ReportDialog extends MessageDialog {
                 updateMessageText();
             }
         });
-        ignoreSimilarButton = createAndConfigureCheckbox(container,
-                Messages.FIELD_LABEL_IGNORE_SIMILAR_ERRORS_IN_FUTURE, Messages.TOOLTIP_IGNORE_SIMILAR_ERRORS_IN_FUTURE);
+        ignoreSimilarButton = createAndConfigureCheckbox(container, Messages.FIELD_LABEL_IGNORE_SIMILAR_ERRORS_IN_FUTURE,
+                Messages.TOOLTIP_IGNORE_SIMILAR_ERRORS_IN_FUTURE);
         ignoreSimilarButton.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -293,8 +285,8 @@ public class ReportDialog extends MessageDialog {
         rememberSettingCombo.setContentProvider(ArrayContentProvider.getInstance());
         rememberSettingCombo.getCombo().setEnabled(false);
 
-        rememberSettingCombo.setInput(new RememberSendAction[] { RememberSendAction.PERMANENT,
-                RememberSendAction.RESTART, RememberSendAction.HOURS_24 });
+        rememberSettingCombo.setInput(
+                new RememberSendAction[] { RememberSendAction.PERMANENT, RememberSendAction.RESTART, RememberSendAction.HOURS_24 });
         rememberSettingCombo.setLabelProvider(new LabelProvider() {
             @Override
             public String getText(Object element) {

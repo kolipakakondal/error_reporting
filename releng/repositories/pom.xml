@@ -58,8 +58,12 @@
 							</goals>
 							<phase>package</phase>
 							<configuration>
-								<appArgLine>-application org.eclipse.wtp.releng.tools.addRepoProperties</appArgLine>
-								<argLine>-DartifactRepoDirectory=${project.build.directory}/repository -Dp2MirrorsURL=${p2MirrorsURL} -DstatsTrackedArtifacts=${statsTrackedArtifacts} -DstatsArtifactsSuffix=-${project.version}</argLine>
+								<appArgLine>-application
+									org.eclipse.wtp.releng.tools.addRepoProperties</appArgLine>
+								<argLine>-DartifactRepoDirectory=${project.build.directory}/repository
+									-Dp2MirrorsURL=${p2MirrorsURL}
+									-DstatsTrackedArtifacts=${statsTrackedArtifacts}
+									-DstatsArtifactsSuffix=-${project.version}</argLine>
 								<dependencies>
 									<dependency>
 										<artifactId>org.eclipse.wtp.releng.tools.feature</artifactId>

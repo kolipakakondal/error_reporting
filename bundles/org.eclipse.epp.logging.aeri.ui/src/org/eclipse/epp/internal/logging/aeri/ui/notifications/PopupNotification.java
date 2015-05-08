@@ -90,8 +90,8 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
         GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(labelText);
         String description = notification.getDescription();
         if (isNotBlank(description)) {
-            StyledText descriptionText = new StyledText(contentComposite, SWT.BEGINNING | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP
-                    | SWT.NO_FOCUS);
+            StyledText descriptionText = new StyledText(contentComposite,
+                    SWT.BEGINNING | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP | SWT.NO_FOCUS);
             descriptionText.setText(abbreviate(description, MAX_DESCRIPTION_CHAR_LENGTH));
             descriptionText.setBackground(contentComposite.getBackground());
             GridDataFactory.fillDefaults().span(2, SWT.DEFAULT).grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(descriptionText);

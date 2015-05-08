@@ -107,8 +107,7 @@ public class Zips {
     }
 
     /**
-     * Reads the give file into memory. This method may be used by zip based
-     * recommenders to speed up data access.
+     * Reads the give file into memory. This method may be used by zip based recommenders to speed up data access.
      */
     public static byte[] readFully(File file) throws IOException {
         return toByteArray(newInputStreamSupplier(file));

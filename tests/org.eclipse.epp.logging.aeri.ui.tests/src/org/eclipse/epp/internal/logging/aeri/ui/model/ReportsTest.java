@@ -159,8 +159,7 @@ public class ReportsTest {
     public void testFingerprintNested() {
         Exception root = new RuntimeException("root");
         IStatus s1 = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "some error message", root);
-        IStatus s2 = new MultiStatus("org.eclipse.epp.logging.aeri", 0, new IStatus[] { s1 }, "some error message",
-                root);
+        IStatus s2 = new MultiStatus("org.eclipse.epp.logging.aeri", 0, new IStatus[] { s1 }, "some error message", root);
 
         org.eclipse.epp.internal.logging.aeri.ui.model.Status normal = Reports.newStatus(s1, settings);
         org.eclipse.epp.internal.logging.aeri.ui.model.Status multi = Reports.newStatus(s2, settings);
@@ -172,11 +171,9 @@ public class ReportsTest {
     public void testCoreExceptionHandling() {
         IStatus causingStatus = new Status(IStatus.ERROR, "the.causing.plugin", "first message");
         java.lang.Throwable causingException = new CoreException(causingStatus);
-        IStatus causedStatus = new Status(IStatus.WARNING, "some.calling.plugin", "any other message",
-                causingException);
+        IStatus causedStatus = new Status(IStatus.WARNING, "some.calling.plugin", "any other message", causingException);
         java.lang.Throwable rootException = new CoreException(causedStatus);
-        IStatus rootEvent = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "someErrorMessage",
-                rootException);
+        IStatus rootEvent = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "someErrorMessage", rootException);
 
         org.eclipse.epp.internal.logging.aeri.ui.model.Status rootStatus = Reports.newStatus(rootEvent, settings);
 
@@ -192,22 +189,20 @@ public class ReportsTest {
         Exception e1 = new Exception("Stack Trace");
         e1.setStackTrace(createStacktraceForClasses("java.lang.Object", "org.eclipse.core.internal.jobs.WorkerPool",
                 "org.eclipse.core.internal.jobs.WorkerPool", "org.eclipse.core.internal.jobs.Worker"));
-        IStatus s1 = new Status(IStatus.ERROR, "org.eclipse.ui.monitoring", "Thread 'Worker-3' tid=39 (TIMED_WAITING)\n"
-                + "Waiting for: org.eclipse.core.internal.jobs.WorkerPool@416dc7fc", e1);
+        IStatus s1 = new Status(IStatus.ERROR, "org.eclipse.ui.monitoring",
+                "Thread 'Worker-3' tid=39 (TIMED_WAITING)\n" + "Waiting for: org.eclipse.core.internal.jobs.WorkerPool@416dc7fc", e1);
 
         Exception e2 = new Exception("Stack Trace");
-        e2.setStackTrace(
-                TestReports.createStacktraceForClasses("java.lang.Object", "org.eclipse.core.internal.jobs.WorkerPool",
-                        "org.eclipse.core.internal.jobs.WorkerPool", "org.eclipse.core.internal.jobs.Worker"));
-        IStatus s2 = new Status(IStatus.ERROR, "org.eclipse.ui.monitoring", "Thread 'Worker-2' tid=36 (TIMED_WAITING)\n"
-                + "Waiting for: org.eclipse.core.internal.jobs.WorkerPool@416dc7fc", e2);
+        e2.setStackTrace(TestReports.createStacktraceForClasses("java.lang.Object", "org.eclipse.core.internal.jobs.WorkerPool",
+                "org.eclipse.core.internal.jobs.WorkerPool", "org.eclipse.core.internal.jobs.Worker"));
+        IStatus s2 = new Status(IStatus.ERROR, "org.eclipse.ui.monitoring",
+                "Thread 'Worker-2' tid=36 (TIMED_WAITING)\n" + "Waiting for: org.eclipse.core.internal.jobs.WorkerPool@416dc7fc", e2);
 
-        IStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, new IStatus[] { s1, s2 },
-                "UI freeze of 10s at 08:09:02.936", new RuntimeException("stand-in-stacktrace"));
+        IStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, new IStatus[] { s1, s2 }, "UI freeze of 10s at 08:09:02.936",
+                new RuntimeException("stand-in-stacktrace"));
         org.eclipse.epp.internal.logging.aeri.ui.model.Status newStatus = Reports.newStatus(multi, settings);
         assertThat(newStatus.getChildren().size(), is(1));
-        assertThat(newStatus.getMessage(),
-                is("UI freeze of 10s at 08:09:02.936 [1 child-status duplicates removed by Error Reporting]"));
+        assertThat(newStatus.getMessage(), is("UI freeze of 10s at 08:09:02.936 [1 child-status duplicates removed by Error Reporting]"));
     }
 
     @Test
@@ -215,11 +210,10 @@ public class ReportsTest {
 
         Exception e1 = new Exception("Stack Trace 1");
         e1.setStackTrace(new java.lang.StackTraceElement[0]);
-        IStatus s1 = new Status(IStatus.ERROR, "org.eclipse.ui.monitoring",
-                "Thread 'Signal Dispatcher' tid=4 (RUNNABLE)", e1);
+        IStatus s1 = new Status(IStatus.ERROR, "org.eclipse.ui.monitoring", "Thread 'Signal Dispatcher' tid=4 (RUNNABLE)", e1);
 
-        IStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, new IStatus[] { s1 },
-                "UI freeze of 10s at 08:09:02.936", new RuntimeException("stand-in-stacktrace"));
+        IStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, new IStatus[] { s1 }, "UI freeze of 10s at 08:09:02.936",
+                new RuntimeException("stand-in-stacktrace"));
         org.eclipse.epp.internal.logging.aeri.ui.model.Status newStatus = Reports.newStatus(multi, settings);
         assertThat(newStatus.getChildren().size(), is(0));
     }
@@ -401,29 +395,24 @@ public class ReportsTest {
                 "org.eclipse.epp.logging.aeri.ui.actions.UiFreezeAction", "org.eclipse.ui.internal.PluginAction",
                 "org.eclipse.ui.internal.WWinPluginAction", "org.eclipse.jface.action.ActionContributionItem",
                 "org.eclipse.jface.action.ActionContributionItem", "org.eclipse.jface.action.ActionContributionItem",
-                "org.eclipse.swt.widgets.EventTable", "org.eclipse.swt.widgets.Display",
-                "org.eclipse.swt.widgets.Widget", "org.eclipse.swt.widgets.Display", "org.eclipse.swt.widgets.Display",
-                "org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine",
-                "org.eclipse.core.databinding.observable.Realm",
-                "org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine",
-                "org.eclipse.e4.ui.internal.workbench.E4Workbench", "org.eclipse.ui.internal.Workbench",
-                "org.eclipse.core.databinding.observable.Realm", "org.eclipse.ui.internal.Workbench",
+                "org.eclipse.swt.widgets.EventTable", "org.eclipse.swt.widgets.Display", "org.eclipse.swt.widgets.Widget",
+                "org.eclipse.swt.widgets.Display", "org.eclipse.swt.widgets.Display",
+                "org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine", "org.eclipse.core.databinding.observable.Realm",
+                "org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine", "org.eclipse.e4.ui.internal.workbench.E4Workbench",
+                "org.eclipse.ui.internal.Workbench", "org.eclipse.core.databinding.observable.Realm", "org.eclipse.ui.internal.Workbench",
                 "org.eclipse.ui.PlatformUI", "org.eclipse.ui.internal.ide.application.IDEApplication",
-                "org.eclipse.equinox.internal.app.EclipseAppHandle",
-                "org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher",
-                "org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher",
-                "org.eclipse.core.runtime.adaptor.EclipseStarter", "org.eclipse.core.runtime.adaptor.EclipseStarter",
-                "sun.reflect.NativeMethodAccessorImpl", "sun.reflect.NativeMethodAccessorImpl",
-                "sun.reflect.DelegatingMethodAccessorImpl", "java.lang.reflect.Method",
-                "org.eclipse.equinox.launcher.Main", "org.eclipse.equinox.launcher.Main",
-                "org.eclipse.equinox.launcher.Main", "org.eclipse.equinox.launcher.Main",
-                "org.eclipse.equinox.launcher.Main");
+                "org.eclipse.equinox.internal.app.EclipseAppHandle", "org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher",
+                "org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher", "org.eclipse.core.runtime.adaptor.EclipseStarter",
+                "org.eclipse.core.runtime.adaptor.EclipseStarter", "sun.reflect.NativeMethodAccessorImpl",
+                "sun.reflect.NativeMethodAccessorImpl", "sun.reflect.DelegatingMethodAccessorImpl", "java.lang.reflect.Method",
+                "org.eclipse.equinox.launcher.Main", "org.eclipse.equinox.launcher.Main", "org.eclipse.equinox.launcher.Main",
+                "org.eclipse.equinox.launcher.Main", "org.eclipse.equinox.launcher.Main");
         e1.setStackTrace(stackTrace);
         IStatus s1 = new Status(IStatus.ERROR, "org.eclipse.ui.monitoring",
                 "Sample at 11:25:04.447 (+1,331s)\n" + "Thread 'main' tid=1 (TIMED_WAITING)", e1);
 
-        IStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, new IStatus[] { s1 },
-                "UI freeze of 6,0s at 11:24:59.108", new RuntimeException("stand-in-stacktrace"));
+        IStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, new IStatus[] { s1 }, "UI freeze of 6,0s at 11:24:59.108",
+                new RuntimeException("stand-in-stacktrace"));
         org.eclipse.epp.internal.logging.aeri.ui.model.Status newStatus = Reports.newStatus(multi, settings);
         assertThat(newStatus.getChildren().size(), is(1));
         assertThat(newStatus.getChildren().get(0).getException().getStackTrace().size(), is(stackTrace.length));

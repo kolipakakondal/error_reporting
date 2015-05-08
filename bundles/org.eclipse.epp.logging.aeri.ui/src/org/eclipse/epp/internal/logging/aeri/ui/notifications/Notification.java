@@ -32,6 +32,7 @@ public abstract class Notification extends AbstractUiNotification {
         this.bus = bus;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
         return Platform.getAdapterManager().getAdapter(this, adapter);
@@ -65,9 +66,8 @@ public abstract class Notification extends AbstractUiNotification {
     }
 
     /**
-     * Returns the list of actions for this notification. The first action (if
-     * present) will be selected as default action for the notification and used
-     * in {@link #open()}
+     * Returns the list of actions for this notification. The first action (if present) will be selected as default action for the
+     * notification and used in {@link #open()}
      */
     public abstract List<NoficationAction> getActions();
 

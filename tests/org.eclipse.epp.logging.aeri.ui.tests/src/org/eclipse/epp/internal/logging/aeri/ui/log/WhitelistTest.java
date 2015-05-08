@@ -27,10 +27,8 @@ public class WhitelistTest {
     public void testWhitelistPackages() throws Exception {
         Collection<String> sut = s.getWhitelistedPackages();
         Assert.assertThat(sut, not(hasItems("")));
-        Assert.assertThat(
-                sut,
-                hasItems("org.eclipse.", "org.apache.", "ch.qos.", "org.slf4j.", "java.", "javax.", "javafx.", "sun.", "com.sun.",
-                        "com.codetrails.", "org.osgi.", "com.google."));
+        Assert.assertThat(sut, hasItems("org.eclipse.", "org.apache.", "ch.qos.", "org.slf4j.", "java.", "javax.", "javafx.", "sun.",
+                "com.sun.", "com.codetrails.", "org.osgi.", "com.google."));
 
     }
 

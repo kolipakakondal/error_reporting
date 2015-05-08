@@ -95,8 +95,9 @@ public class ServerResponseNotification extends Notification {
         }
         case UNCONFIRMED:
         case NEW: {
-            text.append(format("It's not yet confirmed as a bug. "
-                    + "Please visit your report and see if you can provide more information.", state.getReportTitle()));
+            text.append(
+                    format("It's not yet confirmed as a bug. " + "Please visit your report and see if you can provide more information.",
+                            state.getReportTitle()));
             break;
         }
         case INVALID:

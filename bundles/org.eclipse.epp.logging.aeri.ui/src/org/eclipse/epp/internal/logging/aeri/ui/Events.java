@@ -69,8 +69,7 @@ public class Events {
     }
 
     /**
-     * Fired when the popup notification closed w/o any action (no matter it was dismissed by pressing on the x or timed
-     * out)
+     * Fired when the popup notification closed w/o any action (no matter it was dismissed by pressing on the x or timed out)
      */
     public static class NewReportNotificationTimedOut {
 

@@ -70,8 +70,7 @@ public class StandInStacktraceProviderTest {
 
     @Test
     public void testClearMultipleBlacklistedOnTop() {
-        StackTraceElement[] stackframes = createStacktraceForClasses(BLACKLISTED_CLASS_1, BLACKLISTED_CLASS_2,
-                ANY_CLASS_1);
+        StackTraceElement[] stackframes = createStacktraceForClasses(BLACKLISTED_CLASS_1, BLACKLISTED_CLASS_2, ANY_CLASS_1);
 
         StackTraceElement[] cleared = stacktraceProvider.clearBlacklistedTopStackframes(stackframes, BLACKLIST);
 
@@ -91,8 +90,8 @@ public class StandInStacktraceProviderTest {
 
     @Test
     public void testDoNotClearBlacklistedOnBottomButOnTop() {
-        StackTraceElement[] stackframes = createStacktraceForClasses(BLACKLISTED_CLASS_1, BLACKLISTED_CLASS_2,
-                ANY_CLASS_1, BLACKLISTED_CLASS_3);
+        StackTraceElement[] stackframes = createStacktraceForClasses(BLACKLISTED_CLASS_1, BLACKLISTED_CLASS_2, ANY_CLASS_1,
+                BLACKLISTED_CLASS_3);
 
         StackTraceElement[] cleared = stacktraceProvider.clearBlacklistedTopStackframes(stackframes, BLACKLIST);
 
@@ -122,16 +121,15 @@ public class StandInStacktraceProviderTest {
     public void testInsertedExceptionClass() {
         Status status = createStatus(IStatus.ERROR, "plugin.id", "any message");
         stacktraceProvider.insertStandInStacktraceIfEmpty(status, settings);
-        Assert.assertThat(status.getException().getClassName(),
-                is(StandInStacktraceProvider.StandInException.class.getName()));
+        Assert.assertThat(status.getException().getClassName(), is(StandInStacktraceProvider.StandInException.class.getName()));
     }
 
     @Test
     public void testInsertStacktraceSkippedForStatusWithException() {
         Status status = createStatus(IStatus.ERROR, "plugin.id", "any message", new RuntimeException());
         stacktraceProvider.insertStandInStacktraceIfEmpty(status, settings);
-        Mockito.verify(stacktraceProvider, never()).clearBlacklistedTopStackframes(
-                Matchers.any(StackTraceElement[].class), Matchers.anySetOf(String.class));
+        Mockito.verify(stacktraceProvider, never()).clearBlacklistedTopStackframes(Matchers.any(StackTraceElement[].class),
+                Matchers.anySetOf(String.class));
     }
 
     @Test

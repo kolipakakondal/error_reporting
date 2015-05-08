@@ -64,8 +64,7 @@ public class NotificationServiceTest {
     public void testResponseFixed() throws InterruptedException {
         ServerResponse result = createUploadResult();
         notifications.showNewResponseNotification(result);
-        ServerResponseNotificationTimedOut event = (ServerResponseNotificationTimedOut) queue.poll(20,
-                TimeUnit.SECONDS);
+        ServerResponseNotificationTimedOut event = (ServerResponseNotificationTimedOut) queue.poll(20, TimeUnit.SECONDS);
         Assert.assertThat(event, isA(ServerResponseNotificationTimedOut.class));
     }
 

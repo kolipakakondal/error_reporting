@@ -16,16 +16,14 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage;
 import org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Throwable</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Throwable</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getClassName <em>Class Name</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getMessage <em>Message</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getCause <em>Cause</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getStackTrace <em>Stack Trace</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getClassName <em>Class Name</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getMessage <em>Message</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getCause <em>Cause</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.ThrowableImpl#getStackTrace <em>Stack Trace</em>}</li>
  * </ul>
  * </p>
  *
@@ -33,9 +31,8 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement;
  */
 public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.eclipse.epp.internal.logging.aeri.ui.model.Throwable {
     /**
-     * The default value of the '{@link #getClassName() <em>Class Name</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #getClassName() <em>Class Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getClassName()
      * @generated
      * @ordered
@@ -43,9 +40,8 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     protected static final String CLASS_NAME_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getClassName() <em>Class Name</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getClassName() <em>Class Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getClassName()
      * @generated
      * @ordered
@@ -53,9 +49,8 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     protected String className = CLASS_NAME_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getMessage() <em>Message</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #getMessage() <em>Message</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getMessage()
      * @generated
      * @ordered
@@ -63,9 +58,8 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     protected static final String MESSAGE_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getMessage() <em>Message</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getMessage() <em>Message</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getMessage()
      * @generated
      * @ordered
@@ -73,9 +67,8 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     protected String message = MESSAGE_EDEFAULT;
 
     /**
-     * The cached value of the '{@link #getCause() <em>Cause</em>}' containment reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getCause() <em>Cause</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getCause()
      * @generated
      * @ordered
@@ -83,9 +76,9 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     protected org.eclipse.epp.internal.logging.aeri.ui.model.Throwable cause;
 
     /**
-     * The cached value of the '{@link #getStackTrace() <em>Stack Trace</em>}' containment reference list.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getStackTrace() <em>Stack Trace</em>}' containment reference list. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #getStackTrace()
      * @generated
      * @ordered
@@ -93,8 +86,8 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     protected EList<StackTraceElement> stackTrace;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     protected ThrowableImpl() {
@@ -102,8 +95,8 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
@@ -112,8 +105,8 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public String getClassName() {
@@ -121,8 +114,8 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setClassName(String newClassName) {
@@ -133,8 +126,8 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public String getMessage() {
@@ -142,8 +135,8 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setMessage(String newMessage) {
@@ -154,8 +147,8 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public org.eclipse.epp.internal.logging.aeri.ui.model.Throwable getCause() {
@@ -163,42 +156,46 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public NotificationChain basicSetCause(org.eclipse.epp.internal.logging.aeri.ui.model.Throwable newCause, NotificationChain msgs) {
         org.eclipse.epp.internal.logging.aeri.ui.model.Throwable oldCause = cause;
         cause = newCause;
         if (eNotificationRequired()) {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ModelPackage.THROWABLE__CAUSE, oldCause, newCause);
-            if (msgs == null) msgs = notification; else msgs.add(notification);
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ModelPackage.THROWABLE__CAUSE, oldCause,
+                    newCause);
+            if (msgs == null)
+                msgs = notification;
+            else
+                msgs.add(notification);
         }
         return msgs;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setCause(org.eclipse.epp.internal.logging.aeri.ui.model.Throwable newCause) {
         if (newCause != cause) {
             NotificationChain msgs = null;
             if (cause != null)
-                msgs = ((InternalEObject)cause).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ModelPackage.THROWABLE__CAUSE, null, msgs);
+                msgs = ((InternalEObject) cause).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ModelPackage.THROWABLE__CAUSE, null, msgs);
             if (newCause != null)
-                msgs = ((InternalEObject)newCause).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ModelPackage.THROWABLE__CAUSE, null, msgs);
+                msgs = ((InternalEObject) newCause).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ModelPackage.THROWABLE__CAUSE, null, msgs);
             msgs = basicSetCause(newCause, msgs);
-            if (msgs != null) msgs.dispatch();
-        }
-        else if (eNotificationRequired())
+            if (msgs != null)
+                msgs.dispatch();
+        } else if (eNotificationRequired())
             eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.THROWABLE__CAUSE, newCause, newCause));
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public EList<StackTraceElement> getStackTrace() {
@@ -209,119 +206,120 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
         switch (featureID) {
-            case ModelPackage.THROWABLE__CAUSE:
-                return basicSetCause(null, msgs);
-            case ModelPackage.THROWABLE__STACK_TRACE:
-                return ((InternalEList<?>)getStackTrace()).basicRemove(otherEnd, msgs);
+        case ModelPackage.THROWABLE__CAUSE:
+            return basicSetCause(null, msgs);
+        case ModelPackage.THROWABLE__STACK_TRACE:
+            return ((InternalEList<?>) getStackTrace()).basicRemove(otherEnd, msgs);
         }
         return super.eInverseRemove(otherEnd, featureID, msgs);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case ModelPackage.THROWABLE__CLASS_NAME:
-                return getClassName();
-            case ModelPackage.THROWABLE__MESSAGE:
-                return getMessage();
-            case ModelPackage.THROWABLE__CAUSE:
-                return getCause();
-            case ModelPackage.THROWABLE__STACK_TRACE:
-                return getStackTrace();
+        case ModelPackage.THROWABLE__CLASS_NAME:
+            return getClassName();
+        case ModelPackage.THROWABLE__MESSAGE:
+            return getMessage();
+        case ModelPackage.THROWABLE__CAUSE:
+            return getCause();
+        case ModelPackage.THROWABLE__STACK_TRACE:
+            return getStackTrace();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case ModelPackage.THROWABLE__CLASS_NAME:
-                setClassName((String)newValue);
-                return;
-            case ModelPackage.THROWABLE__MESSAGE:
-                setMessage((String)newValue);
-                return;
-            case ModelPackage.THROWABLE__CAUSE:
-                setCause((org.eclipse.epp.internal.logging.aeri.ui.model.Throwable)newValue);
-                return;
-            case ModelPackage.THROWABLE__STACK_TRACE:
-                getStackTrace().clear();
-                getStackTrace().addAll((Collection<? extends StackTraceElement>)newValue);
-                return;
+        case ModelPackage.THROWABLE__CLASS_NAME:
+            setClassName((String) newValue);
+            return;
+        case ModelPackage.THROWABLE__MESSAGE:
+            setMessage((String) newValue);
+            return;
+        case ModelPackage.THROWABLE__CAUSE:
+            setCause((org.eclipse.epp.internal.logging.aeri.ui.model.Throwable) newValue);
+            return;
+        case ModelPackage.THROWABLE__STACK_TRACE:
+            getStackTrace().clear();
+            getStackTrace().addAll((Collection<? extends StackTraceElement>) newValue);
+            return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case ModelPackage.THROWABLE__CLASS_NAME:
-                setClassName(CLASS_NAME_EDEFAULT);
-                return;
-            case ModelPackage.THROWABLE__MESSAGE:
-                setMessage(MESSAGE_EDEFAULT);
-                return;
-            case ModelPackage.THROWABLE__CAUSE:
-                setCause((org.eclipse.epp.internal.logging.aeri.ui.model.Throwable)null);
-                return;
-            case ModelPackage.THROWABLE__STACK_TRACE:
-                getStackTrace().clear();
-                return;
+        case ModelPackage.THROWABLE__CLASS_NAME:
+            setClassName(CLASS_NAME_EDEFAULT);
+            return;
+        case ModelPackage.THROWABLE__MESSAGE:
+            setMessage(MESSAGE_EDEFAULT);
+            return;
+        case ModelPackage.THROWABLE__CAUSE:
+            setCause((org.eclipse.epp.internal.logging.aeri.ui.model.Throwable) null);
+            return;
+        case ModelPackage.THROWABLE__STACK_TRACE:
+            getStackTrace().clear();
+            return;
         }
         super.eUnset(featureID);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case ModelPackage.THROWABLE__CLASS_NAME:
-                return CLASS_NAME_EDEFAULT == null ? className != null : !CLASS_NAME_EDEFAULT.equals(className);
-            case ModelPackage.THROWABLE__MESSAGE:
-                return MESSAGE_EDEFAULT == null ? message != null : !MESSAGE_EDEFAULT.equals(message);
-            case ModelPackage.THROWABLE__CAUSE:
-                return cause != null;
-            case ModelPackage.THROWABLE__STACK_TRACE:
-                return stackTrace != null && !stackTrace.isEmpty();
+        case ModelPackage.THROWABLE__CLASS_NAME:
+            return CLASS_NAME_EDEFAULT == null ? className != null : !CLASS_NAME_EDEFAULT.equals(className);
+        case ModelPackage.THROWABLE__MESSAGE:
+            return MESSAGE_EDEFAULT == null ? message != null : !MESSAGE_EDEFAULT.equals(message);
+        case ModelPackage.THROWABLE__CAUSE:
+            return cause != null;
+        case ModelPackage.THROWABLE__STACK_TRACE:
+            return stackTrace != null && !stackTrace.isEmpty();
         }
         return super.eIsSet(featureID);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public String toString() {
-        if (eIsProxy()) return super.toString();
+        if (eIsProxy())
+            return super.toString();
 
         StringBuffer result = new StringBuffer(super.toString());
         result.append(" (className: ");
@@ -332,4 +330,4 @@ public class ThrowableImpl extends MinimalEObjectImpl.Container implements org.e
         return result.toString();
     }
 
-} //ThrowableImpl
+} // ThrowableImpl

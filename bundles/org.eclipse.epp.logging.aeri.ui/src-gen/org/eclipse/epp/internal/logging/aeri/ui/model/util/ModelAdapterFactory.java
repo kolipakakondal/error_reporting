@@ -17,26 +17,23 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
 
 /**
- * <!-- begin-user-doc -->
- * The <b>Adapter Factory</b> for the model.
- * It provides an adapter <code>createXXX</code> method for each class of the model.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> The <b>Adapter Factory</b> for the model. It provides an adapter <code>createXXX</code> method for each class of
+ * the model. <!-- end-user-doc -->
+ * 
  * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage
  * @generated
  */
 public class ModelAdapterFactory extends AdapterFactoryImpl {
     /**
-     * The cached model package.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached model package. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     protected static ModelPackage modelPackage;
 
     /**
-     * Creates an instance of the adapter factory.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * Creates an instance of the adapter factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public ModelAdapterFactory() {
@@ -46,10 +43,9 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
-     * Returns whether this factory is applicable for the type of the object.
-     * <!-- begin-user-doc -->
-     * This implementation returns <code>true</code> if the object is either the model's package or is an instance object of the model.
-     * <!-- end-user-doc -->
+     * Returns whether this factory is applicable for the type of the object. <!-- begin-user-doc --> This implementation returns
+     * <code>true</code> if the object is either the model's package or is an instance object of the model. <!-- end-user-doc -->
+     * 
      * @return whether this factory is applicable for the type of the object.
      * @generated
      */
@@ -59,69 +55,71 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
             return true;
         }
         if (object instanceof EObject) {
-            return ((EObject)object).eClass().getEPackage() == modelPackage;
+            return ((EObject) object).eClass().getEPackage() == modelPackage;
         }
         return false;
     }
 
     /**
-     * The switch that delegates to the <code>createXXX</code> methods.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The switch that delegates to the <code>createXXX</code> methods. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
-    protected ModelSwitch<Adapter> modelSwitch =
-        new ModelSwitch<Adapter>() {
-            @Override
-            public Adapter caseErrorReport(ErrorReport object) {
-                return createErrorReportAdapter();
-            }
-            @Override
-            public Adapter caseBundle(Bundle object) {
-                return createBundleAdapter();
-            }
-            @Override
-            public Adapter caseStatus(Status object) {
-                return createStatusAdapter();
-            }
-            @Override
-            public Adapter caseThrowable(org.eclipse.epp.internal.logging.aeri.ui.model.Throwable object) {
-                return createThrowableAdapter();
-            }
-            @Override
-            public Adapter caseStackTraceElement(StackTraceElement object) {
-                return createStackTraceElementAdapter();
-            }
-            @Override
-            public Adapter caseSettings(Settings object) {
-                return createSettingsAdapter();
-            }
-            @Override
-            public Adapter defaultCase(EObject object) {
-                return createEObjectAdapter();
-            }
-        };
+    protected ModelSwitch<Adapter> modelSwitch = new ModelSwitch<Adapter>() {
+        @Override
+        public Adapter caseErrorReport(ErrorReport object) {
+            return createErrorReportAdapter();
+        }
+
+        @Override
+        public Adapter caseBundle(Bundle object) {
+            return createBundleAdapter();
+        }
+
+        @Override
+        public Adapter caseStatus(Status object) {
+            return createStatusAdapter();
+        }
+
+        @Override
+        public Adapter caseThrowable(org.eclipse.epp.internal.logging.aeri.ui.model.Throwable object) {
+            return createThrowableAdapter();
+        }
+
+        @Override
+        public Adapter caseStackTraceElement(StackTraceElement object) {
+            return createStackTraceElementAdapter();
+        }
+
+        @Override
+        public Adapter caseSettings(Settings object) {
+            return createSettingsAdapter();
+        }
+
+        @Override
+        public Adapter defaultCase(EObject object) {
+            return createEObjectAdapter();
+        }
+    };
 
     /**
-     * Creates an adapter for the <code>target</code>.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param target the object to adapt.
+     * Creates an adapter for the <code>target</code>. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @param target
+     *            the object to adapt.
      * @return the adapter for the <code>target</code>.
      * @generated
      */
     @Override
     public Adapter createAdapter(Notifier target) {
-        return modelSwitch.doSwitch((EObject)target);
+        return modelSwitch.doSwitch((EObject) target);
     }
 
-
     /**
-     * Creates a new adapter for an object of class '{@link org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport <em>Error Report</em>}'.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null so that we can easily ignore cases;
-     * it's useful to ignore a case when inheritance will catch all the cases anyway.
-     * <!-- end-user-doc -->
+     * Creates a new adapter for an object of class '{@link org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport <em>Error Report</em>
+     * }'. <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case
+     * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+     * 
      * @return the new adapter.
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport
      * @generated
@@ -131,11 +129,10 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
-     * Creates a new adapter for an object of class '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Bundle <em>Bundle</em>}'.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null so that we can easily ignore cases;
-     * it's useful to ignore a case when inheritance will catch all the cases anyway.
-     * <!-- end-user-doc -->
+     * Creates a new adapter for an object of class '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Bundle <em>Bundle</em>}'. <!--
+     * begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when
+     * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+     * 
      * @return the new adapter.
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.Bundle
      * @generated
@@ -145,11 +142,10 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
-     * Creates a new adapter for an object of class '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Status <em>Status</em>}'.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null so that we can easily ignore cases;
-     * it's useful to ignore a case when inheritance will catch all the cases anyway.
-     * <!-- end-user-doc -->
+     * Creates a new adapter for an object of class '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Status <em>Status</em>}'. <!--
+     * begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case when
+     * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+     * 
      * @return the new adapter.
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.Status
      * @generated
@@ -160,10 +156,9 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
 
     /**
      * Creates a new adapter for an object of class '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Throwable <em>Throwable</em>}'.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null so that we can easily ignore cases;
-     * it's useful to ignore a case when inheritance will catch all the cases anyway.
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case
+     * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+     * 
      * @return the new adapter.
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.Throwable
      * @generated
@@ -173,11 +168,10 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
-     * Creates a new adapter for an object of class '{@link org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement <em>Stack Trace Element</em>}'.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null so that we can easily ignore cases;
-     * it's useful to ignore a case when inheritance will catch all the cases anyway.
-     * <!-- end-user-doc -->
+     * Creates a new adapter for an object of class '{@link org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement
+     * <em>Stack Trace Element</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+     * 
      * @return the new adapter.
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement
      * @generated
@@ -188,10 +182,9 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
 
     /**
      * Creates a new adapter for an object of class '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings <em>Settings</em>}'.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null so that we can easily ignore cases;
-     * it's useful to ignore a case when inheritance will catch all the cases anyway.
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful to ignore a case
+     * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+     * 
      * @return the new adapter.
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.Settings
      * @generated
@@ -201,10 +194,8 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
-     * Creates a new adapter for the default case.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null.
-     * <!-- end-user-doc -->
+     * Creates a new adapter for the default case. <!-- begin-user-doc --> This default implementation returns null. <!-- end-user-doc -->
+     * 
      * @return the new adapter.
      * @generated
      */
@@ -212,4 +203,4 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
         return null;
     }
 
-} //ModelAdapterFactory
+} // ModelAdapterFactory

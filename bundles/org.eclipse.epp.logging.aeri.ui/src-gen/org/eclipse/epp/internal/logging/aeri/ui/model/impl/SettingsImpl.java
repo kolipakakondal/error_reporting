@@ -13,25 +13,25 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Settings</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Settings</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getEmail <em>Email</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#isAnonymizeMessages <em>Anonymize Messages</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#isAnonymizeStrackTraceElements <em>Anonymize Strack Trace Elements</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#isConfigured <em>Configured</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#isSkipSimilarErrors <em>Skip Similar Errors</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getAction <em>Action</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getRememberSendAction <em>Remember Send Action</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getRememberSendActionPeriodStart <em>Remember Send Action Period Start</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getServerUrl <em>Server Url</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getWhitelistedPackages <em>Whitelisted Packages</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getWhitelistedPluginIds <em>Whitelisted Plugin Ids</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getProblemsZipEtag <em>Problems Zip Etag</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getEmail <em>Email</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#isAnonymizeMessages <em>Anonymize Messages</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#isAnonymizeStrackTraceElements
+ * <em>Anonymize Strack Trace Elements</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#isConfigured <em>Configured</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#isSkipSimilarErrors <em>Skip Similar Errors</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getAction <em>Action</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getRememberSendAction <em>Remember Send Action</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getRememberSendActionPeriodStart
+ * <em>Remember Send Action Period Start</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getServerUrl <em>Server Url</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getWhitelistedPackages <em>Whitelisted Packages</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getWhitelistedPluginIds <em>Whitelisted Plugin Ids</em>}</li>
+ * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getProblemsZipEtag <em>Problems Zip Etag</em>}</li>
  * </ul>
  * </p>
  *
@@ -39,9 +39,8 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
  */
 public class SettingsImpl extends MinimalEObjectImpl.Container implements Settings {
     /**
-     * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getName()
      * @generated
      * @ordered
@@ -49,9 +48,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected static final String NAME_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getName()
      * @generated
      * @ordered
@@ -59,9 +57,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected String name = NAME_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getEmail() <em>Email</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #getEmail() <em>Email</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getEmail()
      * @generated
      * @ordered
@@ -69,9 +66,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected static final String EMAIL_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getEmail() <em>Email</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getEmail() <em>Email</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getEmail()
      * @generated
      * @ordered
@@ -79,9 +75,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected String email = EMAIL_EDEFAULT;
 
     /**
-     * The default value of the '{@link #isAnonymizeMessages() <em>Anonymize Messages</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #isAnonymizeMessages() <em>Anonymize Messages</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #isAnonymizeMessages()
      * @generated
      * @ordered
@@ -89,9 +85,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected static final boolean ANONYMIZE_MESSAGES_EDEFAULT = false;
 
     /**
-     * The cached value of the '{@link #isAnonymizeMessages() <em>Anonymize Messages</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #isAnonymizeMessages() <em>Anonymize Messages</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #isAnonymizeMessages()
      * @generated
      * @ordered
@@ -99,9 +95,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected boolean anonymizeMessages = ANONYMIZE_MESSAGES_EDEFAULT;
 
     /**
-     * The default value of the '{@link #isAnonymizeStrackTraceElements() <em>Anonymize Strack Trace Elements</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #isAnonymizeStrackTraceElements() <em>Anonymize Strack Trace Elements</em>}' attribute. <!--
+     * begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #isAnonymizeStrackTraceElements()
      * @generated
      * @ordered
@@ -109,9 +105,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected static final boolean ANONYMIZE_STRACK_TRACE_ELEMENTS_EDEFAULT = false;
 
     /**
-     * The cached value of the '{@link #isAnonymizeStrackTraceElements() <em>Anonymize Strack Trace Elements</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #isAnonymizeStrackTraceElements() <em>Anonymize Strack Trace Elements</em>}' attribute. <!--
+     * begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #isAnonymizeStrackTraceElements()
      * @generated
      * @ordered
@@ -119,9 +115,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected boolean anonymizeStrackTraceElements = ANONYMIZE_STRACK_TRACE_ELEMENTS_EDEFAULT;
 
     /**
-     * The default value of the '{@link #isConfigured() <em>Configured</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #isConfigured() <em>Configured</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #isConfigured()
      * @generated
      * @ordered
@@ -129,9 +124,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected static final boolean CONFIGURED_EDEFAULT = false;
 
     /**
-     * The cached value of the '{@link #isConfigured() <em>Configured</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #isConfigured() <em>Configured</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #isConfigured()
      * @generated
      * @ordered
@@ -139,9 +133,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected boolean configured = CONFIGURED_EDEFAULT;
 
     /**
-     * The default value of the '{@link #isSkipSimilarErrors() <em>Skip Similar Errors</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #isSkipSimilarErrors() <em>Skip Similar Errors</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #isSkipSimilarErrors()
      * @generated
      * @ordered
@@ -149,9 +143,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected static final boolean SKIP_SIMILAR_ERRORS_EDEFAULT = false;
 
     /**
-     * The cached value of the '{@link #isSkipSimilarErrors() <em>Skip Similar Errors</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #isSkipSimilarErrors() <em>Skip Similar Errors</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #isSkipSimilarErrors()
      * @generated
      * @ordered
@@ -159,9 +153,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected boolean skipSimilarErrors = SKIP_SIMILAR_ERRORS_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getAction() <em>Action</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #getAction() <em>Action</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getAction()
      * @generated
      * @ordered
@@ -169,9 +162,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected static final SendAction ACTION_EDEFAULT = SendAction.ASK;
 
     /**
-     * The cached value of the '{@link #getAction() <em>Action</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getAction() <em>Action</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getAction()
      * @generated
      * @ordered
@@ -179,9 +171,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected SendAction action = ACTION_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getRememberSendAction() <em>Remember Send Action</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #getRememberSendAction() <em>Remember Send Action</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #getRememberSendAction()
      * @generated
      * @ordered
@@ -189,9 +181,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected static final RememberSendAction REMEMBER_SEND_ACTION_EDEFAULT = RememberSendAction.HOURS_24;
 
     /**
-     * The cached value of the '{@link #getRememberSendAction() <em>Remember Send Action</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getRememberSendAction() <em>Remember Send Action</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #getRememberSendAction()
      * @generated
      * @ordered
@@ -199,9 +191,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected RememberSendAction rememberSendAction = REMEMBER_SEND_ACTION_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getRememberSendActionPeriodStart() <em>Remember Send Action Period Start</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #getRememberSendActionPeriodStart() <em>Remember Send Action Period Start</em>}' attribute. <!--
+     * begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getRememberSendActionPeriodStart()
      * @generated
      * @ordered
@@ -209,9 +201,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected static final long REMEMBER_SEND_ACTION_PERIOD_START_EDEFAULT = 0L;
 
     /**
-     * The cached value of the '{@link #getRememberSendActionPeriodStart() <em>Remember Send Action Period Start</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getRememberSendActionPeriodStart() <em>Remember Send Action Period Start</em>}' attribute. <!--
+     * begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getRememberSendActionPeriodStart()
      * @generated
      * @ordered
@@ -219,9 +211,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected long rememberSendActionPeriodStart = REMEMBER_SEND_ACTION_PERIOD_START_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getServerUrl() <em>Server Url</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #getServerUrl() <em>Server Url</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getServerUrl()
      * @generated
      * @ordered
@@ -229,9 +220,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected static final String SERVER_URL_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getServerUrl() <em>Server Url</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getServerUrl() <em>Server Url</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getServerUrl()
      * @generated
      * @ordered
@@ -239,9 +229,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected String serverUrl = SERVER_URL_EDEFAULT;
 
     /**
-     * The cached value of the '{@link #getWhitelistedPackages() <em>Whitelisted Packages</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getWhitelistedPackages() <em>Whitelisted Packages</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #getWhitelistedPackages()
      * @generated
      * @ordered
@@ -249,9 +239,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected List<String> whitelistedPackages;
 
     /**
-     * The cached value of the '{@link #getWhitelistedPluginIds() <em>Whitelisted Plugin Ids</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getWhitelistedPluginIds() <em>Whitelisted Plugin Ids</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #getWhitelistedPluginIds()
      * @generated
      * @ordered
@@ -259,9 +249,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected List<String> whitelistedPluginIds;
 
     /**
-     * The default value of the '{@link #getProblemsZipEtag() <em>Problems Zip Etag</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The default value of the '{@link #getProblemsZipEtag() <em>Problems Zip Etag</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #getProblemsZipEtag()
      * @generated
      * @ordered
@@ -269,9 +259,9 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected static final String PROBLEMS_ZIP_ETAG_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getProblemsZipEtag() <em>Problems Zip Etag</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getProblemsZipEtag() <em>Problems Zip Etag</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #getProblemsZipEtag()
      * @generated
      * @ordered
@@ -279,8 +269,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected String problemsZipEtag = PROBLEMS_ZIP_ETAG_EDEFAULT;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     protected SettingsImpl() {
@@ -288,8 +278,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
@@ -298,8 +288,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public String getName() {
@@ -307,8 +297,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setName(String newName) {
@@ -319,8 +309,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public String getEmail() {
@@ -328,8 +318,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setEmail(String newEmail) {
@@ -340,8 +330,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public boolean isAnonymizeMessages() {
@@ -349,20 +339,21 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setAnonymizeMessages(boolean newAnonymizeMessages) {
         boolean oldAnonymizeMessages = anonymizeMessages;
         anonymizeMessages = newAnonymizeMessages;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__ANONYMIZE_MESSAGES, oldAnonymizeMessages, anonymizeMessages));
+            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__ANONYMIZE_MESSAGES, oldAnonymizeMessages,
+                    anonymizeMessages));
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public boolean isAnonymizeStrackTraceElements() {
@@ -370,20 +361,21 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setAnonymizeStrackTraceElements(boolean newAnonymizeStrackTraceElements) {
         boolean oldAnonymizeStrackTraceElements = anonymizeStrackTraceElements;
         anonymizeStrackTraceElements = newAnonymizeStrackTraceElements;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__ANONYMIZE_STRACK_TRACE_ELEMENTS, oldAnonymizeStrackTraceElements, anonymizeStrackTraceElements));
+            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__ANONYMIZE_STRACK_TRACE_ELEMENTS,
+                    oldAnonymizeStrackTraceElements, anonymizeStrackTraceElements));
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public boolean isConfigured() {
@@ -391,8 +383,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setConfigured(boolean newConfigured) {
@@ -403,8 +395,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public boolean isSkipSimilarErrors() {
@@ -412,20 +404,21 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setSkipSimilarErrors(boolean newSkipSimilarErrors) {
         boolean oldSkipSimilarErrors = skipSimilarErrors;
         skipSimilarErrors = newSkipSimilarErrors;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__SKIP_SIMILAR_ERRORS, oldSkipSimilarErrors, skipSimilarErrors));
+            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__SKIP_SIMILAR_ERRORS, oldSkipSimilarErrors,
+                    skipSimilarErrors));
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public SendAction getAction() {
@@ -433,8 +426,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setAction(SendAction newAction) {
@@ -445,8 +438,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public RememberSendAction getRememberSendAction() {
@@ -454,20 +447,21 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setRememberSendAction(RememberSendAction newRememberSendAction) {
         RememberSendAction oldRememberSendAction = rememberSendAction;
         rememberSendAction = newRememberSendAction == null ? REMEMBER_SEND_ACTION_EDEFAULT : newRememberSendAction;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__REMEMBER_SEND_ACTION, oldRememberSendAction, rememberSendAction));
+            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__REMEMBER_SEND_ACTION, oldRememberSendAction,
+                    rememberSendAction));
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public long getRememberSendActionPeriodStart() {
@@ -475,20 +469,21 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setRememberSendActionPeriodStart(long newRememberSendActionPeriodStart) {
         long oldRememberSendActionPeriodStart = rememberSendActionPeriodStart;
         rememberSendActionPeriodStart = newRememberSendActionPeriodStart;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START, oldRememberSendActionPeriodStart, rememberSendActionPeriodStart));
+            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START,
+                    oldRememberSendActionPeriodStart, rememberSendActionPeriodStart));
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public String getServerUrl() {
@@ -496,8 +491,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setServerUrl(String newServerUrl) {
@@ -508,8 +503,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public List<String> getWhitelistedPackages() {
@@ -517,20 +512,21 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setWhitelistedPackages(List<String> newWhitelistedPackages) {
         List<String> oldWhitelistedPackages = whitelistedPackages;
         whitelistedPackages = newWhitelistedPackages;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__WHITELISTED_PACKAGES, oldWhitelistedPackages, whitelistedPackages));
+            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__WHITELISTED_PACKAGES, oldWhitelistedPackages,
+                    whitelistedPackages));
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public List<String> getWhitelistedPluginIds() {
@@ -538,20 +534,21 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setWhitelistedPluginIds(List<String> newWhitelistedPluginIds) {
         List<String> oldWhitelistedPluginIds = whitelistedPluginIds;
         whitelistedPluginIds = newWhitelistedPluginIds;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS, oldWhitelistedPluginIds, whitelistedPluginIds));
+            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS, oldWhitelistedPluginIds,
+                    whitelistedPluginIds));
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public String getProblemsZipEtag() {
@@ -559,204 +556,206 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setProblemsZipEtag(String newProblemsZipEtag) {
         String oldProblemsZipEtag = problemsZipEtag;
         problemsZipEtag = newProblemsZipEtag;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG, oldProblemsZipEtag, problemsZipEtag));
+            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG, oldProblemsZipEtag,
+                    problemsZipEtag));
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case ModelPackage.SETTINGS__NAME:
-                return getName();
-            case ModelPackage.SETTINGS__EMAIL:
-                return getEmail();
-            case ModelPackage.SETTINGS__ANONYMIZE_MESSAGES:
-                return isAnonymizeMessages();
-            case ModelPackage.SETTINGS__ANONYMIZE_STRACK_TRACE_ELEMENTS:
-                return isAnonymizeStrackTraceElements();
-            case ModelPackage.SETTINGS__CONFIGURED:
-                return isConfigured();
-            case ModelPackage.SETTINGS__SKIP_SIMILAR_ERRORS:
-                return isSkipSimilarErrors();
-            case ModelPackage.SETTINGS__ACTION:
-                return getAction();
-            case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION:
-                return getRememberSendAction();
-            case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
-                return getRememberSendActionPeriodStart();
-            case ModelPackage.SETTINGS__SERVER_URL:
-                return getServerUrl();
-            case ModelPackage.SETTINGS__WHITELISTED_PACKAGES:
-                return getWhitelistedPackages();
-            case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
-                return getWhitelistedPluginIds();
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
-                return getProblemsZipEtag();
+        case ModelPackage.SETTINGS__NAME:
+            return getName();
+        case ModelPackage.SETTINGS__EMAIL:
+            return getEmail();
+        case ModelPackage.SETTINGS__ANONYMIZE_MESSAGES:
+            return isAnonymizeMessages();
+        case ModelPackage.SETTINGS__ANONYMIZE_STRACK_TRACE_ELEMENTS:
+            return isAnonymizeStrackTraceElements();
+        case ModelPackage.SETTINGS__CONFIGURED:
+            return isConfigured();
+        case ModelPackage.SETTINGS__SKIP_SIMILAR_ERRORS:
+            return isSkipSimilarErrors();
+        case ModelPackage.SETTINGS__ACTION:
+            return getAction();
+        case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION:
+            return getRememberSendAction();
+        case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
+            return getRememberSendActionPeriodStart();
+        case ModelPackage.SETTINGS__SERVER_URL:
+            return getServerUrl();
+        case ModelPackage.SETTINGS__WHITELISTED_PACKAGES:
+            return getWhitelistedPackages();
+        case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
+            return getWhitelistedPluginIds();
+        case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
+            return getProblemsZipEtag();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case ModelPackage.SETTINGS__NAME:
-                setName((String)newValue);
-                return;
-            case ModelPackage.SETTINGS__EMAIL:
-                setEmail((String)newValue);
-                return;
-            case ModelPackage.SETTINGS__ANONYMIZE_MESSAGES:
-                setAnonymizeMessages((Boolean)newValue);
-                return;
-            case ModelPackage.SETTINGS__ANONYMIZE_STRACK_TRACE_ELEMENTS:
-                setAnonymizeStrackTraceElements((Boolean)newValue);
-                return;
-            case ModelPackage.SETTINGS__CONFIGURED:
-                setConfigured((Boolean)newValue);
-                return;
-            case ModelPackage.SETTINGS__SKIP_SIMILAR_ERRORS:
-                setSkipSimilarErrors((Boolean)newValue);
-                return;
-            case ModelPackage.SETTINGS__ACTION:
-                setAction((SendAction)newValue);
-                return;
-            case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION:
-                setRememberSendAction((RememberSendAction)newValue);
-                return;
-            case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
-                setRememberSendActionPeriodStart((Long)newValue);
-                return;
-            case ModelPackage.SETTINGS__SERVER_URL:
-                setServerUrl((String)newValue);
-                return;
-            case ModelPackage.SETTINGS__WHITELISTED_PACKAGES:
-                setWhitelistedPackages((List<String>)newValue);
-                return;
-            case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
-                setWhitelistedPluginIds((List<String>)newValue);
-                return;
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
-                setProblemsZipEtag((String)newValue);
-                return;
+        case ModelPackage.SETTINGS__NAME:
+            setName((String) newValue);
+            return;
+        case ModelPackage.SETTINGS__EMAIL:
+            setEmail((String) newValue);
+            return;
+        case ModelPackage.SETTINGS__ANONYMIZE_MESSAGES:
+            setAnonymizeMessages((Boolean) newValue);
+            return;
+        case ModelPackage.SETTINGS__ANONYMIZE_STRACK_TRACE_ELEMENTS:
+            setAnonymizeStrackTraceElements((Boolean) newValue);
+            return;
+        case ModelPackage.SETTINGS__CONFIGURED:
+            setConfigured((Boolean) newValue);
+            return;
+        case ModelPackage.SETTINGS__SKIP_SIMILAR_ERRORS:
+            setSkipSimilarErrors((Boolean) newValue);
+            return;
+        case ModelPackage.SETTINGS__ACTION:
+            setAction((SendAction) newValue);
+            return;
+        case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION:
+            setRememberSendAction((RememberSendAction) newValue);
+            return;
+        case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
+            setRememberSendActionPeriodStart((Long) newValue);
+            return;
+        case ModelPackage.SETTINGS__SERVER_URL:
+            setServerUrl((String) newValue);
+            return;
+        case ModelPackage.SETTINGS__WHITELISTED_PACKAGES:
+            setWhitelistedPackages((List<String>) newValue);
+            return;
+        case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
+            setWhitelistedPluginIds((List<String>) newValue);
+            return;
+        case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
+            setProblemsZipEtag((String) newValue);
+            return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case ModelPackage.SETTINGS__NAME:
-                setName(NAME_EDEFAULT);
-                return;
-            case ModelPackage.SETTINGS__EMAIL:
-                setEmail(EMAIL_EDEFAULT);
-                return;
-            case ModelPackage.SETTINGS__ANONYMIZE_MESSAGES:
-                setAnonymizeMessages(ANONYMIZE_MESSAGES_EDEFAULT);
-                return;
-            case ModelPackage.SETTINGS__ANONYMIZE_STRACK_TRACE_ELEMENTS:
-                setAnonymizeStrackTraceElements(ANONYMIZE_STRACK_TRACE_ELEMENTS_EDEFAULT);
-                return;
-            case ModelPackage.SETTINGS__CONFIGURED:
-                setConfigured(CONFIGURED_EDEFAULT);
-                return;
-            case ModelPackage.SETTINGS__SKIP_SIMILAR_ERRORS:
-                setSkipSimilarErrors(SKIP_SIMILAR_ERRORS_EDEFAULT);
-                return;
-            case ModelPackage.SETTINGS__ACTION:
-                setAction(ACTION_EDEFAULT);
-                return;
-            case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION:
-                setRememberSendAction(REMEMBER_SEND_ACTION_EDEFAULT);
-                return;
-            case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
-                setRememberSendActionPeriodStart(REMEMBER_SEND_ACTION_PERIOD_START_EDEFAULT);
-                return;
-            case ModelPackage.SETTINGS__SERVER_URL:
-                setServerUrl(SERVER_URL_EDEFAULT);
-                return;
-            case ModelPackage.SETTINGS__WHITELISTED_PACKAGES:
-                setWhitelistedPackages((List<String>)null);
-                return;
-            case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
-                setWhitelistedPluginIds((List<String>)null);
-                return;
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
-                setProblemsZipEtag(PROBLEMS_ZIP_ETAG_EDEFAULT);
-                return;
+        case ModelPackage.SETTINGS__NAME:
+            setName(NAME_EDEFAULT);
+            return;
+        case ModelPackage.SETTINGS__EMAIL:
+            setEmail(EMAIL_EDEFAULT);
+            return;
+        case ModelPackage.SETTINGS__ANONYMIZE_MESSAGES:
+            setAnonymizeMessages(ANONYMIZE_MESSAGES_EDEFAULT);
+            return;
+        case ModelPackage.SETTINGS__ANONYMIZE_STRACK_TRACE_ELEMENTS:
+            setAnonymizeStrackTraceElements(ANONYMIZE_STRACK_TRACE_ELEMENTS_EDEFAULT);
+            return;
+        case ModelPackage.SETTINGS__CONFIGURED:
+            setConfigured(CONFIGURED_EDEFAULT);
+            return;
+        case ModelPackage.SETTINGS__SKIP_SIMILAR_ERRORS:
+            setSkipSimilarErrors(SKIP_SIMILAR_ERRORS_EDEFAULT);
+            return;
+        case ModelPackage.SETTINGS__ACTION:
+            setAction(ACTION_EDEFAULT);
+            return;
+        case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION:
+            setRememberSendAction(REMEMBER_SEND_ACTION_EDEFAULT);
+            return;
+        case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
+            setRememberSendActionPeriodStart(REMEMBER_SEND_ACTION_PERIOD_START_EDEFAULT);
+            return;
+        case ModelPackage.SETTINGS__SERVER_URL:
+            setServerUrl(SERVER_URL_EDEFAULT);
+            return;
+        case ModelPackage.SETTINGS__WHITELISTED_PACKAGES:
+            setWhitelistedPackages((List<String>) null);
+            return;
+        case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
+            setWhitelistedPluginIds((List<String>) null);
+            return;
+        case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
+            setProblemsZipEtag(PROBLEMS_ZIP_ETAG_EDEFAULT);
+            return;
         }
         super.eUnset(featureID);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case ModelPackage.SETTINGS__NAME:
-                return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-            case ModelPackage.SETTINGS__EMAIL:
-                return EMAIL_EDEFAULT == null ? email != null : !EMAIL_EDEFAULT.equals(email);
-            case ModelPackage.SETTINGS__ANONYMIZE_MESSAGES:
-                return anonymizeMessages != ANONYMIZE_MESSAGES_EDEFAULT;
-            case ModelPackage.SETTINGS__ANONYMIZE_STRACK_TRACE_ELEMENTS:
-                return anonymizeStrackTraceElements != ANONYMIZE_STRACK_TRACE_ELEMENTS_EDEFAULT;
-            case ModelPackage.SETTINGS__CONFIGURED:
-                return configured != CONFIGURED_EDEFAULT;
-            case ModelPackage.SETTINGS__SKIP_SIMILAR_ERRORS:
-                return skipSimilarErrors != SKIP_SIMILAR_ERRORS_EDEFAULT;
-            case ModelPackage.SETTINGS__ACTION:
-                return action != ACTION_EDEFAULT;
-            case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION:
-                return rememberSendAction != REMEMBER_SEND_ACTION_EDEFAULT;
-            case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
-                return rememberSendActionPeriodStart != REMEMBER_SEND_ACTION_PERIOD_START_EDEFAULT;
-            case ModelPackage.SETTINGS__SERVER_URL:
-                return SERVER_URL_EDEFAULT == null ? serverUrl != null : !SERVER_URL_EDEFAULT.equals(serverUrl);
-            case ModelPackage.SETTINGS__WHITELISTED_PACKAGES:
-                return whitelistedPackages != null;
-            case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
-                return whitelistedPluginIds != null;
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
-                return PROBLEMS_ZIP_ETAG_EDEFAULT == null ? problemsZipEtag != null : !PROBLEMS_ZIP_ETAG_EDEFAULT.equals(problemsZipEtag);
+        case ModelPackage.SETTINGS__NAME:
+            return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+        case ModelPackage.SETTINGS__EMAIL:
+            return EMAIL_EDEFAULT == null ? email != null : !EMAIL_EDEFAULT.equals(email);
+        case ModelPackage.SETTINGS__ANONYMIZE_MESSAGES:
+            return anonymizeMessages != ANONYMIZE_MESSAGES_EDEFAULT;
+        case ModelPackage.SETTINGS__ANONYMIZE_STRACK_TRACE_ELEMENTS:
+            return anonymizeStrackTraceElements != ANONYMIZE_STRACK_TRACE_ELEMENTS_EDEFAULT;
+        case ModelPackage.SETTINGS__CONFIGURED:
+            return configured != CONFIGURED_EDEFAULT;
+        case ModelPackage.SETTINGS__SKIP_SIMILAR_ERRORS:
+            return skipSimilarErrors != SKIP_SIMILAR_ERRORS_EDEFAULT;
+        case ModelPackage.SETTINGS__ACTION:
+            return action != ACTION_EDEFAULT;
+        case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION:
+            return rememberSendAction != REMEMBER_SEND_ACTION_EDEFAULT;
+        case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
+            return rememberSendActionPeriodStart != REMEMBER_SEND_ACTION_PERIOD_START_EDEFAULT;
+        case ModelPackage.SETTINGS__SERVER_URL:
+            return SERVER_URL_EDEFAULT == null ? serverUrl != null : !SERVER_URL_EDEFAULT.equals(serverUrl);
+        case ModelPackage.SETTINGS__WHITELISTED_PACKAGES:
+            return whitelistedPackages != null;
+        case ModelPackage.SETTINGS__WHITELISTED_PLUGIN_IDS:
+            return whitelistedPluginIds != null;
+        case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
+            return PROBLEMS_ZIP_ETAG_EDEFAULT == null ? problemsZipEtag != null : !PROBLEMS_ZIP_ETAG_EDEFAULT.equals(problemsZipEtag);
         }
         return super.eIsSet(featureID);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public String toString() {
-        if (eIsProxy()) return super.toString();
+        if (eIsProxy())
+            return super.toString();
 
         StringBuffer result = new StringBuffer(super.toString());
         result.append(" (name: ");
@@ -789,4 +788,4 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
         return result.toString();
     }
 
-} //SettingsImpl
+} // SettingsImpl

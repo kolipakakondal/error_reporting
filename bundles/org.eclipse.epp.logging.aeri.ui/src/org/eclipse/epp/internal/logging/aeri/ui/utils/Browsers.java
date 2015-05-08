@@ -19,9 +19,8 @@ import org.eclipse.ui.browser.IWebBrowser;
 public class Browsers {
 
     /**
-     * Tries to open an URL wit the web browser configured in the Eclipse
-     * preferences (General &gt; Web Browser). By default, this will open a new
-     * editor to display the URL within the Eclipse IDE.
+     * Tries to open an URL wit the web browser configured in the Eclipse preferences (General &gt; Web Browser). By default, this will open
+     * a new editor to display the URL within the Eclipse IDE.
      */
     public static void openInDefaultBrowser(String url) {
         try {
@@ -37,11 +36,9 @@ public class Browsers {
     }
 
     /**
-     * Tries to open an URL with an external web browser. If one is configure in
-     * the Eclipse preferences (General &gt; Web Browser) it will prefer that
-     * over the operating system's default browser. If either way to open an
-     * external browser does not succeed, this method will this will open a new
-     * editor to display the URL within the Eclipse IDE.
+     * Tries to open an URL with an external web browser. If one is configure in the Eclipse preferences (General &gt; Web Browser) it will
+     * prefer that over the operating system's default browser. If either way to open an external browser does not succeed, this method will
+     * this will open a new editor to display the URL within the Eclipse IDE.
      */
     public static void openInExternalBrowser(String url) {
         try {

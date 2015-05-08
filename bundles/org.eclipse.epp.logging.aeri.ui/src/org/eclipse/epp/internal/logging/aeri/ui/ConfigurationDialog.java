@@ -126,11 +126,9 @@ public class ConfigurationDialog extends TitleAreaDialog {
     private Composite createPersonalGroup(Composite container) {
         Composite personalGroup = new Composite(container, SWT.NONE);
         GridLayoutFactory.fillDefaults().numColumns(2).applyTo(personalGroup);
-        nameText = createLabelledText(personalGroup, Messages.FIELD_LABEL_NAME, Messages.FIELD_MESSAGE_NAME,
-                Messages.FIELD_MESSAGE_NAME);
+        nameText = createLabelledText(personalGroup, Messages.FIELD_LABEL_NAME, Messages.FIELD_MESSAGE_NAME, Messages.FIELD_MESSAGE_NAME);
         String emailTooltip = Messages.FIELD_MESSAGE_EMAIL + '\n' + Messages.FIELD_DESC_EMAIL;
-        emailText = createLabelledText(personalGroup, Messages.FIELD_LABEL_EMAIL, Messages.FIELD_MESSAGE_EMAIL,
-                emailTooltip);
+        emailText = createLabelledText(personalGroup, Messages.FIELD_LABEL_EMAIL, Messages.FIELD_MESSAGE_EMAIL, emailTooltip);
         return personalGroup;
     }
 
@@ -146,13 +144,12 @@ public class ConfigurationDialog extends TitleAreaDialog {
     }
 
     private Group makeAnonymousGroup(Composite container) {
-        Group makeAnonymousGroup = new Group(container, SWT.SHADOW_ETCHED_IN | SWT.SHADOW_ETCHED_OUT | SWT.SHADOW_IN
-                | SWT.SHADOW_OUT);
+        Group makeAnonymousGroup = new Group(container, SWT.SHADOW_ETCHED_IN | SWT.SHADOW_ETCHED_OUT | SWT.SHADOW_IN | SWT.SHADOW_OUT);
         makeAnonymousGroup.setLayout(new RowLayout(SWT.VERTICAL));
         makeAnonymousGroup.setText(Messages.CONFIGURATIONDIALOG_ANONYMIZATION);
 
-        anonymizeStacktracesButton = createGroupCheckButton(makeAnonymousGroup,
-                Messages.FIELD_LABEL_ANONYMIZE_STACKTRACES, Messages.TOOLTIP_MAKE_STACKTRACE_ANONYMOUS);
+        anonymizeStacktracesButton = createGroupCheckButton(makeAnonymousGroup, Messages.FIELD_LABEL_ANONYMIZE_STACKTRACES,
+                Messages.TOOLTIP_MAKE_STACKTRACE_ANONYMOUS);
         clearMessagesButton = createGroupCheckButton(makeAnonymousGroup, Messages.FIELD_LABEL_ANONYMIZE_MESSAGES,
                 Messages.TOOLTIP_MAKE_MESSAGES_ANONYMOUS);
         return makeAnonymousGroup;

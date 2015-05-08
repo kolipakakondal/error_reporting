@@ -38,8 +38,8 @@ public class Shells {
     }
 
     /**
-     * Returns the Display of <code>PlatformUI.getWorkbench().getDisplay()</code>. If the workbench is closing or not
-     * created or the display is disposed this will return {@link Optional#absent()}.
+     * Returns the Display of <code>PlatformUI.getWorkbench().getDisplay()</code>. If the workbench is closing or not created or the display
+     * is disposed this will return {@link Optional#absent()}.
      */
     public static Optional<Display> getDisplay() {
         IWorkbench workbench = PlatformUI.getWorkbench();

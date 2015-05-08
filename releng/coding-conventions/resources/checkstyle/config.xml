@@ -7,136 +7,139 @@
 	<!-- http://checkstyle.sourceforge.net/config_misc.html#NewlineAtEndOfFile -->
 	<module name="NewlineAtEndOfFile">
 		<!-- Require a Unix line delimiter at end of file. -->
-		<property name="lineSeparator" value="lf"/>
+		<property name="lineSeparator" value="lf" />
 	</module>
 
-	<!--  http://checkstyle.sourceforge.net/config_regexp.html#RegexpMultiline -->
+	<!-- http://checkstyle.sourceforge.net/config_regexp.html#RegexpMultiline -->
 	<module name="RegexpMultiline">
 		<!-- Match from the first illegal line delimiter to the end of file. -->
-		<property name="format" value="(\r\n|\r)(.*(\r\n|\r|\n))*.*"/>
-		<property name="message" value="Found non-Unix line delimiter(s)."/>
+		<property name="format" value="(\r\n|\r)(.*(\r\n|\r|\n))*.*" />
+		<property name="message" value="Found non-Unix line delimiter(s)." />
 	</module>
 
 	<!-- http://checkstyle.sourceforge.net/config_whitespace.html#FileTabCharacter -->
-	<module name="FileTabCharacter"/>
+	<module name="FileTabCharacter" />
 
 	<!-- http://checkstyle.sourceforge.net/config.html#TreeWalker -->
 	<module name="TreeWalker">
 
-		<!--  http://checkstyle.sourceforge.net/config_coding.html#CovariantEquals -->
-		<module name="CovariantEquals"/>
+		<!-- http://checkstyle.sourceforge.net/config_coding.html#CovariantEquals -->
+		<module name="CovariantEquals" />
 
-		<!--  http://checkstyle.sourceforge.net/config_coding.html#EmptyStatement -->
-		<module name="EmptyStatement"/>
+		<!-- http://checkstyle.sourceforge.net/config_coding.html#EmptyStatement -->
+		<module name="EmptyStatement" />
 
-		<!--  http://checkstyle.sourceforge.net/config_coding.html#EqualsHashCode -->
-		<module name="EqualsHashCode"/>
+		<!-- http://checkstyle.sourceforge.net/config_coding.html#EqualsHashCode -->
+		<module name="EqualsHashCode" />
 
-		<!--  http://checkstyle.sourceforge.net/config_coding.html#DefaultComesLast -->
-		<module name="DefaultComesLast"/>
+		<!-- http://checkstyle.sourceforge.net/config_coding.html#DefaultComesLast -->
+		<module name="DefaultComesLast" />
 
 		<!-- http://checkstyle.sourceforge.net/config_design.html#MutableException -->
-		<module name="MutableException"/>
+		<module name="MutableException" />
 
 		<!-- http://checkstyle.sourceforge.net/config_imports.html#RedundantImport -->
-		<module name="RedundantImport"/>
+		<module name="RedundantImport" />
 
 		<!-- http://checkstyle.sourceforge.net/config_metrics.html#CyclomaticComplexity -->
 		<module name="CyclomaticComplexity">
-			<property name="max" value="7"/>
-			<property name="severity" value="warning"/>
+			<property name="max" value="7" />
+			<property name="severity" value="warning" />
 		</module>
 
 		<!-- http://checkstyle.sourceforge.net/config_metrics.html#NPathComplexity -->
 		<module name="NPathComplexity">
-			<property name="max" value="200"/>
-			<property name="severity" value="warning"/>
+			<property name="max" value="200" />
+			<property name="severity" value="warning" />
 		</module>
 
 		<!-- http://checkstyle.sourceforge.net/config_misc.html#UpperEll -->
-		<module name="UpperEll"/>
+		<module name="UpperEll" />
 
 		<!-- http://checkstyle.sourceforge.net/config_misc.html#ArrayTypeStyle -->
 		<module name="ArrayTypeStyle">
 			<!-- Disallow C-style array type declarations like "String args[]". -->
-			<property name="javaStyle" value="true"/>
+			<property name="javaStyle" value="true" />
 		</module>
 
 		<!-- http://checkstyle.sourceforge.net/config_modifier.html#ModifierOrder -->
-		<module name="ModifierOrder"/>
+		<module name="ModifierOrder" />
 
 		<!-- http://checkstyle.sourceforge.net/config_modifier.html#RedundantModifier -->
-		<module name="RedundantModifier"/>
+		<module name="RedundantModifier" />
 
-		<!--  http://checkstyle.sourceforge.net/config_naming.html -->
+		<!-- http://checkstyle.sourceforge.net/config_naming.html -->
 		<module name="ClassTypeParameterName">
-			<property name="format" value="^[A-Z][0-9]*$"/>
+			<property name="format" value="^[A-Z][0-9]*$" />
 		</module>
 
-		<!--  http://checkstyle.sourceforge.net/config_naming.html -->
-		<module name="ConstantName"/>
+		<!-- http://checkstyle.sourceforge.net/config_naming.html -->
+		<module name="ConstantName" />
 
-		<!--  http://checkstyle.sourceforge.net/config_naming.html -->
-		<module name="LocalFinalVariableName"/>
+		<!-- http://checkstyle.sourceforge.net/config_naming.html -->
+		<module name="LocalFinalVariableName" />
 
-		<!--  http://checkstyle.sourceforge.net/config_naming.html -->
-		<module name="LocalVariableName"/>
+		<!-- http://checkstyle.sourceforge.net/config_naming.html -->
+		<module name="LocalVariableName" />
 
-		<!--  http://checkstyle.sourceforge.net/config_naming.html -->
+		<!-- http://checkstyle.sourceforge.net/config_naming.html -->
 		<module name="MethodTypeParameterName">
-			<property name="format" value="^[A-Z][0-9]*$"/>
+			<property name="format" value="^[A-Z][0-9]*$" />
 		</module>
 
-		<!--  http://checkstyle.sourceforge.net/config_naming.html -->
+		<!-- http://checkstyle.sourceforge.net/config_naming.html -->
 		<module name="PackageName">
-			<property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+			<property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$" />
 		</module>
 
-		<!--  http://checkstyle.sourceforge.net/config_naming.html -->
-		<module name="ParameterName"/>
+		<!-- http://checkstyle.sourceforge.net/config_naming.html -->
+		<module name="ParameterName" />
 
-		<!--  http://checkstyle.sourceforge.net/config_naming.html -->
-		<module name="TypeName"/>
+		<!-- http://checkstyle.sourceforge.net/config_naming.html -->
+		<module name="TypeName" />
 
-		<!--  http://checkstyle.sourceforge.net/config_regexp.html#RegexpSinglelineJava -->
+		<!-- http://checkstyle.sourceforge.net/config_regexp.html#RegexpSinglelineJava -->
 		<module name="RegexpSinglelineJava">
-			<property name="format" value="\s+$"/>
-			<property name="message" value="Found trailing whitespace outside of a comment."/>
-			<property name="ignoreComments" value="true"/>
+			<property name="format" value="\s+$" />
+			<property name="message"
+				value="Found trailing whitespace outside of a comment." />
+			<property name="ignoreComments" value="true" />
 		</module>
 
 		<!-- http://checkstyle.sourceforge.net/config_whitespace.html#GenericWhitespace -->
-		<module name="GenericWhitespace"/>
+		<module name="GenericWhitespace" />
 
 		<!-- http://checkstyle.sourceforge.net/config_whitespace.html#NoWhitespaceAfter -->
 		<module name="NoWhitespaceAfter">
 			<!-- All tokens except ARRAY_INIT. -->
-			<property name="tokens" value="BNOT, DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS"/>
-			<property name="allowLineBreaks" value="false"/>
+			<property name="tokens"
+				value="BNOT, DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS" />
+			<property name="allowLineBreaks" value="false" />
 		</module>
 
 		<!-- http://checkstyle.sourceforge.net/config_whitespace.html#NoWhitespaceBefore -->
 		<module name="NoWhitespaceBefore">
-			<property name="tokens" value="SEMI, POST_DEC, POST_INC"/>
-			<property name="allowLineBreaks" value="false"/>
+			<property name="tokens" value="SEMI, POST_DEC, POST_INC" />
+			<property name="allowLineBreaks" value="false" />
 		</module>
 		<module name="NoWhitespaceBefore">
-			<property name="tokens" value="DOT"/>
-			<property name="allowLineBreaks" value="true"/>
+			<property name="tokens" value="DOT" />
+			<property name="allowLineBreaks" value="true" />
 		</module>
 
 		<!-- http://checkstyle.sourceforge.net/config_whitespace.html#TypecastParenPad -->
-		<module name="TypecastParenPad"/>
+		<module name="TypecastParenPad" />
 
 		<!-- http://checkstyle.sourceforge.net/config_whitespace.html#WhitespaceAfter -->
 		<module name="WhitespaceAfter">
-			<property name="tokens" value="COMMA, SEMI, TYPECAST"/>
+			<property name="tokens" value="COMMA, SEMI, TYPECAST" />
 		</module>
 
 		<!-- http://checkstyle.sourceforge.net/config_whitespace.html#WhitespaceAround -->
 		<module name="WhitespaceAround">
 			<!-- All tokens except LCURLY, RCURLY. -->
-			<property name="tokens" value="ASSIGN,
+			<property name="tokens"
+				value="ASSIGN,
 				BAND,
 				BAND_ASSIGN,
 				BOR,
@@ -180,8 +183,8 @@
 				SR_ASSIGN,
 				STAR,
 				STAR_ASSIGN,
-				TYPE_EXTENSION_AND"/>
-			<property name="ignoreEnhancedForColon" value="false"/>
+				TYPE_EXTENSION_AND" />
+			<property name="ignoreEnhancedForColon" value="false" />
 		</module>
 	</module>
 </module>
