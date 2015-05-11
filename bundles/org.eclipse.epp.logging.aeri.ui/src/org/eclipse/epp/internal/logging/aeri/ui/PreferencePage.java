@@ -15,6 +15,7 @@ import static org.eclipse.epp.internal.logging.aeri.ui.model.PreferenceInitializ
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.epp.internal.logging.aeri.ui.l10n.Messages;
+import org.eclipse.epp.internal.logging.aeri.ui.model.PreferenceInitializer;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Browsers;
 import org.eclipse.jface.dialogs.Dialog;
@@ -59,9 +60,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         addField(createStringFieldEditorAndToolTip(PROP_NAME, Messages.FIELD_LABEL_NAME, Messages.FIELD_MESSAGE_NAME));
         addField(createStringFieldEditorAndToolTip(PROP_EMAIL, Messages.FIELD_LABEL_EMAIL,
                 Messages.FIELD_MESSAGE_EMAIL + " \n" + Messages.FIELD_DESC_EMAIL)); //$NON-NLS-1$
-
         addField(new ComboFieldEditor(PROP_SEND_ACTION, Messages.FIELD_LABEL_ACTION, createModeLabelAndValues(), getFieldEditorParent()));
-
         addField(createBooleanFieldEditorAndToolTip(PROP_SKIP_SIMILAR_ERRORS, Messages.FIELD_LABEL_SKIP_SIMILAR_ERRORS,
                 Messages.TOOLTIP_SKIP_SIMILAR));
         addField(createBooleanFieldEditorAndToolTip(PROP_ANONYMIZE_STACKTRACES, Messages.FIELD_LABEL_ANONYMIZE_STACKTRACES,
@@ -157,6 +156,12 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         default:
             return mode.name();
         }
+    }
+
+    @Override
+    public boolean performOk() {
+        PreferenceInitializer.getDefault().setConfigured(true);
+        return super.performOk();
     }
 
 }
