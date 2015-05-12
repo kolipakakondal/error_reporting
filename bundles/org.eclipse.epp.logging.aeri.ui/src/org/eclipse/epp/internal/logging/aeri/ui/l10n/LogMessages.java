@@ -13,7 +13,6 @@ package org.eclipse.epp.internal.logging.aeri.ui.l10n;
 import static org.eclipse.core.runtime.IStatus.*;
 
 import org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.DefaultLogMessage;
-import org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.ILogMessage;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
@@ -21,7 +20,8 @@ public final class LogMessages extends DefaultLogMessage {
 
     private static final Bundle BUNDLE = FrameworkUtil.getBundle(LogMessages.class);
     // Unit tests should not fails because OSGI is not yet available:
-    private static final String VERSION = "Version: " + (BUNDLE == null ? "unit-tests" : BUNDLE.getVersion().toString()); //$NON-NLS-1$
+    private static final String VERSION = "Version: " //$NON-NLS-1$
+            + (BUNDLE == null ? "unit-tests" : BUNDLE.getVersion().toString());
     private static int code = 1;
 
     public static final LogMessages ERROR_FAILED_TO_PARSE_PREFERENCE_VALUE = new LogMessages(ERROR,
@@ -55,7 +55,8 @@ public final class LogMessages extends DefaultLogMessage {
             Messages.LOG_WARN_STATUS_INDEX_NOT_AVAILABLE);
     public static final LogMessages WARN_THANK_YOU_DIALOG_ERROR = new LogMessages(WARNING, Messages.LOG_WARN_THANK_YOU_DIALOG_ERROR);
     public static final LogMessages WARN_STACKTRACE_WITH_NULL = new LogMessages(WARNING, Messages.LOG_WARN_STACKTRACE_WITH_NULL);
-    public static final ILogMessage WARN_CYCLIC_EXCEPTION = new LogMessages(WARNING, Messages.LOG_WARN_CYCLIC_EXCEPTION);
+    public static final LogMessages WARN_CYCLIC_EXCEPTION = new LogMessages(WARNING, Messages.LOG_WARN_CYCLIC_EXCEPTION);
+    public static final LogMessages WARN_UPLOADJOB_BAD_RESPONSE = new LogMessages(WARNING, Messages.LOG_WARN_UPLOADJOB_BAD_RESPONSE);
 
     public LogMessages(int severity, String message) {
         super(severity, code++, String.format("%s %s", message, VERSION)); //$NON-NLS-1$

@@ -73,8 +73,8 @@ public class Messages extends NLS {
     public static String TOOLTIP_IGNORE_SIMILAR_ERRORS_IN_FUTURE;
     public static String TOOLTIP_NOT_AN_ERROR;
     public static String UPLOADJOB_ALREADY_FIXED_UPDATE;
-    public static String UPLOADJOB_BAD_RESPONSE;
-    public static String UPLOADJOB_FAILED_WITH_EXCEPTION;
+    public static String LOG_WARN_UPLOADJOB_BAD_RESPONSE;
+    public static String UPLOADJOB_FAILED;
     public static String UPLOADJOB_NAME;
     public static String UPLOADJOB_NEED_FURTHER_INFORMATION;
     public static String UPLOADJOB_TASKNAME;

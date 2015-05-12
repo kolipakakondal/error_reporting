@@ -30,6 +30,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseShowRequest;
@@ -44,9 +45,6 @@ import org.eclipse.epp.internal.logging.aeri.ui.utils.Json;
 import com.google.common.base.Optional;
 import com.google.common.eventbus.EventBus;
 
-/**
- * Responsible to anonymize (if requested) and send an error report.
- */
 public class UploadJob extends Job {
 
     private Executor executor;
@@ -77,7 +75,8 @@ public class UploadJob extends Job {
             String details = EntityUtils.toString(httpResponse.getEntity());
             int code = httpResponse.getStatusLine().getStatusCode();
             if (code >= 400) {
-                return new Status(WARNING, PLUGIN_ID, format(Messages.UPLOADJOB_BAD_RESPONSE, details));
+                return new MultiStatus(PLUGIN_ID, WARNING, new Status[] { new Status(WARNING, PLUGIN_ID, details) },
+                        Messages.UPLOADJOB_FAILED, null);
             }
             final ServerResponse05 response05 = Json.deserialize(details, ServerResponse05.class);
 
@@ -92,7 +91,7 @@ public class UploadJob extends Job {
             bus.post(new ServerResponseShowRequest(result));
             return new Status(IStatus.OK, PLUGIN_ID, format(Messages.UPLOADJOB_THANK_YOU, details));
         } catch (Exception e) {
-            return new Status(WARNING, PLUGIN_ID, Messages.UPLOADJOB_FAILED_WITH_EXCEPTION, e);
+            return new Status(WARNING, PLUGIN_ID, Messages.UPLOADJOB_FAILED, e);
         } finally {
             monitor.done();
         }
