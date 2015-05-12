@@ -305,7 +305,8 @@ public class ReportingController {
                     }
                 }
                 monitor.done();
-                Jobs.sequential(format(Messages.UPLOADJOB_NAME, target), jobs);
+                IProgressMonitor sendMonitor = Jobs.sequential(format(Messages.UPLOADJOB_NAME, target), jobs);
+                Jobs.wait(sendMonitor, jobs);
                 return Status.OK_STATUS;
             }
         }.schedule();

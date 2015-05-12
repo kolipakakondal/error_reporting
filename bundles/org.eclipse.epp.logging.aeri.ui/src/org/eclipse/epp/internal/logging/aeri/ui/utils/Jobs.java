@@ -14,10 +14,13 @@ import static com.google.common.collect.Iterables.size;
 import static java.util.Arrays.asList;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
+
+import com.google.common.base.Throwables;
 
 public final class Jobs {
 
@@ -31,32 +34,51 @@ public final class Jobs {
         return Job.getJobManager().createProgressGroup();
     }
 
-    public static void parallel(String task, Job... jobs) {
-        parallel(task, asList(jobs));
+    public static IProgressMonitor parallel(String task, Job... jobs) {
+        return parallel(task, asList(jobs));
     }
 
-    public static void parallel(String task, Iterable<Job> jobs) {
+    public static IProgressMonitor parallel(String task, Iterable<Job> jobs) {
         IProgressMonitor group = getProgressGroup();
-        group.beginTask(task, size(jobs));
-        for (Job job : jobs) {
-            job.setProgressGroup(group, 1);
-            job.schedule();
+        try {
+            group.beginTask(task, size(jobs));
+            for (Job job : jobs) {
+                job.setProgressGroup(group, 1);
+                job.schedule();
+            }
+            for (Job job : jobs) {
+                job.join();
+            }
+        } catch (InterruptedException e) {
+            // ignore
+        } finally {
+            group.done();
         }
+        return group;
     }
 
-    public static void sequential(String task, Job... jobs) {
-        sequential(task, Arrays.asList(jobs));
+    public static IProgressMonitor sequential(String task, Job... jobs) {
+        return sequential(task, Arrays.asList(jobs));
     }
 
-    public static void sequential(String task, Iterable<Job> jobs) {
+    public static IProgressMonitor sequential(String task, Iterable<Job> jobs) {
         ISchedulingRule rule = new SequentialSchedulingRule();
         IProgressMonitor group = getProgressGroup();
-        group.beginTask(task, size(jobs));
-        for (Job job : jobs) {
-            job.setRule(rule);
-            job.setProgressGroup(group, 1);
-            job.schedule();
+        try {
+            group.beginTask(task, size(jobs));
+            for (Job job : jobs) {
+                job.setRule(rule);
+                job.setProgressGroup(group, 1);
+                job.schedule();
+                job.join();
+            }
+        } catch (InterruptedException e) {
+            // ignore
+
+        } finally {
+            group.done();
         }
+        return group;
     }
 
     public static final class SequentialSchedulingRule implements ISchedulingRule {
@@ -69,6 +91,17 @@ public final class Jobs {
         public boolean contains(ISchedulingRule rule) {
             return rule == this;
         }
+    }
+
+    public static void wait(IProgressMonitor group, List<Job> jobs) {
+        for (Job job : jobs) {
+            try {
+                job.join();
+            } catch (InterruptedException e) {
+                Throwables.propagate(e);
+            }
+        }
+        group.done();
     }
 
 }
