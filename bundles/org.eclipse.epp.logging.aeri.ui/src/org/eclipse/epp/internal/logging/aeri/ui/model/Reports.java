@@ -55,13 +55,13 @@ public class Reports {
         @Override
         public Object caseStatus(Status status) {
             status.setMessage(Constants.HIDDEN);
-            return Boolean.TRUE;
+            return null;
         }
 
         @Override
         public Object caseThrowable(Throwable throwable) {
             throwable.setMessage(Constants.HIDDEN);
-            return Boolean.TRUE;
+            return null;
         }
     }
 
@@ -77,7 +77,7 @@ public class Reports {
             if (!isWhitelisted(throwable.getClassName(), whitelist)) {
                 throwable.setClassName(Constants.HIDDEN);
             }
-            return Boolean.TRUE;
+            return null;
         }
 
         @Override
@@ -88,7 +88,7 @@ public class Reports {
                 element.setFileName(Constants.HIDDEN);
                 element.setLineNumber(-1);
             }
-            return Boolean.TRUE;
+            return null;
         }
     }
 
@@ -112,7 +112,7 @@ public class Reports {
             if (isWhitelisted(element.getClassName(), whitelist)) {
                 content.append(element.getClassName()).append(element.getMethodName());
             }
-            return Boolean.TRUE;
+            return null;
         }
 
         @Override
@@ -120,7 +120,7 @@ public class Reports {
             if (isWhitelisted(throwable.getClassName(), whitelist)) {
                 content.append(throwable.getClassName());
             }
-            return Boolean.TRUE;
+            return null;
         }
 
         public String hash() {
@@ -136,7 +136,7 @@ public class Reports {
             String pkg = replace(substringBeforeLast(element.getClassName(), "."), ".internal.", ".");
             packages.add(pkg);
 
-            return Boolean.TRUE;
+            return null;
         }
     }
 
@@ -175,7 +175,7 @@ public class Reports {
         public Object caseErrorReport(ErrorReport report) {
             appendHeadline("REPORT", reportStringBuilder);
             appendAttributes(report, reportStringBuilder);
-            return Boolean.TRUE;
+            return null;
         }
 
         @Override
@@ -187,7 +187,7 @@ public class Reports {
                 statusStringBuilder.append("Exception:");
                 append(exception, statusStringBuilder);
             }
-            return Boolean.TRUE;
+            return null;
         }
 
         private void append(Throwable throwable, StringBuilder builder) {
@@ -206,14 +206,39 @@ public class Reports {
         @Override
         public Object caseBundle(org.eclipse.epp.internal.logging.aeri.ui.model.Bundle bundle) {
             appendAttributes(bundle, bundlesStringBuilder);
-            return Boolean.TRUE;
+            return null;
         }
 
         public String print() {
             return new StringBuilder().append(statusStringBuilder).append("\n").append(reportStringBuilder).append(bundlesStringBuilder)
                     .toString();
         }
+    }
 
+    public static final class LinkErrorAnalyserVisitor extends ModelSwitch<Object> {
+        private static final LinkageErrorAnalyser ANALYSER = new LinkageErrorAnalyser();
+
+        private Optional<String> linkageErrorComment = Optional.absent();
+
+        private final List<org.eclipse.epp.internal.logging.aeri.ui.model.Bundle> presentBundles;
+
+        public LinkErrorAnalyserVisitor(List<org.eclipse.epp.internal.logging.aeri.ui.model.Bundle> presentBundles) {
+            this.presentBundles = presentBundles;
+        }
+
+        @Override
+        public Object caseThrowable(Throwable throwable) {
+            linkageErrorComment = ANALYSER.computeComment(presentBundles, throwable);
+            if (linkageErrorComment.isPresent()) {
+                return Boolean.TRUE;
+            } else {
+                return null;
+            }
+        }
+
+        public Optional<String> getLinkageErrorComment() {
+            return linkageErrorComment;
+        }
     }
 
     private static class MultiStatusFilter {
@@ -365,6 +390,15 @@ public class Reports {
         }
     }
 
+    public static void insertLinkageErrorComment(ErrorReport report) {
+        LinkErrorAnalyserVisitor visitor = new LinkErrorAnalyserVisitor(report.getPresentBundles());
+        visit(report, visitor);
+        Optional<String> comment = visitor.getLinkageErrorComment();
+        if (comment.isPresent()) {
+            report.setComment(comment.get());
+        }
+    }
+
     @VisibleForTesting
     public static Status newStatus(IStatus status, Settings settings) {
         Status mStatus = factory.createStatus();
@@ -486,13 +520,20 @@ public class Reports {
         return report.getStatus().getFingerprint();
     }
 
-    public static <T, K extends EObject> void visit(K object, ModelSwitch<T> s) {
-        s.doSwitch(object);
+    public static <T, K extends EObject> T visit(K object, ModelSwitch<T> s) {
+        T t = s.doSwitch(object);
+        if (t != null) {
+            return t;
+        }
         TreeIterator<EObject> allContents = EcoreUtil.getAllContents(object, true);
         for (TreeIterator<EObject> iterator = allContents; iterator.hasNext();) {
             EObject modelElement = iterator.next();
-            s.doSwitch(modelElement);
+            t = s.doSwitch(modelElement);
+            if (t != null) {
+                return t;
+            }
         }
+        return null;
     }
 
     public static String exactIdentityHash(ErrorReport report) {
@@ -507,7 +548,7 @@ public class Reports {
                 hasher.putString(stripToEmpty(object.getOsgiOsVersion()), UTF_8);
                 hasher.putString(stripToEmpty(object.getOsgiArch()), UTF_8);
                 hasher.putString(stripToEmpty(object.getOsgiWs()), UTF_8);
-                return hasher;
+                return null;
             };
 
             @Override
@@ -517,14 +558,14 @@ public class Reports {
                 hasher.putString(stripToEmpty(object.getMessage()), UTF_8);
                 hasher.putInt(object.getSeverity());
                 hasher.putInt(object.getCode());
-                return hasher;
+                return null;
             }
 
             @Override
             public Hasher caseBundle(org.eclipse.epp.internal.logging.aeri.ui.model.Bundle object) {
                 hasher.putString(stripToEmpty(object.getName()), UTF_8);
                 hasher.putString(stripToEmpty(object.getVersion()), UTF_8);
-                return hasher;
+                return null;
             }
 
             @Override
@@ -532,14 +573,14 @@ public class Reports {
                 hasher.putString(stripToEmpty(object.getClassName()), UTF_8);
                 hasher.putString(stripToEmpty(object.getMethodName()), UTF_8);
                 hasher.putInt(object.getLineNumber());
-                return hasher;
+                return null;
             }
 
             @Override
             public Hasher caseThrowable(Throwable object) {
                 hasher.putString(stripToEmpty(object.getClassName()), UTF_8);
                 hasher.putString(stripToEmpty(object.getMessage()), UTF_8);
-                return hasher;
+                return null;
             }
         };
 
@@ -557,7 +598,7 @@ public class Reports {
                 hasher.putString(element.getClassName(), UTF_8);
                 hasher.putString(element.getMethodName(), UTF_8);
                 hasher.putInt(element.getLineNumber());
-                return hasher;
+                return null;
             }
         });
         String hash = hasher.hash().toString();

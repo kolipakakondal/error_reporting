@@ -12,13 +12,9 @@ package org.eclipse.epp.internal.logging.aeri.ui;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.SYSPROP_ECLIPSE_BUILD_ID;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +23,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
@@ -379,5 +376,19 @@ public class LogListenerTest {
         sut.logging(s1, "");
 
         verifyNoErrorReportLogged();
+    }
+
+    @Test
+    public void testLinkageErrorCommentAdded() {
+        Throwable e3 = new RuntimeException();
+        e3.fillInStackTrace();
+        ClassNotFoundException e2 = new ClassNotFoundException(StringUtils.class.getName(), e3);
+        Throwable e1 = new Throwable("test", e2);
+        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message", e1);
+
+        sut.logging(status, "");
+
+        ErrorReport report = pollEvent().report;
+        assertThat(report.getComment(), not(isEmptyOrNullString()));
     }
 }

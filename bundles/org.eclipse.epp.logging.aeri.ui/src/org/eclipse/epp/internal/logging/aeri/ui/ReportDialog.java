@@ -50,6 +50,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
@@ -224,12 +225,26 @@ public class ReportDialog extends MessageDialog {
         IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
         if (!selection.isEmpty()) {
             activeSelection = (ErrorReport) selection.getFirstElement();
+
             ErrorReport copy = Reports.copy(activeSelection);
             copy.setName(settings.getName());
             copy.setEmail(settings.getEmail());
             messageText.setText(Reports.prettyPrint(copy, settings));
+
             logMessageButton.setSelection(activeSelection.isLogMessage());
             ignoreSimilarButton.setSelection(activeSelection.isIgnoreSimilar());
+            if (null != activeSelection.getComment()) {
+                // what a silly situation...
+                // since there is a modify listener present, we have to disable it for a while...
+                Listener[] listeners = commentText.getListeners(SWT.Modify);
+                for (Listener l : listeners) {
+                    commentText.removeListener(SWT.Modify, l);
+                }
+                commentText.setText(copy.getComment());
+                for (Listener l : listeners) {
+                    commentText.addListener(SWT.Modify, l);
+                }
+            }
         }
     }
 

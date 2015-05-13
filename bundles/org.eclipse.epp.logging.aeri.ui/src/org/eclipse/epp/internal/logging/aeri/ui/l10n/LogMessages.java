@@ -18,7 +18,7 @@ import org.osgi.framework.FrameworkUtil;
 
 public final class LogMessages extends DefaultLogMessage {
 
-    private static final Bundle BUNDLE = FrameworkUtil.getBundle(LogMessages.class);
+    public static final Bundle BUNDLE = FrameworkUtil.getBundle(LogMessages.class);
     // Unit tests should not fails because OSGI is not yet available:
     private static final String VERSION = "Version: " //$NON-NLS-1$
             + (BUNDLE == null ? "unit-tests" : BUNDLE.getVersion().toString());

@@ -16,6 +16,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -43,7 +44,8 @@ public class LogErrorsAction implements IWorkbenchWindowActionDelegate {
             public IStatus run(IProgressMonitor monitor) {
                 System.setProperty("eclipse.buildId", "unit-tests");
                 // logMultiStatusDelayed();
-                logError();
+                logLinkageError();
+                // logError();
                 // logManyDifferentErrors();
                 // XXX only execute in non-production. These errors should never
                 // be sent to eclipse.org!
@@ -53,6 +55,11 @@ public class LogErrorsAction implements IWorkbenchWindowActionDelegate {
 
         };
         job.schedule();
+    }
+
+    private void logLinkageError() {
+        log.log(new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "Test Error without exception",
+                new ClassNotFoundException(StringUtils.class.getName())));
     }
 
     @SuppressWarnings("unused")

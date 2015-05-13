@@ -4,7 +4,6 @@ Bundle-SymbolicName: org.eclipse.epp.logging.aeri.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
-Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.core.databinding.property,
  org.eclipse.core.runtime,
@@ -38,3 +37,4 @@ Import-Package: com.google.common.annotations;version="[15.0.0,16.0.0)",
  org.apache.http.client.fluent;version="[4.3.0,5.0.0)",
  org.apache.http.entity;version="[4.3.0,5.0.0)",
  org.apache.http.util;version="[4.3.0,5.0.0)"
+Bundle-ActivationPolicy: lazy
