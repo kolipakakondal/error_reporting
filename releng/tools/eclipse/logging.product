@@ -30,7 +30,6 @@
    <vm>
    </vm>
 
-
    <plugins>
    </plugins>
 
@@ -78,8 +77,8 @@
       <feature id="org.eclipse.platform.source"/>
       <feature id="org.eclipse.mylyn.commons.notifications"/>
       <feature id="org.eclipse.mylyn.commons"/>
-      <feature id="org.eclipse.epp.logging.aeri.ui.feature" version="1.0.0.qualifier"/>
       <feature id="org.eclipse.epp.logging.3rd.feature" version="1.0.0.qualifier"/>
+      <feature id="org.eclipse.epp.logging.aeri.feature" version="1.0.0.qualifier"/>
       <feature id="org.eclipse.epp.logging.sdk.feature" version="1.0.0.qualifier"/>
    </features>
 
