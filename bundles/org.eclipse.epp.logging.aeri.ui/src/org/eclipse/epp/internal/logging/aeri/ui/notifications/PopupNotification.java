@@ -6,12 +6,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Daniel Haftstein - initial API and implementation based on the work 
+ *    Daniel Haftstein - initial API and implementation based on the work
  *                       in the Eclipse Mylyn project.
  */
 package org.eclipse.epp.internal.logging.aeri.ui.notifications;
 
 import static org.apache.commons.lang3.StringUtils.*;
+
+import java.util.List;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -28,18 +30,128 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 
+import com.google.common.collect.Lists;
+
 @SuppressWarnings("restriction")
 public class PopupNotification extends AbstractWorkbenchNotificationPopup {
+
+    private final class BlockPopupOnModalShellActivationListener implements Listener {
+
+        private boolean popupBlocked = false;
+        private boolean popupReactivated = false;
+        private String title;
+        private Label titleLabel;
+
+        public BlockPopupOnModalShellActivationListener() {
+            title = getPopupShellTitle();
+            titleLabel = getTitleLabel(getContents());
+            title = titleLabel.getText();
+            // check existing shells
+            IWorkbench workbench = PlatformUI.getWorkbench();
+            for (Shell shell : workbench.getDisplay().getShells()) {
+                if (isVisibleAndModal(shell) && !popupBlocked) {
+                    deactivate();
+                }
+            }
+        }
+
+        private Label getTitleLabel(Control c) {
+            if (c instanceof Label) {
+                Label l = (Label) c;
+                if (getPopupShellTitle().equals(l.getText())) {
+                    return l;
+                }
+            }
+            if (c instanceof Composite) {
+                for (Control cc : ((Composite) c).getChildren()) {
+                    Label l = getTitleLabel(cc);
+                    if (l != null) {
+                        return l;
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public void handleEvent(Event event) {
+            if (!isPopupOpen()) {
+                return;
+            }
+            Widget w = event.widget;
+            if (w instanceof Shell) {
+                Shell shell = (Shell) w;
+                if (isVisibleAndModal(shell)) {
+                    if (!popupBlocked) {
+                        deactivate();
+                    }
+                } else {
+                    if (popupBlocked) {
+                        popupReactivated = true;
+                        activate();
+                    }
+                }
+            }
+        }
+
+        private boolean isPopupOpen() {
+            return getShell() != null && !getShell().isDisposed();
+        }
+
+        private boolean isVisibleAndModal(Shell shell) {
+            int modal = SWT.APPLICATION_MODAL | SWT.SYSTEM_MODAL | SWT.PRIMARY_MODAL;
+            return shell.isVisible() && (shell.getStyle() & modal) != 0;
+        }
+
+        private void deactivate() {
+            popupBlocked = true;
+            titleLabel.setText("(Waiting for focus) " + title);
+            for (ScalingHyperlink link : links) {
+                link.setEnabled(false);
+            }
+        }
+
+        private void activate() {
+            popupBlocked = false;
+            titleLabel.setText(title);
+            for (ScalingHyperlink link : links) {
+                link.setEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public void closeFade() {
+        // the close job can not be extended to handle the blocked popup.
+        // therefore the closing fade is checked and the job is rescheduled.
+        if (blockPopupListener.popupBlocked) {
+            scheduleAutoClose();
+            return;
+        }
+        if (blockPopupListener.popupReactivated) {
+            // the popup has been reactivated but a close job will still be active and may be triggered short afterwards. For this reason
+            // schedule another time interval
+            blockPopupListener.popupReactivated = false;
+            scheduleAutoClose();
+            return;
+        }
+        super.closeFade();
+    }
 
     private static final int MAX_LABEL_CHAR_LENGTH = 120;
     private static final int MAX_DESCRIPTION_CHAR_LENGTH = 500;
@@ -48,6 +160,8 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
     private static final int PADDING_EDGE = 5;
 
     private Notification notification;
+    private List<ScalingHyperlink> links = Lists.newArrayList();
+    private BlockPopupOnModalShellActivationListener blockPopupListener;
 
     public PopupNotification(Display display) {
         super(display);
@@ -125,9 +239,9 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
                         action.execute();
                     }
                 });
+                links.add(actionLink);
             }
         }
-
     }
 
     @Override
@@ -168,6 +282,19 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
         if (notification != null) {
             notification.close();
         }
+        PlatformUI.getWorkbench().getDisplay().removeFilter(SWT.Activate, blockPopupListener);
         return super.close();
     }
+
+    @Override
+    public void create() {
+        super.create();
+        registerModalShellListener();
+    }
+
+    private void registerModalShellListener() {
+        blockPopupListener = new BlockPopupOnModalShellActivationListener();
+        PlatformUI.getWorkbench().getDisplay().addFilter(SWT.Activate, blockPopupListener);
+    }
+
 }
