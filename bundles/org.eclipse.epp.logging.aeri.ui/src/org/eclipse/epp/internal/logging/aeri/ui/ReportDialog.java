@@ -11,13 +11,26 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui;
 
+import static org.eclipse.emf.databinding.EMFProperties.value;
+import static org.eclipse.jface.databinding.swt.WidgetProperties.*;
+
+import org.eclipse.core.databinding.Binding;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.IValueChangeListener;
+import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
+import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.epp.internal.logging.aeri.ui.l10n.Messages;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
+import org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage;
 import org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Reports;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
+import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -41,8 +54,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -50,7 +61,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
@@ -63,12 +73,41 @@ import com.google.common.eventbus.EventBus;
 
 public class ReportDialog extends MessageDialog {
 
+    private static final class PackShellExpansionListener extends ExpansionAdapter {
+        private final Shell shell;
+
+        private PackShellExpansionListener(Shell shell) {
+            this.shell = shell;
+        }
+
+        @Override
+        public void expansionStateChanged(ExpansionEvent e) {
+            shell.pack();
+        }
+    }
+
+    private final class ErrorReportSelectionChangeListener implements IValueChangeListener {
+        @Override
+        public void handleValueChange(ValueChangeEvent event) {
+            boolean isAnyReportSelected = event.getObservableValue().getValue() != null;
+            if (!isAnyReportSelected) {
+                messageText.setText("Please select a report for more information");
+                commentText.setText("");
+                logMessageButton.setSelection(false);
+                ignoreSimilarButton.setSelection(false);
+            }
+            logMessageButton.setEnabled(isAnyReportSelected);
+            ignoreSimilarButton.setEnabled(isAnyReportSelected);
+            commentText.setEnabled(isAnyReportSelected);
+        }
+    }
+
     private static final Image ERROR_ICON = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
     private Settings settings;
     private TableViewer tableViewer;
     private StyledText messageText;
     private IObservableList errors;
-    private ErrorReport activeSelection;
+    private WritableValue selectedErrorReport;
 
     private Text commentText;
     private Button rememberDecisionButton;
@@ -109,10 +148,11 @@ public class ReportDialog extends MessageDialog {
 
         Composite settingsComposite = createSettingsComposite(parent);
         GridDataFactory.fillDefaults().grab(true, false).indent(0, 5).align(SWT.BEGINNING, SWT.CENTER).applyTo(settingsComposite);
+        configureDataBinding();
         return container;
     }
 
-    protected void createCommentContainer(final Composite parent, Composite container) {
+    private void createCommentContainer(final Composite parent, Composite container) {
         final ExpandableComposite commentContainer = new ExpandableComposite(container, SWT.NONE);
         commentContainer.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         commentContainer.setText("Comments");
@@ -124,39 +164,19 @@ public class ReportDialog extends MessageDialog {
         commentText = new Text(commentContent, SWT.BORDER | SWT.MULTI | SWT.WRAP);
         commentText.setToolTipText(
                 "If possible, please provide additional information " + "such as steps that allow committers to reproduce this error.");
-        commentText.addModifyListener(new ModifyListener() {
-            @Override
-            public void modifyText(ModifyEvent event) {
-                String comment = commentText.getText();
-                for (Object errorReport : errors) {
-                    ((ErrorReport) errorReport).setComment(comment);
-                }
-                updateMessageText();
-            }
-        });
         GridDataFactory.fillDefaults().hint(SWT.DEFAULT, 50).grab(true, false).applyTo(commentText);
         commentContainer.setClient(commentContent);
-        commentContainer.addExpansionListener(new ExpansionAdapter() {
-            @Override
-            public void expansionStateChanged(ExpansionEvent e) {
-                parent.getShell().pack();
-            }
-        });
+        commentContainer.addExpansionListener(new PackShellExpansionListener(parent.getShell()));
     }
 
-    protected void createDetailsContainer(final Composite parent, Composite container) {
+    private void createDetailsContainer(final Composite parent, Composite container) {
         ExpandableComposite detailsContainer = new ExpandableComposite(container, SWT.NONE);
         GridDataFactory.fillDefaults().grab(true, true).applyTo(detailsContainer);
 
         detailsContainer.setText("Details");
         Composite detailsContent = createDetailsContent(detailsContainer);
         detailsContainer.setClient(detailsContent);
-        detailsContainer.addExpansionListener(new ExpansionAdapter() {
-            @Override
-            public void expansionStateChanged(ExpansionEvent e) {
-                parent.getShell().pack();
-            }
-        });
+        detailsContainer.addExpansionListener(new PackShellExpansionListener(parent.getShell()));
         detailsContainer.setExpanded(true);
     }
 
@@ -168,9 +188,45 @@ public class ReportDialog extends MessageDialog {
         SashForm sash = new SashForm(container, SWT.HORIZONTAL);
         GridDataFactory.fillDefaults().grab(true, true).applyTo(sash);
         createTableComposite(sash);
-        createMessageComposite(sash);
+        createDetailsArea(sash);
         sash.setWeights(new int[] { 20, 80 });
         return container;
+    }
+
+    private void configureDataBinding() {
+        DataBindingContext context = new DataBindingContext();
+        selectedErrorReport = new WritableValue();
+        selectedErrorReport.addValueChangeListener(new ErrorReportSelectionChangeListener());
+
+        ISWTObservableValue ovCommentText = text(SWT.Modify).observe(commentText);
+        IObservableValue ovReportComment = value(ModelPackage.Literals.ERROR_REPORT__COMMENT).observeDetail(selectedErrorReport);
+        context.bindValue(ovCommentText, ovReportComment);
+        ISWTObservableValue ovLogMessage = selection().observe(logMessageButton);
+        IObservableValue ovReportLogMessage = value(ModelPackage.Literals.ERROR_REPORT__LOG_MESSAGE).observeDetail(selectedErrorReport);
+        context.bindValue(ovLogMessage, ovReportLogMessage);
+
+        ISWTObservableValue ovIgnoreSimilar = selection().observe(ignoreSimilarButton);
+        IObservableValue ovReportIgnoreSimilar = value(ModelPackage.Literals.ERROR_REPORT__IGNORE_SIMILAR)
+                .observeDetail(selectedErrorReport);
+        context.bindValue(ovIgnoreSimilar, ovReportIgnoreSimilar);
+
+        addChangeListenerToBindings(context);
+    }
+
+    private void addChangeListenerToBindings(DataBindingContext context) {
+        for (Object o : context.getBindings()) {
+            Binding b = (Binding) o;
+            b.getModel().addChangeListener(new IChangeListener() {
+
+                @Override
+                public void handleChange(ChangeEvent event) {
+                    Object report = selectedErrorReport.getValue();
+                    if (report != null) {
+                        messageText.setText(Reports.prettyPrint((ErrorReport) report, settings));
+                    }
+                }
+            });
+        }
     }
 
     private Composite createTableComposite(Composite parent) {
@@ -199,7 +255,10 @@ public class ReportDialog extends MessageDialog {
 
             @Override
             public void selectionChanged(SelectionChangedEvent event) {
-                updateMessageText();
+                IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
+                if (!selection.isEmpty()) {
+                    selectedErrorReport.setValue(selection.getFirstElement());
+                }
             }
 
         });
@@ -215,44 +274,31 @@ public class ReportDialog extends MessageDialog {
             private void deleteSelection() {
                 IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
                 errors.removeAll(selection.toList());
+                selectedErrorReport.setValue(null);
             }
 
         });
         return tableComposite;
     }
 
-    private void updateMessageText() {
-        IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
-        if (!selection.isEmpty()) {
-            activeSelection = (ErrorReport) selection.getFirstElement();
-
-            ErrorReport copy = Reports.copy(activeSelection);
-            copy.setName(settings.getName());
-            copy.setEmail(settings.getEmail());
-            messageText.setText(Reports.prettyPrint(copy, settings));
-
-            logMessageButton.setSelection(activeSelection.isLogMessage());
-            ignoreSimilarButton.setSelection(activeSelection.isIgnoreSimilar());
-            if (null != activeSelection.getComment()) {
-                // what a silly situation...
-                // since there is a modify listener present, we have to disable it for a while...
-                Listener[] listeners = commentText.getListeners(SWT.Modify);
-                for (Listener l : listeners) {
-                    commentText.removeListener(SWT.Modify, l);
-                }
-                commentText.setText(copy.getComment());
-                for (Listener l : listeners) {
-                    commentText.addListener(SWT.Modify, l);
-                }
-            }
-        }
-    }
-
-    private Composite createMessageComposite(Composite parent) {
+    private Composite createDetailsArea(Composite parent) {
         Composite container = new Composite(parent, SWT.NONE);
         GridDataFactory.fillDefaults().grab(true, true).applyTo(container);
         GridLayoutFactory.fillDefaults().numColumns(1).applyTo(container);
 
+        createMessageComposite(container);
+
+        createButtons(container);
+        return container;
+    }
+
+    private void createButtons(Composite container) {
+        logMessageButton = createAndConfigureCheckbox(container, Messages.FIELD_LABEL_NOT_AN_ERROR, Messages.TOOLTIP_NOT_AN_ERROR);
+        ignoreSimilarButton = createAndConfigureCheckbox(container, Messages.FIELD_LABEL_IGNORE_SIMILAR_ERRORS_IN_FUTURE,
+                Messages.TOOLTIP_IGNORE_SIMILAR_ERRORS_IN_FUTURE);
+    }
+
+    private void createMessageComposite(Composite container) {
         Composite messageComposite = new Composite(container, SWT.NONE);
         GridLayoutFactory.fillDefaults().applyTo(messageComposite);
         GridDataFactory.fillDefaults().grab(true, true).applyTo(messageComposite);
@@ -262,26 +308,6 @@ public class ReportDialog extends MessageDialog {
         messageText.setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
         messageText.setForeground(new Color(container.getDisplay(), 80, 80, 80));
         GridDataFactory.fillDefaults().minSize(100, 1).hint(100, 300).grab(true, true).applyTo(messageText);
-
-        logMessageButton = createAndConfigureCheckbox(container, Messages.FIELD_LABEL_NOT_AN_ERROR, Messages.TOOLTIP_NOT_AN_ERROR);
-        logMessageButton.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                activeSelection.setLogMessage(logMessageButton.getSelection());
-                updateMessageText();
-            }
-        });
-        ignoreSimilarButton = createAndConfigureCheckbox(container, Messages.FIELD_LABEL_IGNORE_SIMILAR_ERRORS_IN_FUTURE,
-                Messages.TOOLTIP_IGNORE_SIMILAR_ERRORS_IN_FUTURE);
-        ignoreSimilarButton.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                activeSelection.setIgnoreSimilar(ignoreSimilarButton.getSelection());
-                updateMessageText();
-            }
-        });
-
-        return container;
     }
 
     private Button createAndConfigureCheckbox(Composite parent, String text, String toolTip) {
