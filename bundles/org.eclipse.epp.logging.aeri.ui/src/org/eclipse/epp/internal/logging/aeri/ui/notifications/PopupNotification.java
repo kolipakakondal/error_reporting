@@ -6,8 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Daniel Haftstein - initial API and implementation based on the work
- *                       in the Eclipse Mylyn project.
+ *    Daniel Haftstein - initial API and implementation based on org.eclipse.mylyn.internal.commons.notifications.ui.popup.NotificationPopup.
  */
 package org.eclipse.epp.internal.logging.aeri.ui.notifications;
 
@@ -23,7 +22,6 @@ import org.eclipse.mylyn.commons.workbench.AbstractWorkbenchNotificationPopup;
 import org.eclipse.mylyn.commons.workbench.forms.CommonFormUtil;
 import org.eclipse.mylyn.commons.workbench.forms.ScalingHyperlink;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -37,6 +35,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -193,21 +192,16 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
         GridLayout gridLayout = new GridLayout(2, false);
         GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(contentComposite);
         contentComposite.setLayout(gridLayout);
-        contentComposite.setBackground(contentComposite.getBackground());
         final Label notificationLabelIcon = new Label(contentComposite, SWT.NO_FOCUS);
-        notificationLabelIcon.setBackground(contentComposite.getBackground());
-        final StyledText labelText = new StyledText(contentComposite, SWT.BEGINNING | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP | SWT.NO_FOCUS);
+        notificationLabelIcon.setBackground(parent.getBackground());
+        final Text labelText = new Text(contentComposite, SWT.BEGINNING | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP | SWT.NO_FOCUS);
         labelText.setForeground(CommonColors.TEXT_QUOTED);
         labelText.setText(abbreviate(notification.getLabel(), MAX_LABEL_CHAR_LENGTH));
-        labelText.setBackground(contentComposite.getBackground());
-
         GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(labelText);
         String description = notification.getDescription();
         if (isNotBlank(description)) {
-            StyledText descriptionText = new StyledText(contentComposite,
-                    SWT.BEGINNING | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP | SWT.NO_FOCUS);
+            Text descriptionText = new Text(contentComposite, SWT.BEGINNING | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP | SWT.NO_FOCUS);
             descriptionText.setText(abbreviate(description, MAX_DESCRIPTION_CHAR_LENGTH));
-            descriptionText.setBackground(contentComposite.getBackground());
             GridDataFactory.fillDefaults().span(2, SWT.DEFAULT).grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(descriptionText);
         }
         if (notification instanceof Notification) {
@@ -221,7 +215,6 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
                 actionLink.setForeground(CommonColors.HYPERLINK_WIDGET);
                 actionLink.registerMouseTrackListener();
                 actionLink.setText(action.getName());
-                actionLink.setBackground(contentComposite.getBackground());
                 actionLink.addHyperlinkListener(new HyperlinkAdapter() {
                     @Override
                     public void linkActivated(HyperlinkEvent e) {
