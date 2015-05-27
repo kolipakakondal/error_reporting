@@ -12,7 +12,7 @@ package org.eclipse.epp.internal.logging.aeri.ui.log;
 
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
-import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.proxy;
+import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.*;
 
 import java.net.URI;
 import java.net.URL;
@@ -42,9 +42,9 @@ public class CheckServerAvailabilityJob extends Job {
     protected IStatus run(IProgressMonitor monitor) {
         try {
             URI target = new URL(Constants.PROBLEMS_STATUS_INDEX_ZIP_URL).toURI();
-            Request request = Request.Head(target);
             Executor executor = Executor.newInstance();
-            Response response = proxy(executor, target).execute(request);
+            Request request = Request.Head(target).viaProxy(getProxyHost(target).orNull());
+            Response response = proxyAuthentication(executor, target).execute(request);
             if (response.returnResponse().getStatusLine().getStatusCode() != 200) {
                 settings.setAction(SendAction.IGNORE);
                 settings.setRememberSendAction(RememberSendAction.RESTART);
