@@ -29,13 +29,18 @@ public class ReportPredicates {
     public static class ProblemDatabaseIgnoredPredicate implements Predicate<ErrorReport> {
 
         private ProblemsDatabaseService index;
+        private Settings settings;
 
-        public ProblemDatabaseIgnoredPredicate(ProblemsDatabaseService index) {
+        public ProblemDatabaseIgnoredPredicate(ProblemsDatabaseService index, Settings settings) {
             this.index = index;
+            this.settings = settings;
         }
 
         @Override
         public boolean apply(ErrorReport report) {
+            if (!settings.isSkipSimilarErrors()) {
+                return true;
+            }
             Optional<ProblemStatus> status = index.seen(report);
             if (status.isPresent()) {
                 if (status.get().getAction() == RequiredAction.IGNORE) {

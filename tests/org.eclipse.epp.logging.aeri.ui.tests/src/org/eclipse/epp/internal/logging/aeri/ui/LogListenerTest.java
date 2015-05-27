@@ -359,8 +359,6 @@ public class LogListenerTest {
 
     @Test
     public void testServerProblemIgnoreHandled() {
-        settings.setSkipSimilarErrors(false);
-
         Throwable t1 = new Throwable();
         t1.fillInStackTrace();
         Status s1 = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message", t1);

@@ -202,7 +202,7 @@ public class Startup implements IStartup {
                 new HistoryReadyPredicate(history));
         Predicate<ErrorReport> reportFilters = Predicates.and(new UnseenErrorReportPredicate(history, settings),
                 new CompleteErrorReportPredicate(), new ReportsHistoryPredicate(expiringReportHistory, settings),
-                new ReportPredicates.ProblemDatabaseIgnoredPredicate(serverProblemsStatusIndex));
+                new ReportPredicates.ProblemDatabaseIgnoredPredicate(serverProblemsStatusIndex, settings));
         org.eclipse.epp.internal.logging.aeri.ui.log.LogListener listener = new org.eclipse.epp.internal.logging.aeri.ui.log.LogListener(
                 statusFilters, reportFilters, settings, bus);
         return listener;
