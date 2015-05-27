@@ -12,7 +12,7 @@ package org.eclipse.epp.internal.logging.aeri.ui.log;
 
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
-import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.proxy;
+import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.*;
 
 import java.io.File;
 import java.net.URI;
@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
+import org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Zips;
 
 import com.google.common.base.Optional;
@@ -87,11 +88,10 @@ public class ProblemsDatabaseUpdateJob extends Job {
 
     private Optional<String> getEtag() {
         try {
-            URI target = indexUrl.toURI();
-            Request request = Request.Head(target);
             Executor executor = Executor.newInstance();
-            Response response = proxy(executor, target).execute(request);
-
+            URI target = indexUrl.toURI();
+            Request request = Request.Head(target).viaProxy(getProxyHost(target).orNull());
+            Response response = proxyAuthentication(executor, target).execute(request);
             return Optional.fromNullable(response.returnResponse().getFirstHeader("ETAG").getValue());
         } catch (Exception e) {
             log(WARN_INDEX_UPDATE_FAILED, e);
@@ -100,10 +100,11 @@ public class ProblemsDatabaseUpdateJob extends Job {
     }
 
     private File downloadRemoteIndex() throws Exception {
-        URI target = indexUrl.toURI();
-        Request request = Request.Get(target);
         Executor executor = Executor.newInstance();
-        Response response = proxy(executor, target).execute(request);
+        URI target = indexUrl.toURI();
+        Request request = Request.Get(target).viaProxy(getProxyHost(target).orNull());
+        Response response = Proxies.proxyAuthentication(executor, target).execute(request);
+
         Content content = response.returnContent();
         File temp = File.createTempFile("problems-index", ".zip");
         Files.write(content.asBytes(), temp);

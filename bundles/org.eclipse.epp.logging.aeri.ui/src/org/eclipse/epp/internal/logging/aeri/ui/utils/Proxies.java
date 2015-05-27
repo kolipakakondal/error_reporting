@@ -14,6 +14,7 @@ import static com.google.common.base.Optional.*;
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.*;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
@@ -30,7 +31,7 @@ import com.google.common.base.Optional;
 public final class Proxies {
 
     private Proxies() {
-        throw new IllegalStateException("Not meant to be instantiated");
+        // Not meant to be instantiated
     }
 
     private static final String DOUBLEBACKSLASH = "\\\\"; //$NON-NLS-1$
@@ -57,8 +58,7 @@ public final class Proxies {
             return of(domain);
         }
 
-        // test the user's name whether it may contain an information about the
-        // domain name
+        // test the user's name whether it may contain an information about the domain name
         if (StringUtils.contains(userName, DOUBLEBACKSLASH)) {
             return of(substringBefore(userName, DOUBLEBACKSLASH));
         }
@@ -91,21 +91,36 @@ public final class Proxies {
         return contains(userName, DOUBLEBACKSLASH) ? of(substringAfterLast(userName, DOUBLEBACKSLASH)) : of(userName);
     }
 
-    public static Executor proxy(Executor executor, URI target) {
-        IProxyData[] proxies = ProxyManager.getProxyManager().select(target);
-        if (isEmpty(proxies)) {
-            executor.clearAuth();
-        } else {
-            IProxyData proxy = proxies[0];
-            HttpHost host = new HttpHost(proxy.getHost(), proxy.getPort());
+    public static Optional<HttpHost> getProxyHost(URI target) {
+        IProxyData proxy = getProxyData(target).orNull();
+        if (proxy == null) {
+            return Optional.absent();
+        }
+        return Optional.of(new HttpHost(proxy.getHost(), proxy.getPort()));
+    }
+
+    public static Executor proxyAuthentication(Executor executor, URI target) throws IOException {
+        IProxyData proxy = getProxyData(target).orNull();
+        if (proxy != null) {
+            HttpHost proxyHost = new HttpHost(proxy.getHost(), proxy.getPort());
             if (proxy.getUserId() != null) {
                 String userId = getUserName(proxy.getUserId()).orNull();
                 String pass = proxy.getPassword();
                 String workstation = getWorkstation().orNull();
                 String domain = getUserDomain(proxy.getUserId()).orNull();
-                executor.auth(host, userId, pass, workstation, domain);
+                return executor.auth(proxyHost, userId, pass, workstation, domain);
+            } else {
+                return executor;
             }
         }
         return executor;
+    }
+
+    private static Optional<IProxyData> getProxyData(URI target) {
+        IProxyData[] proxies = ProxyManager.getProxyManager().select(target);
+        if (isEmpty(proxies)) {
+            return Optional.absent();
+        }
+        return Optional.of(proxies[0]);
     }
 }

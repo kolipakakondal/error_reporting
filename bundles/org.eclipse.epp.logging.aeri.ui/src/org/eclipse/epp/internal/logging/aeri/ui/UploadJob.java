@@ -15,7 +15,7 @@ import static java.text.MessageFormat.format;
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 import static org.eclipse.core.runtime.IStatus.WARNING;
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.PLUGIN_ID;
-import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.proxy;
+import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.*;
 
 import java.net.URI;
 
@@ -69,8 +69,8 @@ public class UploadJob extends Job {
             String body = Reports.toJson(event, settings, false);
             StringEntity stringEntity = new StringEntity(body, ContentType.APPLICATION_OCTET_STREAM.withCharset(UTF_8));
             HttpEntity entity = new GzipCompressingEntity(stringEntity);
-            Request request = Request.Post(target).body(entity);
-            Response response = proxy(executor, target).execute(request);
+            Request request = Request.Post(target).viaProxy(getProxyHost(target).orNull()).body(entity);
+            Response response = proxyAuthentication(executor, target).execute(request);
             HttpResponse httpResponse = response.returnResponse();
             String details = EntityUtils.toString(httpResponse.getEntity());
             int code = httpResponse.getStatusLine().getStatusCode();
