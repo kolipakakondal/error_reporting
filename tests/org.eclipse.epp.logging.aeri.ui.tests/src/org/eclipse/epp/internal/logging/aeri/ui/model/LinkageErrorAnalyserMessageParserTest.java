@@ -29,7 +29,8 @@ public class LinkageErrorAnalyserMessageParserTest {
             {"org.eclipse.ui.views.tasklist", new ClassNotFoundException("org.eclipse.ui.views.tasklist.ITaskListResourceAdapter cannot be found by org.eclipse.ui.ide_3.11.0.v20150309-2044")},
             {"org.eclipse.mylyn.internal.provisional.commons.ui", new ClassNotFoundException("org.eclipse.mylyn.internal.provisional.commons.ui.CommonImages")},
             {"org.apache.http.params", new LinkageError("org/apache/http/params/HttpParams")},
-
+            {"org.eclipse.recommenders.utils", new NoSuchMethodError("org.eclipse.recommenders.utils.Checks.anyIsNull([Ljava/lang/Object;)")},
+            {null, new NoSuchMethodError("HIDDEN")},
         // @formatter:on
         });
     }

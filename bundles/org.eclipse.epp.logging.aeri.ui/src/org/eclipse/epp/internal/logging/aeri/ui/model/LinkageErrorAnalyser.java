@@ -11,6 +11,7 @@
 package org.eclipse.epp.internal.logging.aeri.ui.model;
 
 import static com.google.common.base.Optional.*;
+import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.epp.internal.logging.aeri.ui.Constants;
 import org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -127,29 +130,51 @@ public class LinkageErrorAnalyser {
     @VisibleForTesting
     static Optional<String> extractProblematicPackage(Throwable throwable) {
         String message = throwable.getMessage();
+        if (StringUtils.equals(Constants.HIDDEN, message)) {
+            return Optional.absent();
+        }
         if (NoClassDefFoundError.class.getName().equals(throwable.getClassName())
                 || LinkageError.class.getName().equals(throwable.getClassName())) {
-            int lastIndexOfSlash = message.lastIndexOf('/');
-            if (lastIndexOfSlash < 0) {
-                return absent();
-            } else {
-                String packageName = message.substring(0, lastIndexOfSlash).replace('/', '.');
-                return Optional.of(packageName);
-            }
+            return handleNoClassDefFoundErrorAndLinkageError(message);
         } else if (ClassNotFoundException.class.getName().equals(throwable.getClassName())) {
-            int firstIndexOfSpace = message.indexOf(" ");
-            if (firstIndexOfSpace >= 0) {
-                message = message.substring(0, firstIndexOfSpace);
-            }
-            int lastIndexOfDot = message.lastIndexOf('.');
-            if (lastIndexOfDot < 0) {
-                return absent();
-            } else {
-                String packageName = message.substring(0, lastIndexOfDot);
-                return Optional.of(packageName);
-            }
+            return handleClassNotFoundException(message);
+        } else if (NoSuchMethodError.class.getName().equals(throwable.getClassName())) {
+            return handleMethodNotFoundException(message);
         } else {
             return absent();
         }
+    }
+
+    private static Optional<String> handleNoClassDefFoundErrorAndLinkageError(String message) {
+        int lastIndexOfSlash = message.lastIndexOf('/');
+        if (lastIndexOfSlash < 0) {
+            return absent();
+        } else {
+            String packageName = message.substring(0, lastIndexOfSlash).replace('/', '.');
+            return Optional.of(packageName);
+        }
+    }
+
+    private static Optional<String> handleClassNotFoundException(String message) {
+        int firstIndexOfSpace = message.indexOf(" ");
+        if (firstIndexOfSpace >= 0) {
+            message = message.substring(0, firstIndexOfSpace);
+        }
+        int lastIndexOfDot = message.lastIndexOf('.');
+        if (lastIndexOfDot < 0) {
+            return absent();
+        } else {
+            String packageName = message.substring(0, lastIndexOfDot);
+            return Optional.of(packageName);
+        }
+    }
+
+    private static Optional<String> handleMethodNotFoundException(String message) {
+        // java.lang.NoSuchMethodError: org.eclipse.recommenders.utils.Checks.anyIsNull([Ljava/lang/Object;)Z
+        // java.lang.NoSuchMethodError: HIDDEN
+        String className = substringBeforeLast(message, ".");
+        // we assume that there is a package...
+        String packageName = substringBeforeLast(className, ".");
+        return Optional.fromNullable(packageName);
     }
 }
