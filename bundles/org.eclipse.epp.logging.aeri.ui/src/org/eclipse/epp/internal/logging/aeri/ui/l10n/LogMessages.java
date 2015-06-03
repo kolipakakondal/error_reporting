@@ -57,6 +57,7 @@ public final class LogMessages extends DefaultLogMessage {
     public static final LogMessages WARN_STACKTRACE_WITH_NULL = new LogMessages(WARNING, Messages.LOG_WARN_STACKTRACE_WITH_NULL);
     public static final LogMessages WARN_CYCLIC_EXCEPTION = new LogMessages(WARNING, Messages.LOG_WARN_CYCLIC_EXCEPTION);
     public static final LogMessages WARN_UPLOADJOB_BAD_RESPONSE = new LogMessages(WARNING, Messages.LOG_WARN_UPLOADJOB_BAD_RESPONSE);
+    public static final LogMessages WARN_OPEN_BROWSER_FAILED = new LogMessages(WARNING, Messages.LOG_WARN_OPEN_BROSER_FAILED);
 
     public LogMessages(int severity, String message) {
         super(severity, code++, String.format("%s %s", message, VERSION)); //$NON-NLS-1$

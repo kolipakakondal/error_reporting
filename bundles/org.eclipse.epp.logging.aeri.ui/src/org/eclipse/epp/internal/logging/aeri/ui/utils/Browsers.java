@@ -10,6 +10,9 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui.utils;
 
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.WARN_OPEN_BROWSER_FAILED;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
+
 import java.net.URL;
 
 import org.eclipse.swt.program.Program;
@@ -26,8 +29,9 @@ public class Browsers {
         try {
             IWebBrowser defaultBrowser = PlatformUI.getWorkbench().getBrowserSupport().createBrowser(null);
             defaultBrowser.openURL(new URL(url));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             // Ignore failure; this method is best effort.
+            log(WARN_OPEN_BROWSER_FAILED, e);
         }
     }
 
@@ -44,9 +48,13 @@ public class Browsers {
         try {
             IWebBrowser externalBrowser = PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser();
             externalBrowser.openURL(new URL(url));
-        } catch (Exception e) {
-            if (!Program.launch(url)) {
-                openInDefaultBrowser(url);
+        } catch (Throwable e) {
+            try {
+                if (!Program.launch(url)) {
+                    openInDefaultBrowser(url);
+                }
+            } catch (Throwable e1) {
+                log(WARN_OPEN_BROWSER_FAILED, e1);
             }
         }
     }

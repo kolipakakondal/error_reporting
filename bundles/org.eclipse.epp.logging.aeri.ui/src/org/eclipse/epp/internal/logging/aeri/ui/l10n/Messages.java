@@ -99,6 +99,7 @@ public class Messages extends NLS {
     public static String LOG_WARN_STACKTRACE_WITH_NULL;
     public static String LOG_WARN_NO_INTERNET;
     public static String LOG_WARN_NOTIFICATION_TIMED_OUT;
+    public static String LOG_WARN_OPEN_BROSER_FAILED;
     public static String LOG_WARN_REFLECTION_FAILED;
     public static String LOG_WARN_REPORTING_ERROR;
     public static String LOG_WARN_SERVER_AVAILABILITY_CHECK_FAILED;
