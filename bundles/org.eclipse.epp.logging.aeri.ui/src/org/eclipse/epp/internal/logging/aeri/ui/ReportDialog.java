@@ -221,7 +221,7 @@ public class ReportDialog extends MessageDialog {
                 @Override
                 public void handleChange(ChangeEvent event) {
                     Object report = selectedErrorReport.getValue();
-                    if (report != null) {
+                    if (report != null && !messageText.isDisposed()) {
                         messageText.setText(Reports.prettyPrint((ErrorReport) report, settings));
                     }
                 }
