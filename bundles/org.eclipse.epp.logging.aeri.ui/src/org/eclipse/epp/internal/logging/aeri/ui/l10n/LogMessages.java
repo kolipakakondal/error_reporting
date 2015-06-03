@@ -35,6 +35,8 @@ public final class LogMessages extends DefaultLogMessage {
     public static final LogMessages WARN_FAILED_TO_PARSE_REMEMBER_SEND_MODE = new LogMessages(WARNING,
             Messages.LOG_WARN_FAILED_TO_PARSE_REMEMBER_SEND_MODE);
     public static final LogMessages WARN_FAILED_TO_PARSE_SEND_MODE = new LogMessages(WARNING, Messages.LOG_WARN_FAILED_TO_PARSE_SEND_MODE);
+    public static final LogMessages WARN_FAILED_TO_LOAD_DEFAULT_PREFERENCES = new LogMessages(WARNING,
+            Messages.LOG_WARN_FAILED_TO_LOAD_DEFAULT_PREFERENCES);
     public static final LogMessages WARN_FIRST_CONFIGURATION_FAILED = new LogMessages(WARNING,
             Messages.LOG_WARN_FIRST_CONFIGURATION_FAILED);
     public static final LogMessages WARN_HISTORY_NO_FINGERPRINT = new LogMessages(WARNING, Messages.LOG_WARN_HISTORY_NO_FINGERPRINT);

@@ -85,6 +85,7 @@ public class Messages extends NLS {
     public static String LOG_INFO_SERVER_NOT_AVAILABLE;
     public static String LOG_WARN_CONFIGURATION_TIMED_OUT;
     public static String LOG_WARN_FAILED_TO_FETCH_PROBLEM_DB_ETAG;
+    public static String LOG_WARN_FAILED_TO_LOAD_DEFAULT_PREFERENCES;
     public static String LOG_WARN_FAILED_TO_PARSE_REMEMBER_SEND_MODE;
     public static String LOG_WARN_FAILED_TO_PARSE_SEND_MODE;
     public static String LOG_WARN_FIRST_CONFIGURATION_FAILED;
