@@ -14,7 +14,6 @@ import static com.google.common.base.Objects.equal;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static java.text.MessageFormat.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.eclipse.epp.internal.logging.aeri.ui.ConfigurationDialog.ESC_CANCEL;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.utils.Shells.isUIThread;
@@ -400,15 +399,6 @@ public class ReportingController {
                     break;
                 }
                 case CANCEL: {
-                    for (Object report : queueUI) {
-                        bus.post(new NewReportNotificationSkipped((ErrorReport) report));
-                    }
-                    break;
-                }
-                case ESC_CANCEL: {
-                    // TODO: better behaviour than review the configuration on
-                    // the next event?
-                    settings.setConfigured(false);
                     for (Object report : queueUI) {
                         bus.post(new NewReportNotificationSkipped((ErrorReport) report));
                     }
