@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.preference.JFacePreferences;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.mylyn.commons.notifications.ui.AbstractUiNotification;
 import org.eclipse.mylyn.commons.ui.compatibility.CommonColors;
 import org.eclipse.mylyn.commons.workbench.AbstractWorkbenchNotificationPopup;
@@ -35,7 +37,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -192,15 +193,18 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
         GridLayout gridLayout = new GridLayout(2, false);
         GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(contentComposite);
         contentComposite.setLayout(gridLayout);
-        final Label notificationLabelIcon = new Label(contentComposite, SWT.NO_FOCUS);
-        notificationLabelIcon.setBackground(parent.getBackground());
-        final Text labelText = new Text(contentComposite, SWT.BEGINNING | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP | SWT.NO_FOCUS);
+
+        // icon label:
+        new Label(contentComposite, SWT.NO_FOCUS);
+
+        final Label labelText = new Label(contentComposite, SWT.WRAP | SWT.NO_FOCUS);
         labelText.setForeground(CommonColors.TEXT_QUOTED);
+
         labelText.setText(abbreviate(notification.getLabel(), MAX_LABEL_CHAR_LENGTH));
         GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(labelText);
         String description = notification.getDescription();
         if (isNotBlank(description)) {
-            Text descriptionText = new Text(contentComposite, SWT.BEGINNING | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP | SWT.NO_FOCUS);
+            Label descriptionText = new Label(contentComposite, SWT.WRAP);
             descriptionText.setText(abbreviate(description, MAX_DESCRIPTION_CHAR_LENGTH));
             GridDataFactory.fillDefaults().span(2, SWT.DEFAULT).grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(descriptionText);
         }
@@ -212,7 +216,8 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
             for (final NoficationAction action : executableNotification.getActions()) {
                 final ScalingHyperlink actionLink = new ScalingHyperlink(linksComposite, SWT.RIGHT | SWT.NO_FOCUS);
                 GridDataFactory.fillDefaults().grab(true, false).applyTo(actionLink);
-                actionLink.setForeground(CommonColors.HYPERLINK_WIDGET);
+                Color linkColor = JFaceResources.getColorRegistry().get(JFacePreferences.HYPERLINK_COLOR);
+                actionLink.setForeground(linkColor);
                 actionLink.registerMouseTrackListener();
                 actionLink.setText(action.getName());
                 actionLink.addHyperlinkListener(new HyperlinkAdapter() {
