@@ -123,4 +123,26 @@ public final class Proxies {
         }
         return Optional.of(proxies[0]);
     }
+
+    public static Optional<String> getProxyUser(URI target) {
+        IProxyData proxy = getProxyData(target).orNull();
+        if (proxy == null) {
+            return Optional.absent();
+        }
+        if (proxy.getUserId() == null) {
+            return Optional.absent();
+        }
+        return getUserName(proxy.getUserId());
+    }
+
+    public static Optional<String> getProxyPassword(URI target) {
+        IProxyData proxy = getProxyData(target).orNull();
+        if (proxy == null) {
+            return Optional.absent();
+        }
+        if (proxy.getUserId() == null) {
+            return Optional.absent();
+        }
+        return Optional.fromNullable(proxy.getPassword());
+    }
 }

@@ -17,6 +17,7 @@ import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.*;
 import java.net.URI;
 import java.net.URL;
 
+import org.apache.http.HttpStatus;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.fluent.Response;
@@ -45,10 +46,16 @@ public class CheckServerAvailabilityJob extends Job {
             Executor executor = Executor.newInstance();
             Request request = Request.Head(target).viaProxy(getProxyHost(target).orNull());
             Response response = proxyAuthentication(executor, target).execute(request);
-            if (response.returnResponse().getStatusLine().getStatusCode() != 200) {
+            int statusCode = response.returnResponse().getStatusLine().getStatusCode();
+            if (statusCode != HttpStatus.SC_OK) {
                 settings.setAction(SendAction.IGNORE);
                 settings.setRememberSendAction(RememberSendAction.RESTART);
                 log(INFO_SERVER_NOT_AVAILABLE);
+                if (statusCode != HttpStatus.SC_NOT_FOUND) {
+                    // NOT_FOUND (404) would mean that network communication works correctly.
+                    // We are only interested in cases where the communication failed.
+                    new NetworkCommunicationTestJob().schedule();
+                }
             }
         } catch (Exception e) {
             log(WARN_SERVER_AVAILABILITY_CHECK_FAILED, e);

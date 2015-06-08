@@ -107,6 +107,10 @@ public class Messages extends NLS {
     public static String LOG_WARN_STATUS_INDEX_NOT_AVAILABLE;
     public static String LOG_WARN_THANK_YOU_DIALOG_ERROR;
     public static String LOG_WARN_CYCLIC_EXCEPTION;
+    public static String LOG_ERROR_NETWORK_COMMUNICATION_URL_PARSING_FAILED;
+    public static String LOG_ERROR_ON_PROXY_AUTHENTICATION_TEST;
+    public static String LOG_ERROR_ON_APACHE_HEAD_REQUEST;
+    public static String LOG_ERROR_ON_P2_HEAD_REQUEST;
 
     static {
         // initialize resource bundle
