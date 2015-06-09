@@ -62,7 +62,7 @@ public class ServerResponseNotification extends Notification {
     public String getLabel() {
         switch (state.getResolution()) {
         case FIXED:
-            return format("Your issue is already fixed.");
+            return format("Your issue appears to be fixed.");
         case INVALID:
             return format("Your report has been marked as a log message.");
         case NEEDINFO:
@@ -83,7 +83,9 @@ public class ServerResponseNotification extends Notification {
         StringBuilder text = new StringBuilder();
         switch (state.getResolution()) {
         case FIXED: {
-            text.append("Please visit the bug report for further details.");
+            if (state.getBugUrl().isPresent()) {
+                text.append("Please visit the bug report for further details.");
+            }
             break;
         }
         case NEEDINFO: {

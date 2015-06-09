@@ -17,7 +17,7 @@
          <action
                class="org.eclipse.epp.internal.logging.aeri.ui.actions.UiFreezeAction"
                icon="icons/sample2.gif"
-               id="org.eclipse.epp.logging.aeri.rcp.test.actions.SampleAction"
+               id="org.eclipse.epp.logging.aeri.rcp.test.actions.SampleFreezeAction"
                label="UI Freeze"
                menubarPath="sampleMenu/sampleGroup"
                toolbarPath="sampleGroup"
@@ -26,7 +26,7 @@
          <action
                class="org.eclipse.epp.internal.logging.aeri.ui.actions.LogErrorsAction"
                icon="icons/sample.gif"
-               id="org.eclipse.epp.logging.aeri.rcp.test.actions.SampleAction"
+               id="org.eclipse.epp.logging.aeri.rcp.test.actions.SampleLogAction"
                label="Log error(s)"
                menubarPath="sampleMenu/sampleGroup"
                toolbarPath="sampleGroup"
