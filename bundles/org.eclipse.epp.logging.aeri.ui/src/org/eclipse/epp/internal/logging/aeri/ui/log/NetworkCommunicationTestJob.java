@@ -50,8 +50,8 @@ import com.google.common.collect.Lists;
 @SuppressWarnings("restriction")
 public class NetworkCommunicationTestJob extends Job {
 
-    private static final String PROXY_TEST_URL = "http://download.codetrails.com/stats/technology/epp/logging/network-communication-test/proxy/authentication/"; //$NON-NLS-1$
-    private static final String REQUEST_URL = "http://download.codetrails.com/stats/technology/epp/logging/network-communication-test/{0}/java-{1}/{2}-{3}/{4}-{5}/{6}/{7}-{8}/"; //$NON-NLS-1$
+    private static final String PROXY_TEST_URL = "http://download.eclipse.org/stats/technology/epp/logging/network-communication-test/proxy/authentication/"; //$NON-NLS-1$
+    private static final String REQUEST_URL = "http://download.eclipse.org/stats/technology/epp/logging/network-communication-test/{0}/java-{1}/{2}-{3}/{4}-{5}/{6}/{7}-{8}/"; //$NON-NLS-1$
     private static final String APACHE_HTTP_REQUEST_PART = "apache"; //$NON-NLS-1$
     private static final String P2_HTTP_REQUEST_PART = "p2"; //$NON-NLS-1$
     private static final String UNKNOWN = "unknown"; //$NON-NLS-1$
