@@ -142,22 +142,28 @@ public class NetworkCommunicationTestJob extends Job {
             Response response = proxyAuthentication(executor, uri).execute(request);
             HttpResponse httpResponse = response.returnResponse();
             int statusCode = httpResponse.getStatusLine().getStatusCode();
-            if (statusCode != HttpStatus.SC_NOT_FOUND || statusCode != HttpStatus.SC_OK) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(lineSeparator());
-                sb.append("Communication URL: ").append(uri).append(lineSeparator()); //$NON-NLS-1$
-                sb.append("Response Code: ").append(statusCode).append(" - ").append(httpResponse.getStatusLine().getReasonPhrase())
-                        .append(lineSeparator());
-                sb.append("Response Headers:").append(lineSeparator()); //$NON-NLS-1$
-                for (Header header : httpResponse.getAllHeaders()) {
-                    sb.append(header.getName()).append(": ").append(header.getValue()).append(lineSeparator()); //$NON-NLS-1$
-                }
-                Logs.log(LogMessages.ERROR_ON_APACHE_HEAD_REQUEST, BUGZILLA_URL, sb);
+            if (statusCode == HttpStatus.SC_OK) {
+                return;
             }
+            if (statusCode == HttpStatus.SC_NOT_FOUND) {
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(lineSeparator());
+            sb.append("Communication URL: ").append(uri).append(lineSeparator()); //$NON-NLS-1$
+            sb.append("Response Code: ").append(statusCode).append(" - ").append(httpResponse.getStatusLine().getReasonPhrase())
+                    .append(lineSeparator());
+            sb.append("Response Headers:").append(lineSeparator()); //$NON-NLS-1$
+            for (Header header : httpResponse.getAllHeaders()) {
+                sb.append(header.getName()).append(": ").append(header.getValue()).append(lineSeparator()); //$NON-NLS-1$
+            }
+            Logs.log(LogMessages.ERROR_ON_APACHE_HEAD_REQUEST, BUGZILLA_URL, sb);
         } catch (Exception e) {
             Logs.log(LogMessages.ERROR_ON_APACHE_HEAD_REQUEST, e, BUGZILLA_URL, uri);
+        } finally {
+            progress.done();
         }
-        progress.done();
     }
 
     private void doP2HeadRequest(URI uri, SubMonitor progress) {
