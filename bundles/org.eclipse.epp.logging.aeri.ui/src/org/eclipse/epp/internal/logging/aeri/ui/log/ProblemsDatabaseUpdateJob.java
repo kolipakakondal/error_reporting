@@ -10,6 +10,7 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui.log;
 
+import static com.google.common.base.Optional.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.*;
@@ -20,6 +21,8 @@ import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
@@ -92,7 +95,14 @@ public class ProblemsDatabaseUpdateJob extends Job {
             URI target = indexUrl.toURI();
             Request request = Request.Head(target).viaProxy(getProxyHost(target).orNull());
             Response response = proxyAuthentication(executor, target).execute(request);
-            return Optional.fromNullable(response.returnResponse().getFirstHeader("ETAG").getValue());
+            // assuming that this cannot be null:
+            HttpResponse httpResponse = response.returnResponse();
+            // headers, however, may be null:
+            Header etagHeader = httpResponse.getFirstHeader("ETAG");
+            if (etagHeader == null) {
+                return absent();
+            }
+            return fromNullable(etagHeader.getValue());
         } catch (Exception e) {
             log(WARN_INDEX_UPDATE_FAILED, e);
             return Optional.absent();
