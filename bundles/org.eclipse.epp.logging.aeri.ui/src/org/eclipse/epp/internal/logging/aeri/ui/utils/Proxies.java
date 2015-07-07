@@ -21,6 +21,9 @@ import java.net.UnknownHostException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.NTCredentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.fluent.Executor;
 import org.eclipse.core.internal.net.ProxyManager;
 import org.eclipse.core.net.proxy.IProxyData;
@@ -108,7 +111,10 @@ public final class Proxies {
                 String pass = proxy.getPassword();
                 String workstation = getWorkstation().orNull();
                 String domain = getUserDomain(proxy.getUserId()).orNull();
-                return executor.auth(proxyHost, userId, pass, workstation, domain);
+                return executor
+                        .auth(new AuthScope(proxyHost, AuthScope.ANY_REALM, "ntlm"), new NTCredentials(userId, pass, workstation, domain))
+                        .auth(new AuthScope(proxyHost, AuthScope.ANY_REALM, AuthScope.ANY_SCHEME),
+                                new UsernamePasswordCredentials(userId, pass));
             } else {
                 return executor;
             }
