@@ -85,12 +85,37 @@ public class NetworkCommunicationTestJob extends Job {
 
             String authentication = getRequiredAuthentication(proxyTestUri, progress.newChild(1));
 
-            doApacheHeadRequest(toUri(format(REQUEST_URL, APACHE_HTTP_REQUEST_PART, javaVersion, operatingSystem, operatingSystemVersion,
-                    proxyProvider, authentication, proxyHostConfigured, proxyUsernameConfigured, proxyPasswordConfigured)),
-                    progress.newChild(1));
-            doP2HeadRequest(toUri(format(REQUEST_URL, P2_HTTP_REQUEST_PART, javaVersion, operatingSystem, operatingSystemVersion,
-                    proxyProvider, authentication, proxyHostConfigured, proxyUsernameConfigured, proxyPasswordConfigured)),
-                    progress.newChild(1));
+            Exception apacheException = null;
+            String apacheStatus = null;
+            URI apacheUri = toUri(format(REQUEST_URL, APACHE_HTTP_REQUEST_PART, javaVersion, operatingSystem, operatingSystemVersion,
+                    proxyProvider, authentication, proxyHostConfigured, proxyUsernameConfigured, proxyPasswordConfigured));
+            try {
+                apacheStatus = doApacheHeadRequest(apacheUri, progress.newChild(1));
+            } catch (Exception e) {
+                apacheException = e;
+            }
+
+            Exception p2Exception = null;
+            URI p2Uri = toUri(format(REQUEST_URL, P2_HTTP_REQUEST_PART, javaVersion, operatingSystem, operatingSystemVersion, proxyProvider,
+                    authentication, proxyHostConfigured, proxyUsernameConfigured, proxyPasswordConfigured));
+            try {
+                doP2HeadRequest(p2Uri, progress.newChild(1));
+
+            } catch (Exception e) {
+                p2Exception = e;
+            }
+            if (apacheException == null && apacheStatus == null && p2Exception != null) {
+                // apache request worked, p2 request failed with exception
+                Logs.log(LogMessages.ERROR_ON_P2_HEAD_REQUEST, p2Exception, p2Uri);
+            } else if (apacheException != null && p2Exception == null) {
+                // apache request failed with exception, p2 request worked
+                Logs.log(LogMessages.ERROR_ON_APACHE_HEAD_REQUEST, apacheException, BUGZILLA_URL, apacheUri);
+            } else if (apacheException == null && apacheStatus != null && p2Exception == null) {
+                // apache request failed without exception, p2 request worked
+                Logs.log(LogMessages.ERROR_ON_APACHE_HEAD_REQUEST, BUGZILLA_URL, apacheStatus);
+            } else if ((apacheException != null || apacheStatus != null) && p2Exception != null) {
+                // Both requests failed. Assume no internet connection. No logging required.
+            }
         } catch (Exception e) {
             Logs.log(LogMessages.ERROR_NETWORK_COMMUNICATION_URL_PARSING_FAILED, e);
         }
@@ -135,7 +160,7 @@ public class NetworkCommunicationTestJob extends Job {
         }
     }
 
-    private void doApacheHeadRequest(URI uri, SubMonitor progress) {
+    private String doApacheHeadRequest(URI uri, SubMonitor progress) throws Exception {
         Executor executor = Executor.newInstance();
         Request request = Request.Head(uri).viaProxy(getProxyHost(uri).orNull());
         try {
@@ -143,10 +168,10 @@ public class NetworkCommunicationTestJob extends Job {
             HttpResponse httpResponse = response.returnResponse();
             int statusCode = httpResponse.getStatusLine().getStatusCode();
             if (statusCode == HttpStatus.SC_OK) {
-                return;
+                return null;
             }
             if (statusCode == HttpStatus.SC_NOT_FOUND) {
-                return;
+                return null;
             }
 
             StringBuilder sb = new StringBuilder();
@@ -158,22 +183,18 @@ public class NetworkCommunicationTestJob extends Job {
             for (Header header : httpResponse.getAllHeaders()) {
                 sb.append(header.getName()).append(": ").append(header.getValue()).append(lineSeparator()); //$NON-NLS-1$
             }
-            Logs.log(LogMessages.ERROR_ON_APACHE_HEAD_REQUEST, BUGZILLA_URL, sb);
-        } catch (Exception e) {
-            Logs.log(LogMessages.ERROR_ON_APACHE_HEAD_REQUEST, e, BUGZILLA_URL, uri);
+            return sb.toString();
         } finally {
             progress.done();
         }
     }
 
-    private void doP2HeadRequest(URI uri, SubMonitor progress) {
+    private void doP2HeadRequest(URI uri, SubMonitor progress) throws Exception {
         try {
             RepositoryTransport transport = new RepositoryTransport();
             transport.getLastModified(uri, progress);
         } catch (FileNotFoundException e) {
             // Expected exception.
-        } catch (Exception e) {
-            Logs.log(LogMessages.ERROR_ON_P2_HEAD_REQUEST, e, uri);
         }
     }
 
