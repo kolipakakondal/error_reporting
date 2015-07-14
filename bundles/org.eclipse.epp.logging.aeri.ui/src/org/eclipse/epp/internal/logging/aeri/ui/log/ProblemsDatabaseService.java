@@ -170,9 +170,9 @@ public class ProblemsDatabaseService extends AbstractIdleService {
     public void replaceContent(File tempDir) throws IOException {
         IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, new KeywordAnalyzer());
         conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
-        try (IndexWriter writer = new IndexWriter(index, conf)) {
+        try (IndexWriter writer = new IndexWriter(index, conf); FSDirectory newContent = FSDirectory.open(tempDir);) {
             writer.deleteAll();
-            writer.addIndexes(FSDirectory.open(tempDir));
+            writer.addIndexes(newContent);
             writer.commit();
         }
     }

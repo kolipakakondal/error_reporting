@@ -10,20 +10,22 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui.log;
 
-import static com.google.common.base.Optional.*;
+import static com.google.common.base.Optional.absent;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
-import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.*;
+import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.getProxyHost;
 
 import java.io.File;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.fluent.Content;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.fluent.Response;
@@ -32,7 +34,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs;
+import org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction;
+import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Zips;
@@ -58,66 +61,72 @@ public class ProblemsDatabaseUpdateJob extends Job {
         SubMonitor progress = SubMonitor.convert(monitor, 3);
         progress.beginTask("Checking...", 3);
         try {
-            String etag = getEtag().orNull();
+            progress.subTask("Checking for new problem database");
+            File tempRemoteIndexZip = downloadNewRemoteIndex(progress.newChild(1)).orNull();
+            if (tempRemoteIndexZip == null) {
+                return Status.OK_STATUS;
+            }
+
+            File tempDir = Files.createTempDir();
+            progress.subTask("Merging problem database");
+            Zips.unzip(tempRemoteIndexZip, tempDir);
+            service.replaceContent(tempDir);
             progress.worked(1);
-            if (etag == null) {
-                return Logs.toStatus(WARN_FAILED_TO_FETCH_PROBLEM_DB_ETAG);
-            }
-            try {
-                if (isLocalIndexOutdated(etag)) {
-                    progress.subTask("Downloading new problem database");
-                    File remoteIndexZip = downloadRemoteIndex();
-                    progress.worked(1);
-                    File tempDir = Files.createTempDir();
-                    progress.subTask("Merging problem database");
-                    Zips.unzip(remoteIndexZip, tempDir);
-                    service.replaceContent(tempDir);
-                    progress.worked(1);
-                    settings.setProblemsZipEtag(etag);
-                    FileUtils.deleteQuietly(tempDir);
-                }
-            } catch (Exception e) {
-                log(WARN_INDEX_UPDATE_FAILED, e);
-            }
+
+            // cleanup files
+            tempRemoteIndexZip.delete();
+            FileUtils.deleteDirectory(tempDir);
+            progress.worked(1);
+
+            return Status.OK_STATUS;
+        } catch (Exception e) {
+            log(WARN_INDEX_UPDATE_FAILED, e);
             return Status.OK_STATUS;
         } finally {
             monitor.done();
         }
     }
 
-    private boolean isLocalIndexOutdated(String etag) {
-        return !StringUtils.equals(settings.getProblemsZipEtag(), etag);
-    }
-
-    private Optional<String> getEtag() {
+    private Optional<File> downloadNewRemoteIndex(SubMonitor progress) throws Exception {
         try {
-            Executor executor = Executor.newInstance();
             URI target = indexUrl.toURI();
-            Request request = Request.Head(target).viaProxy(getProxyHost(target).orNull());
-            Response response = proxyAuthentication(executor, target).execute(request);
-            // assuming that this cannot be null:
-            HttpResponse httpResponse = response.returnResponse();
-            // headers, however, may be null:
-            Header etagHeader = httpResponse.getFirstHeader("ETAG");
-            if (etagHeader == null) {
+            Request request = Request.Get(target).viaProxy(getProxyHost(target).orNull());
+            if (StringUtils.isNotBlank(settings.getProblemsZipEtag())) {
+                request.setHeader(HttpHeaders.IF_NONE_MATCH, settings.getProblemsZipEtag());
+            }
+
+            Executor executor = Executor.newInstance();
+            Response response = Proxies.proxyAuthentication(executor, target).execute(request);
+            HttpResponse returnResponse = response.returnResponse();
+            int statusCode = returnResponse.getStatusLine().getStatusCode();
+            if (statusCode == HttpStatus.SC_OK) {
+                Header etagHeader = returnResponse.getFirstHeader(HttpHeaders.ETAG);
+                if (etagHeader == null) {
+                    return absent();
+                }
+                settings.setProblemsZipEtag(etagHeader.getValue());
+
+                File temp = File.createTempFile("problems-index", ".zip");
+                try (OutputStream out = Files.newOutputStreamSupplier(temp).getOutput()) {
+                    returnResponse.getEntity().writeTo(out);
+                }
+                return Optional.of(temp);
+            } else if (statusCode == HttpStatus.SC_NOT_MODIFIED) {
+                return absent();
+            } else {
+                // Could not access problems.zip for whatever reason; switch off error reporting until restart.
+                settings.setAction(SendAction.IGNORE);
+                settings.setRememberSendAction(RememberSendAction.RESTART);
+                log(INFO_SERVER_NOT_AVAILABLE);
+                if (statusCode != HttpStatus.SC_NOT_FOUND) {
+                    // NOT_FOUND (404) would mean that network communication works correctly.
+                    // We are only interested in cases where the communication failed.
+                    new NetworkCommunicationTestJob().schedule();
+                }
                 return absent();
             }
-            return fromNullable(etagHeader.getValue());
-        } catch (Exception e) {
-            log(WARN_INDEX_UPDATE_FAILED, e);
-            return Optional.absent();
+        } finally {
+            progress.done();
         }
-    }
-
-    private File downloadRemoteIndex() throws Exception {
-        Executor executor = Executor.newInstance();
-        URI target = indexUrl.toURI();
-        Request request = Request.Get(target).viaProxy(getProxyHost(target).orNull());
-        Response response = Proxies.proxyAuthentication(executor, target).execute(request);
-
-        Content content = response.returnContent();
-        File temp = File.createTempFile("problems-index", ".zip");
-        Files.write(content.asBytes(), temp);
-        return temp;
     }
 }

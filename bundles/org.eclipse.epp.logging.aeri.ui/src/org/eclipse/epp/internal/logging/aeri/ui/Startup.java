@@ -24,7 +24,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.epp.internal.logging.aeri.ui.log.CheckServerAvailabilityJob;
 import org.eclipse.epp.internal.logging.aeri.ui.log.LogListener;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseUpdateJob;
@@ -185,8 +184,7 @@ public class Startup implements IStartup {
     private void scheduleJobs() {
         try {
             URL indexZipUrl = new URL(Constants.PROBLEMS_STATUS_INDEX_ZIP_URL);
-            new CheckServerAvailabilityJob(settings).schedule(MILLISECONDS.convert(10, SECONDS));
-            new ProblemsDatabaseUpdateJob(problemsDb, indexZipUrl, settings).schedule(MILLISECONDS.convert(1, MINUTES));
+            new ProblemsDatabaseUpdateJob(problemsDb, indexZipUrl, settings).schedule(MILLISECONDS.convert(10, SECONDS));
         } catch (Exception e) {
             Throwables.propagate(e);
         }
