@@ -604,4 +604,16 @@ public class Reports {
         String hash = hasher.hash().toString();
         return hash;
     }
+
+    public static String toShortClassName(String className) {
+        if (isBlank(className)) {
+            return "";
+        } else if (contains(className, '$')) {
+            return substringAfterLast(className, "$");
+        } else if (contains(className, '.')) {
+            return substringAfterLast(className, ".");
+        } else {
+            return className;
+        }
+    }
 }

@@ -10,6 +10,8 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui.notifications;
 
+import static org.eclipse.epp.internal.logging.aeri.ui.model.Reports.toShortClassName;
+
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +40,8 @@ public class NewErrorNotification extends Notification {
         StringBuilder b = new StringBuilder();
         Throwable exception = report.getStatus().getException();
         if (exception != null) {
-            String message = exception.getClassName() + ": " + Optional.fromNullable(exception.getMessage()).or("");
+
+            String message = toShortClassName(exception.getClassName()) + ": " + Optional.fromNullable(exception.getMessage()).or("");
             b.append(StringUtils.abbreviate(message, 120));
         }
         b.append("\n\nDo you want to report this error?");
