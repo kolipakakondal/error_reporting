@@ -8,7 +8,7 @@
  * Contributors:
  *    Marcel Bruch - initial API and implementation.
  */
-package org.eclipse.epp.internal.logging.aeri.ui;
+package org.eclipse.epp.internal.logging.aeri.ide;
 
 import static java.util.concurrent.TimeUnit.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
@@ -24,22 +24,13 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.epp.internal.logging.aeri.ui.Constants;
+import org.eclipse.epp.internal.logging.aeri.ui.ExpiringReportHistory;
+import org.eclipse.epp.internal.logging.aeri.ui.ReportingController;
 import org.eclipse.epp.internal.logging.aeri.ui.log.LogListener;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseUpdateJob;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
-import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates;
-import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.CompleteErrorReportPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.ReportsHistoryPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.UnseenErrorReportPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.EclipseBuildIdPresentPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ErrorStatusOnlyPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.HistoryReadyPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ReporterNotDisabledPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.SkipReportsAbsentPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WhitelistedPluginIdPresentPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WorkbenchRunningPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.PreferenceInitializer;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.notifications.MylynNotificationService;
@@ -50,9 +41,6 @@ import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 
@@ -99,6 +87,7 @@ public class Startup implements IStartup {
                 monitor.done();
                 return Status.OK_STATUS;
             }
+
         }.schedule();
     }
 
@@ -176,8 +165,8 @@ public class Startup implements IStartup {
     }
 
     private void initalizeLogListener() {
-        org.eclipse.epp.internal.logging.aeri.ui.log.LogListener listener = createLogListener(settings, history, bus, expiringReportHistory,
-                problemsDb);
+        org.eclipse.epp.internal.logging.aeri.ui.log.LogListener listener = LogListener.createLogListener(settings, history, bus,
+                expiringReportHistory, problemsDb);
         Platform.addLogListener(listener);
     }
 
@@ -190,19 +179,4 @@ public class Startup implements IStartup {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    @VisibleForTesting
-    public static LogListener createLogListener(Settings settings, ReportHistory history, EventBus bus,
-            ExpiringReportHistory expiringReportHistory, ProblemsDatabaseService serverProblemsStatusIndex) {
-        Predicate<IStatus> statusFilters = Predicates.and(new ReporterNotDisabledPredicate(settings),
-                new WhitelistedPluginIdPresentPredicate(settings), new SkipReportsAbsentPredicate(), new EclipseBuildIdPresentPredicate(),
-                new ErrorStatusOnlyPredicate(), new WorkbenchRunningPredicate(PlatformUI.getWorkbench()),
-                new HistoryReadyPredicate(history));
-        Predicate<ErrorReport> reportFilters = Predicates.and(new UnseenErrorReportPredicate(history, settings),
-                new CompleteErrorReportPredicate(), new ReportsHistoryPredicate(expiringReportHistory, settings),
-                new ReportPredicates.ProblemDatabaseIgnoredPredicate(serverProblemsStatusIndex, settings));
-        org.eclipse.epp.internal.logging.aeri.ui.log.LogListener listener = new org.eclipse.epp.internal.logging.aeri.ui.log.LogListener(
-                statusFilters, reportFilters, settings, bus);
-        return listener;
-    }
 }

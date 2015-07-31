@@ -17,13 +17,43 @@ import static org.eclipse.epp.internal.logging.aeri.ui.model.Reports.*;
 import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportLogged;
+import org.eclipse.epp.internal.logging.aeri.ui.ExpiringReportHistory;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.CompleteErrorReportPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.ReportsHistoryPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.UnseenErrorReportPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.EclipseBuildIdPresentPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ErrorStatusOnlyPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.HistoryReadyPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ReporterNotDisabledPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.SkipReportsAbsentPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WhitelistedPluginIdPresentPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WorkbenchRunningPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
+import org.eclipse.ui.PlatformUI;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.eventbus.EventBus;
 
 public class LogListener implements ILogListener {
+
+    @SuppressWarnings("unchecked")
+    @VisibleForTesting
+    public static LogListener createLogListener(Settings settings, ReportHistory history, EventBus bus,
+            ExpiringReportHistory expiringReportHistory, ProblemsDatabaseService serverProblemsStatusIndex) {
+        Predicate<IStatus> statusFilters = Predicates.and(new ReporterNotDisabledPredicate(settings),
+                new WhitelistedPluginIdPresentPredicate(settings), new SkipReportsAbsentPredicate(), new EclipseBuildIdPresentPredicate(),
+                new ErrorStatusOnlyPredicate(), new WorkbenchRunningPredicate(PlatformUI.getWorkbench()),
+                new HistoryReadyPredicate(history));
+        Predicate<ErrorReport> reportFilters = Predicates.and(new UnseenErrorReportPredicate(history, settings),
+                new CompleteErrorReportPredicate(), new ReportsHistoryPredicate(expiringReportHistory, settings),
+                new ReportPredicates.ProblemDatabaseIgnoredPredicate(serverProblemsStatusIndex, settings));
+        org.eclipse.epp.internal.logging.aeri.ui.log.LogListener listener = new org.eclipse.epp.internal.logging.aeri.ui.log.LogListener(
+                statusFilters, reportFilters, settings, bus);
+        return listener;
+    }
 
     private StandInStacktraceProvider stacktraceProvider = new StandInStacktraceProvider();
     private Predicate<IStatus> statusFilters;
@@ -39,7 +69,8 @@ public class LogListener implements ILogListener {
     }
 
     @Override
-    public void logging(final IStatus status, String nouse) {
+    public void logging(IStatus status, String nouse) {
+        assert status != null;
         try {
             if (!statusFilters.apply(status)) {
                 return;

@@ -103,7 +103,7 @@ public class LogListenerTest {
 
         when(problemStatusIndex.seen(org.mockito.Matchers.any(ErrorReport.class))).thenReturn(noStatus);
 
-        sut = Startup.createLogListener(settings, history, bus, expiringHistory, problemStatusIndex);
+        sut = LogListener.createLogListener(settings, history, bus, expiringHistory, problemStatusIndex);
     }
 
     @Subscribe
