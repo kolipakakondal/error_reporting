@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -88,9 +89,16 @@ public class ProblemsDatabaseUpdateJob extends Job {
     }
 
     private Optional<File> downloadNewRemoteIndex(SubMonitor progress) throws Exception {
+
+        // max time until a connection to the server has to be established.
+        int connectTimeout = (int) TimeUnit.SECONDS.toMillis(10);
+        // max time between two packets sent back to the client. 10 seconds of silence will kill the session
+        int socketTimeout = (int) TimeUnit.SECONDS.toMillis(10);
+
         try {
             URI target = indexUrl.toURI();
-            Request request = Request.Get(target).viaProxy(getProxyHost(target).orNull());
+            Request request = Request.Get(target).viaProxy(getProxyHost(target).orNull()).connectTimeout(connectTimeout)
+                    .staleConnectionCheck(true).socketTimeout(socketTimeout);
             if (StringUtils.isNotBlank(settings.getProblemsZipEtag())) {
                 request.setHeader(HttpHeaders.IF_NONE_MATCH, settings.getProblemsZipEtag());
             }

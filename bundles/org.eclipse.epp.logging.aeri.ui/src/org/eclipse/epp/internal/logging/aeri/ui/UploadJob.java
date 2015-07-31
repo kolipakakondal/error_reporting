@@ -18,6 +18,7 @@ import static org.eclipse.epp.internal.logging.aeri.ui.Constants.PLUGIN_ID;
 import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.*;
 
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -64,12 +65,19 @@ public class UploadJob extends Job {
     @Override
     protected IStatus run(IProgressMonitor monitor) {
         monitor.beginTask(Messages.UPLOADJOB_TASKNAME, 1);
+        // max time until a connection to the server has to be established.
+        int connectTimeout = (int) TimeUnit.SECONDS.toMillis(3);
+        // max time between two packets sent back to the client. 10 seconds of silence will kill the session
+        int socketTimeout = (int) TimeUnit.SECONDS.toMillis(10);
+
         try {
             executor = Executor.newInstance();
             String body = Reports.toJson(event, settings, false);
             StringEntity stringEntity = new StringEntity(body, ContentType.APPLICATION_OCTET_STREAM.withCharset(UTF_8));
             HttpEntity entity = new GzipCompressingEntity(stringEntity);
-            Request request = Request.Post(target).viaProxy(getProxyHost(target).orNull()).body(entity);
+
+            Request request = Request.Post(target).viaProxy(getProxyHost(target).orNull()).body(entity).connectTimeout(connectTimeout)
+                    .staleConnectionCheck(true).socketTimeout(socketTimeout);
             Response response = proxyAuthentication(executor, target).execute(request);
             HttpResponse httpResponse = response.returnResponse();
             String details = EntityUtils.toString(httpResponse.getEntity());
