@@ -26,6 +26,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.HistoryReadyPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WorkbenchRunningPredicate;
+import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.ui.IWorkbench;
 import org.junit.Test;
 
@@ -43,6 +44,15 @@ public class FiltersTest {
         System.setProperty(SYSPROP_ECLIPSE_BUILD_ID, "some-value");
         assertThat(sut.apply(null), is(true));
         System.clearProperty(SYSPROP_ECLIPSE_BUILD_ID);
+    }
+
+    @Test
+    public void testSkipProvisioningExceptionsPredicateTest() {
+        Predicate<IStatus> sut = new StatusPredicates.SkipProvisionExceptionsPredicate();
+        assertThat(sut.apply(OK_STATUS), is(true));
+
+        Status provisionError = new Status(IStatus.ERROR, "some", "some", new ProvisionException(""));
+        assertThat(sut.apply(provisionError), is(false));
     }
 
     @Test

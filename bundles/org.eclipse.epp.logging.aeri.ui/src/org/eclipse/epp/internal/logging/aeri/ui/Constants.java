@@ -35,6 +35,8 @@ public final class Constants {
     public static final String SYSPROP_SKIP_REPORTS = PLUGIN_ID + ".skipReports";
     public static final String SYSPROP_ECLIPSE_BUILD_ID = "eclipse.buildId";
 
+    public static final String PROVISION_EXCEPTION = "org.eclipse.equinox.p2.core.ProvisionException";
+
     // values for notifications
     public static final String NOTIFY_CONFIGURATION = AERI_NAMESPACE + ".notifications.event.configure";
     public static final String NOTIFY_REPORT = AERI_NAMESPACE + ".notifications.event.newReport";

@@ -20,6 +20,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.ui.IWorkbench;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Throwables;
 
 public class StatusPredicates {
 
@@ -63,6 +64,33 @@ public class StatusPredicates {
         @Override
         public boolean apply(IStatus input) {
             return !Boolean.getBoolean(SYSPROP_SKIP_REPORTS);
+        }
+    }
+
+    public static class SkipProvisionExceptionsPredicate implements Predicate<IStatus> {
+
+        @Override
+        public boolean apply(IStatus input) {
+            return !visit(input);
+        }
+
+        private boolean visit(IStatus input) {
+            Throwable exception = input.getException();
+            if (exception != null) {
+                for (Throwable t : Throwables.getCausalChain(exception)) {
+                    String type = t.getClass().getName();
+                    if (equal(PROVISION_EXCEPTION, type)) {
+                        return true;
+                    }
+                }
+            }
+
+            for (IStatus child : input.getChildren()) {
+                if (visit(child)) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
