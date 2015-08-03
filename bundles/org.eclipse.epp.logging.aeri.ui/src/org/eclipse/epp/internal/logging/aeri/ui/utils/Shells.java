@@ -12,6 +12,8 @@ package org.eclipse.epp.internal.logging.aeri.ui.utils;
 
 import static com.google.common.base.Optional.*;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
@@ -51,5 +53,28 @@ public class Shells {
             return absent();
         }
         return of(display);
+    }
+
+    public static boolean hasActiveWindow() {
+        final Display display = getDisplay().orNull();
+        if (display == null) {
+            return false;
+        }
+        if (isUIThread()) {
+            return display.getActiveShell() != null;
+        }
+        // else
+        final AtomicBoolean res = new AtomicBoolean(false);
+        display.syncExec(new Runnable() {
+            @Override
+            public void run() {
+                if (display.getActiveShell() == null) {
+                    res.set(false);
+                } else {
+                    res.set(true);
+                }
+            }
+        });
+        return res.get();
     }
 }
