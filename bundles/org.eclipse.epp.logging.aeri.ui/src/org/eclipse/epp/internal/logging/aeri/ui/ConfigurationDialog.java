@@ -67,6 +67,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
         super(parentShell);
         this.settings = settings;
         setHelpAvailable(false);
+        setShellStyle(getShellStyle() | SWT.RESIZE);
     }
 
     @Override
