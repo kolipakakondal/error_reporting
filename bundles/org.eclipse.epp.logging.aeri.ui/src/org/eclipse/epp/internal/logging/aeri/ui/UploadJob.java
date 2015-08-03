@@ -18,6 +18,8 @@ import static org.eclipse.epp.internal.logging.aeri.ui.Constants.PLUGIN_ID;
 import static org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies.*;
 
 import java.net.URI;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpEntity;
@@ -49,14 +51,14 @@ import com.google.common.eventbus.EventBus;
 public class UploadJob extends Job {
 
     private Executor executor;
-    private ErrorReport event;
+    private Set<ErrorReport> events;
     private URI target;
     private Settings settings;
     private EventBus bus;
 
-    public UploadJob(ErrorReport event, Settings settings, URI target, EventBus bus) {
+    public UploadJob(Set<ErrorReport> events, Settings settings, URI target, EventBus bus) {
         super(format(Messages.UPLOADJOB_NAME, target));
-        this.event = event;
+        this.events = events;
         this.settings = settings;
         this.target = target;
         this.bus = bus;
@@ -71,33 +73,38 @@ public class UploadJob extends Job {
         int socketTimeout = (int) TimeUnit.SECONDS.toMillis(10);
 
         try {
-            executor = Executor.newInstance();
-            String body = Reports.toJson(event, settings, false);
-            StringEntity stringEntity = new StringEntity(body, ContentType.APPLICATION_OCTET_STREAM.withCharset(UTF_8));
-            HttpEntity entity = new GzipCompressingEntity(stringEntity);
+            while (!events.isEmpty()) {
+                Iterator<ErrorReport> iterator = events.iterator();
+                ErrorReport event = iterator.next();
+                iterator.remove();
+                executor = Executor.newInstance();
+                String body = Reports.toJson(event, settings, false);
+                StringEntity stringEntity = new StringEntity(body, ContentType.APPLICATION_OCTET_STREAM.withCharset(UTF_8));
+                HttpEntity entity = new GzipCompressingEntity(stringEntity);
 
-            Request request = Request.Post(target).viaProxy(getProxyHost(target).orNull()).body(entity).connectTimeout(connectTimeout)
-                    .staleConnectionCheck(true).socketTimeout(socketTimeout);
-            Response response = proxyAuthentication(executor, target).execute(request);
-            HttpResponse httpResponse = response.returnResponse();
-            String details = EntityUtils.toString(httpResponse.getEntity());
-            int code = httpResponse.getStatusLine().getStatusCode();
-            if (code >= 400) {
-                return new MultiStatus(PLUGIN_ID, WARNING, new Status[] { new Status(WARNING, PLUGIN_ID, details) },
-                        Messages.UPLOADJOB_FAILED, null);
+                Request request = Request.Post(target).viaProxy(getProxyHost(target).orNull()).body(entity).connectTimeout(connectTimeout)
+                        .staleConnectionCheck(true).socketTimeout(socketTimeout);
+                Response response = proxyAuthentication(executor, target).execute(request);
+                HttpResponse httpResponse = response.returnResponse();
+                String details = EntityUtils.toString(httpResponse.getEntity());
+                int code = httpResponse.getStatusLine().getStatusCode();
+                if (code >= 400) {
+                    return new MultiStatus(PLUGIN_ID, WARNING, new Status[] { new Status(WARNING, PLUGIN_ID, details) },
+                            Messages.UPLOADJOB_FAILED, null);
+                }
+                final ServerResponse05 response05 = Json.deserialize(details, ServerResponse05.class);
+
+                // TODO complete dto
+                ServerResponse result = new ServerResponse();
+                result.setReportTitle(abbreviate(event.getStatus().getMessage(), 80));
+                result.setIncidentId(response05.bugId);
+                result.setIncidentUrl(response05.bugUrl);
+                result.setResolution(tryParse(response05));
+                result.setCommitterMessage(response05.information);
+
+                bus.post(new ServerResponseShowRequest(result));
             }
-            final ServerResponse05 response05 = Json.deserialize(details, ServerResponse05.class);
-
-            // TODO complete dto
-            ServerResponse result = new ServerResponse();
-            result.setReportTitle(abbreviate(event.getStatus().getMessage(), 80));
-            result.setIncidentId(response05.bugId);
-            result.setIncidentUrl(response05.bugUrl);
-            result.setResolution(tryParse(response05));
-            result.setCommitterMessage(response05.information);
-
-            bus.post(new ServerResponseShowRequest(result));
-            return new Status(IStatus.OK, PLUGIN_ID, format(Messages.UPLOADJOB_THANK_YOU, details));
+            return new Status(IStatus.OK, PLUGIN_ID, Messages.UPLOADJOB_THANK_YOU);
         } catch (Exception e) {
             return new Status(WARNING, PLUGIN_ID, Messages.UPLOADJOB_FAILED, e);
         } finally {

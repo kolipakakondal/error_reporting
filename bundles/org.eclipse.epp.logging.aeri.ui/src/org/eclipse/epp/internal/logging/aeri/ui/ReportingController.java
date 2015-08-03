@@ -12,24 +12,18 @@ package org.eclipse.epp.internal.logging.aeri.ui;
 
 import static com.google.common.base.Objects.equal;
 import static com.google.common.collect.ImmutableList.copyOf;
-import static java.text.MessageFormat.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.utils.Shells.isUIThread;
 import static org.eclipse.jface.window.Window.*;
 
-import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.property.Properties;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.BugIsFixedInfo;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogCanceled;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ConfigureDialogCompleted;
@@ -46,7 +40,6 @@ import org.eclipse.epp.internal.logging.aeri.ui.Events.OpenUrlInBrowserRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.SendReportsRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseNotificationTimedOut;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.ServerResponseShowRequest;
-import org.eclipse.epp.internal.logging.aeri.ui.l10n.Messages;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
@@ -56,7 +49,6 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Browsers;
-import org.eclipse.epp.internal.logging.aeri.ui.utils.Jobs;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Shells;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
@@ -96,6 +88,7 @@ public class ReportingController {
     private long notificationInProgressTimeout = Long.MAX_VALUE;
     private ReportHistory history;
     private ProblemsDatabaseService problemsDb;
+    private UploadHandler uploadHandler;
 
     public ReportingController(EventBus bus, Settings settings, INotificationService notifications, ReportHistory history,
             ProblemsDatabaseService problemsDb) {
@@ -104,6 +97,7 @@ public class ReportingController {
         this.notifications = notifications;
         this.history = history;
         this.problemsDb = problemsDb;
+        uploadHandler = new UploadHandler(settings, history, bus);
         initalizeLists();
     }
 
@@ -292,28 +286,7 @@ public class ReportingController {
 
     @VisibleForTesting
     public void scheduleForSending(final List<ErrorReport> reports) {
-        final URI target = URI.create(settings.getServerUrl());
-        new Job("Schedule Reports for sending") {
-
-            @Override
-            protected IStatus run(IProgressMonitor monitor) {
-                monitor.beginTask("Scheduling...", reports.size());
-                List<Job> jobs = Lists.newLinkedList();
-                for (ErrorReport report : reports) {
-                    history.remember(report);
-                    UploadJob job = new UploadJob(report, settings, target, bus);
-                    jobs.add(job);
-                    monitor.worked(1);
-                    if (monitor.isCanceled()) {
-                        break;
-                    }
-                }
-                monitor.done();
-                IProgressMonitor sendMonitor = Jobs.sequential(format(Messages.UPLOADJOB_NAME, target), jobs);
-                Jobs.wait(sendMonitor, jobs);
-                return Status.OK_STATUS;
-            }
-        }.schedule();
+        uploadHandler.scheduleForSending(reports);
     }
 
     @Subscribe
