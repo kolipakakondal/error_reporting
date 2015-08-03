@@ -115,19 +115,16 @@ public class ReportingController {
     @Subscribe
     public synchronized void on(NewReportLogged e) {
         ErrorReport report = e.report;
-
         addToQueue(report);
-
+        if (!Shells.hasActiveWindow()) {
+            // skip event for the moment if eclipse has no focus
+            return;
+        }
         if (!isConfigured()) {
             if (!isConfigureInProgress()) {
                 requestShowConfigureDialog();
             }
             // we can't do anything else yet, wait for configuration
-            return;
-        }
-
-        if (!Shells.hasActiveWindow()) {
-            // skip event for the moment if eclipse has no focus
             return;
         }
 
