@@ -132,11 +132,16 @@ public class ReportingController {
             return;
         }
 
+        if (!Shells.hasActiveWindow()) {
+            // skip event for the moment if eclipse has no focus
+            return;
+        }
+
         ProblemStatus status = problemsDb.seen(report).or(UNKNOWN_STATUS);
         switch (status.getAction()) {
         case NEEDINFO: {
             requestShowNeedInfoRequest(report, status);
-            // TODO if this popu dialog fades out, what should we do?
+            // TODO if this popup dialog fades out, what should we do?
             // handling this case is not very clean yet
             // we also do not store that this problem was seen, right?
             // needs intensive unit tests...
@@ -144,7 +149,7 @@ public class ReportingController {
         }
         case FIXED: {
             requestShowFixedInfo(report, status);
-            // TODO if this popu dialog fades out, what should we do?
+            // TODO if this popup dialog fades out, what should we do?
             // handling this case is not very clean yet
             // we also do not store that this problem was seen, right?
             // needs intensive unit tests...
