@@ -12,21 +12,17 @@ package org.eclipse.epp.internal.logging.aeri.ui.model;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.eclipse.emf.ecore.util.EcoreUtil.getAllContents;
-import static org.eclipse.epp.internal.logging.aeri.ui.model.Reports.newStatus;
-import static org.eclipse.epp.internal.logging.aeri.ui.model.Reports.visit;
-import static org.eclipse.epp.internal.logging.aeri.ui.utils.TestReports.createStackTraceElement;
-import static org.eclipse.epp.internal.logging.aeri.ui.utils.TestReports.createStacktraceForClasses;
-import static org.eclipse.epp.internal.logging.aeri.ui.utils.TestReports.createTestReport;
-import static org.eclipse.epp.internal.logging.aeri.ui.utils.TestReports.createThrowable;
+import static org.eclipse.epp.internal.logging.aeri.ui.model.Reports.*;
+import static org.eclipse.epp.internal.logging.aeri.ui.utils.TestReports.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -37,12 +33,15 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Reports.AnonymizeStacktraceVisitor;
 import org.eclipse.epp.internal.logging.aeri.ui.model.util.ModelSwitch;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.TestReports;
+import org.eclipse.epp.internal.logging.aeri.ui.utils.WildcardRegexConverter;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class ReportsTest {
-    private static final List<String> PREFIX_WHITELIST = Arrays.asList("sun.", "java.", "javax.", "org.eclipse.");
+    private static final List<Pattern> PREFIX_WHITELIST = WildcardRegexConverter
+            .convert(Arrays.asList("sun.*", "java.*", "javax.*", "org.eclipse.*"));
 
     private static final String WHITELISTED_CLASSNAME = "java.lang.RuntimeException";
     private static final String NOT_WHITELISTED_CLASSNAME = "foo.bar.FooBarException";
@@ -56,13 +55,15 @@ public class ReportsTest {
     private static String ANONYMIZED_TAG = "HIDDEN";
 
     private Settings settings;
+    private ServerConfiguration configuration;
 
     @Before
     public void before() {
         settings = ModelFactory.eINSTANCE.createSettings();
-        settings.setWhitelistedPackages(newArrayList("org."));
         exCounter = 1;
         stCounter = 1;
+        configuration = new ServerConfiguration();
+        configuration.setAcceptedPackages(newArrayList("org.*"));
     }
 
     @Test
@@ -149,8 +150,8 @@ public class ReportsTest {
         IStatus s1 = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "some error message", r1);
         IStatus s2 = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "some error message", r2);
 
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status noCause = Reports.newStatus(s1, settings);
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status withCause = Reports.newStatus(s2, settings);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status noCause = Reports.newStatus(s1, configuration);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status withCause = Reports.newStatus(s2, configuration);
 
         Assert.assertNotEquals(noCause.getFingerprint(), withCause.getFingerprint());
     }
@@ -161,8 +162,8 @@ public class ReportsTest {
         IStatus s1 = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "some error message", root);
         IStatus s2 = new MultiStatus("org.eclipse.epp.logging.aeri", 0, new IStatus[] { s1 }, "some error message", root);
 
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status normal = Reports.newStatus(s1, settings);
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status multi = Reports.newStatus(s2, settings);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status normal = Reports.newStatus(s1, configuration);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status multi = Reports.newStatus(s2, configuration);
 
         Assert.assertNotEquals(normal.getFingerprint(), multi.getFingerprint());
     }
@@ -175,7 +176,7 @@ public class ReportsTest {
         java.lang.Throwable rootException = new CoreException(causedStatus);
         IStatus rootEvent = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "someErrorMessage", rootException);
 
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status rootStatus = Reports.newStatus(rootEvent, settings);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status rootStatus = Reports.newStatus(rootEvent, configuration);
 
         org.eclipse.epp.internal.logging.aeri.ui.model.Status child = rootStatus.getChildren().get(0);
         org.eclipse.epp.internal.logging.aeri.ui.model.Status leaf = child.getChildren().get(0);
@@ -200,7 +201,7 @@ public class ReportsTest {
 
         IStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, new IStatus[] { s1, s2 }, "UI freeze of 10s at 08:09:02.936",
                 new RuntimeException("stand-in-stacktrace"));
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status newStatus = Reports.newStatus(multi, settings);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status newStatus = Reports.newStatus(multi, configuration);
         assertThat(newStatus.getChildren().size(), is(1));
         assertThat(newStatus.getMessage(), is("UI freeze of 10s at 08:09:02.936 [1 child-status duplicates removed by Error Reporting]"));
     }
@@ -214,21 +215,21 @@ public class ReportsTest {
 
         IStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, new IStatus[] { s1 }, "UI freeze of 10s at 08:09:02.936",
                 new RuntimeException("stand-in-stacktrace"));
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status newStatus = Reports.newStatus(multi, settings);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status newStatus = Reports.newStatus(multi, configuration);
         assertThat(newStatus.getChildren().size(), is(0));
     }
 
     @Test
     public void testMultistatus() {
         MultiStatus mst = mst(ex(), st(ex()), st(ex()), st(ex()), st(ex()), st(ex()));
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status res = Reports.newStatus(mst, settings);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status res = Reports.newStatus(mst, configuration);
         assertThat(numberOfStatusObjects(res), is(6));
     }
 
     @Test
     public void testCausedByContainsCoreExceptionWithStatus() {
         Status st = st(ex(cex(st(ex()))));
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status res = newStatus(st, settings);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status res = newStatus(st, configuration);
         assertThat(numberOfStatusObjects(res), is(2));
     }
 
@@ -236,7 +237,7 @@ public class ReportsTest {
     public void testCausedByContainsCoreExceptionWithMultistatus() {
         MultiStatus mst = mst(ex(), st(ex()), st(ex()), st(ex()), st(ex()), st(ex()));
         Status st = st(ex(cex(mst)));
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status res = Reports.newStatus(st, settings);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status res = Reports.newStatus(st, configuration);
         assertThat(numberOfStatusObjects(res), is(7));
     }
 
@@ -264,7 +265,7 @@ public class ReportsTest {
         // ---ex2
         // --st2
         // ---ex3
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status st4 = Reports.newStatus(st, settings);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status st4 = Reports.newStatus(st, configuration);
         Throwable ex4 = st4.getException();
         Throwable cex = ex4.getCause();
         Throwable ex1 = cex.getCause();
@@ -325,7 +326,7 @@ public class ReportsTest {
         // ---st6
         // ----st5
         // -----ex5
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status st9 = Reports.newStatus(st, settings);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status st9 = Reports.newStatus(st, configuration);
         Throwable ex6 = st9.getException();
         org.eclipse.epp.internal.logging.aeri.ui.model.Status st8 = st9.getChildren().get(0);
         org.eclipse.epp.internal.logging.aeri.ui.model.Status mst7 = st8.getChildren().get(0);
@@ -354,7 +355,7 @@ public class ReportsTest {
     public void testPrettyPrintNullSafe1() {
         ModelFactory mf = ModelFactory.eINSTANCE;
         ErrorReport report = mf.createErrorReport();
-        Reports.prettyPrint(report, settings);
+        Reports.prettyPrint(report, settings, configuration);
     }
 
     @Test
@@ -362,7 +363,7 @@ public class ReportsTest {
         ModelFactory mf = ModelFactory.eINSTANCE;
         ErrorReport report = mf.createErrorReport();
         report.setStatus(mf.createStatus());
-        Reports.prettyPrint(report, settings);
+        Reports.prettyPrint(report, settings, configuration);
     }
 
     @Test
@@ -374,7 +375,7 @@ public class ReportsTest {
         Throwable t = mf.createThrowable();
         t.setClassName("org.test");
         report.getStatus().setException(t);
-        Reports.prettyPrint(report, settings);
+        Reports.prettyPrint(report, settings, configuration);
     }
 
     @Test
@@ -383,7 +384,7 @@ public class ReportsTest {
 
         ErrorReport report = mf.createErrorReport();
         report.setStatus(mf.createStatus());
-        String prettyPrint = Reports.prettyPrint(report, settings);
+        String prettyPrint = Reports.prettyPrint(report, settings, configuration);
         assertThat(prettyPrint, not(containsString("Exception")));
     }
 
@@ -413,7 +414,7 @@ public class ReportsTest {
 
         IStatus multi = new MultiStatus("org.eclipse.ui.monitoring", 0, new IStatus[] { s1 }, "UI freeze of 6,0s at 11:24:59.108",
                 new RuntimeException("stand-in-stacktrace"));
-        org.eclipse.epp.internal.logging.aeri.ui.model.Status newStatus = Reports.newStatus(multi, settings);
+        org.eclipse.epp.internal.logging.aeri.ui.model.Status newStatus = Reports.newStatus(multi, configuration);
         assertThat(newStatus.getChildren().size(), is(1));
         assertThat(newStatus.getChildren().get(0).getException().getStackTrace().size(), is(stackTrace.length));
     }

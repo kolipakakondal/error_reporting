@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -39,6 +40,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.util.ModelSwitch;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.AnonymousId;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.EmfFieldExclusionStrategy;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.UuidTypeAdapter;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 import org.osgi.framework.Bundle;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -66,9 +68,9 @@ public class Reports {
     }
 
     public static final class AnonymizeStacktraceVisitor extends ModelSwitch<Object> {
-        private List<String> whitelist;
+        private List<Pattern> whitelist;
 
-        public AnonymizeStacktraceVisitor(List<String> whitelist) {
+        public AnonymizeStacktraceVisitor(List<Pattern> whitelist) {
             this.whitelist = whitelist;
         }
 
@@ -95,10 +97,10 @@ public class Reports {
     public static final class ThrowableFingerprintComputer extends ModelSwitch<Object> {
 
         private StringBuilder content = new StringBuilder();
-        private List<String> whitelist;
+        private List<Pattern> whitelist;
         private int maxframes;
 
-        public ThrowableFingerprintComputer(List<String> whitelist, int maxframes) {
+        public ThrowableFingerprintComputer(List<Pattern> whitelist, int maxframes) {
             this.whitelist = whitelist;
             this.maxframes = maxframes;
         }
@@ -304,9 +306,9 @@ public class Reports {
 
     private static ModelFactory factory = ModelFactory.eINSTANCE;
 
-    static boolean isWhitelisted(String className, List<String> whitelist) {
-        for (String whiteListedPrefix : whitelist) {
-            if (className.startsWith(whiteListedPrefix)) {
+    static boolean isWhitelisted(String className, List<Pattern> whitelist) {
+        for (Pattern whitelistedPattern : whitelist) {
+            if (whitelistedPattern.matcher(className).matches()) {
                 return true;
             }
         }
@@ -317,22 +319,23 @@ public class Reports {
         return EcoreUtil.copy(org);
     }
 
-    public static String toJson(ErrorReport report, Settings settings, boolean pretty) {
-        // work on a copy:
-        report = copy(report);
-
-        report.setName(settings.getName());
-        report.setEmail(settings.getEmail());
-        if (settings.isAnonymizeStrackTraceElements()) {
-            anonymizeStackTrace(report, settings);
-        }
-        if (settings.isAnonymizeMessages()) {
-            clearMessages(report);
-        }
-
+    public static String toJson(ErrorReport report, boolean pretty) {
         Gson gson = createGson(pretty);
         String json = gson.toJson(report);
         return json;
+    }
+
+    public static ErrorReport createAnonymizedSendCopy(ErrorReport report, Settings settings, ServerConfiguration configuration) {
+        ErrorReport copy = copy(report);
+        copy.setName(settings.getName());
+        copy.setEmail(settings.getEmail());
+        if (settings.isAnonymizeStrackTraceElements()) {
+            anonymizeStackTrace(copy, configuration);
+        }
+        if (settings.isAnonymizeMessages()) {
+            clearMessages(copy);
+        }
+        return copy;
     }
 
     private static Gson createGson(boolean pretty) {
@@ -346,7 +349,7 @@ public class Reports {
         return gson;
     }
 
-    public static ErrorReport newErrorReport(IStatus event, Settings settings) {
+    public static ErrorReport newErrorReport(IStatus event, Settings settings, ServerConfiguration configuration) {
         ErrorReport mReport = factory.createErrorReport();
         mReport.setAnonymousId(AnonymousId.getId());
         mReport.setName(settings.getName());
@@ -359,7 +362,7 @@ public class Reports {
         mReport.setOsgiWs(System.getProperty("osgi.ws", "-"));
         mReport.setOsgiOs(System.getProperty(org.osgi.framework.Constants.FRAMEWORK_OS_NAME, "-"));
         mReport.setOsgiOsVersion(System.getProperty(org.osgi.framework.Constants.FRAMEWORK_OS_VERSION, "-"));
-        mReport.setStatus(newStatus(event, settings));
+        mReport.setStatus(newStatus(event, configuration));
 
         return mReport;
     }
@@ -400,7 +403,7 @@ public class Reports {
     }
 
     @VisibleForTesting
-    public static Status newStatus(IStatus status, Settings settings) {
+    public static Status newStatus(IStatus status, ServerConfiguration configuration) {
         Status mStatus = factory.createStatus();
         mStatus.setMessage(removeSourceFileContents(status.getMessage()));
         mStatus.setSeverity(status.getSeverity());
@@ -419,7 +422,7 @@ public class Reports {
             if (cur instanceof CoreException) {
                 CoreException coreException = (CoreException) cur;
                 IStatus coreExceptionStatus = coreException.getStatus();
-                Status mCoreExceptionStatus = newStatus(coreExceptionStatus, settings);
+                Status mCoreExceptionStatus = newStatus(coreExceptionStatus, configuration);
                 String detachedMessage = format("{0} [detached from CoreException of Status ''{1}'' by Error Reporting]",
                         mCoreExceptionStatus.getMessage(), mStatus.getMessage());
                 mCoreExceptionStatus.setMessage(detachedMessage);
@@ -430,7 +433,7 @@ public class Reports {
         }
         // Multistatus handling
         for (IStatus child : status.getChildren()) {
-            mChildren.add(newStatus(child, settings));
+            mChildren.add(newStatus(child, configuration));
         }
         // some stacktraces from ui.monitoring should be filtered
         boolean needFiltering = "org.eclipse.ui.monitoring".equals(status.getPlugin()) && (status.getCode() == 0 || status.getCode() == 1);
@@ -443,13 +446,14 @@ public class Reports {
             mStatus.setException(mException);
         }
 
-        mStatus.setFingerprint(computeFingerprintFor(mStatus, settings));
+        mStatus.setFingerprint(computeFingerprintFor(mStatus, configuration));
 
         return mStatus;
     }
 
-    public static String computeFingerprintFor(Status status, Settings settings) {
-        ThrowableFingerprintComputer fingerprintComputer = new ThrowableFingerprintComputer(settings.getWhitelistedPackages(), 1024);
+    public static String computeFingerprintFor(Status status, ServerConfiguration configuration) {
+        ThrowableFingerprintComputer fingerprintComputer = new ThrowableFingerprintComputer(configuration.getAcceptedPackagesPatterns(),
+                1024);
         visit(status, fingerprintComputer);
         return fingerprintComputer.hash();
     }
@@ -500,13 +504,13 @@ public class Reports {
         visit(report, new ClearMessagesVisitor());
     }
 
-    public static void anonymizeStackTrace(ErrorReport report, final Settings settings) {
-        visit(report, new AnonymizeStacktraceVisitor(settings.getWhitelistedPackages()));
+    public static void anonymizeStackTrace(ErrorReport report, final ServerConfiguration configuration) {
+        visit(report, new AnonymizeStacktraceVisitor(configuration.getAcceptedPackagesPatterns()));
     }
 
-    public static String prettyPrint(ErrorReport report, Settings settings) {
+    public static String prettyPrint(ErrorReport report, Settings settings, ServerConfiguration configuration) {
         if (settings.isAnonymizeStrackTraceElements()) {
-            anonymizeStackTrace(report, settings);
+            anonymizeStackTrace(report, configuration);
         }
         if (settings.isAnonymizeMessages()) {
             clearMessages(report);

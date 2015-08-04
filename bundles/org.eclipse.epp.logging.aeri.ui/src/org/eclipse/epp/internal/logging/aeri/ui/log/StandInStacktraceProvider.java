@@ -17,8 +17,8 @@ import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.epp.internal.logging.aeri.ui.Constants;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Reports;
-import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 
 public class StandInStacktraceProvider {
 
@@ -33,7 +33,7 @@ public class StandInStacktraceProvider {
 
     private static final String STAND_IN_MESSAGE = "Stand-In Stacktrace supplied by the Eclipse Error Reporting";
 
-    public void insertStandInStacktraceIfEmpty(final Status status, Settings settings) {
+    public void insertStandInStacktraceIfEmpty(final Status status, ServerConfiguration configuration) {
         if (requiresStandInStacktrace(status)) {
             Throwable syntetic = new StandInException(STAND_IN_MESSAGE);
             syntetic.fillInStackTrace();
@@ -41,7 +41,7 @@ public class StandInStacktraceProvider {
             StackTraceElement[] clearedStacktrace = clearBlacklistedTopStackframes(stacktrace, Constants.STAND_IN_STACKTRACE_BLACKLIST);
             syntetic.setStackTrace(clearedStacktrace);
             status.setException(Reports.newThrowable(syntetic));
-            status.setFingerprint(computeFingerprintFor(status, settings));
+            status.setFingerprint(computeFingerprintFor(status, configuration));
         }
     }
 

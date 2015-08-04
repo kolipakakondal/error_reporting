@@ -30,6 +30,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Reports;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -104,6 +105,7 @@ public class ReportDialog extends MessageDialog {
 
     private static final Image ERROR_ICON = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
     private Settings settings;
+    private ServerConfiguration configuration;
     private TableViewer tableViewer;
     private StyledText messageText;
     private IObservableList errors;
@@ -115,13 +117,14 @@ public class ReportDialog extends MessageDialog {
     private Button logMessageButton;
     private Button ignoreSimilarButton;
 
-    public ReportDialog(Shell parentShell, Settings settings, IObservableList errors, EventBus bus) {
+    public ReportDialog(Shell parentShell, Settings settings, ServerConfiguration configuration, IObservableList errors, EventBus bus) {
         super(parentShell, "An Error Was Logged", null,
                 "We noticed a new error event was logged. Such error events may reveal issues in the Eclipse codebase, and thus we kindly ask you to report them to eclipse.org.",
                 MessageDialog.WARNING, new String[] { "Send", "Don't Send" }, 0);
         setShellStyle(SWT.MODELESS | SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX);
         setBlockOnOpen(false);
         this.settings = settings;
+        this.configuration = configuration;
         this.errors = errors;
     }
 
@@ -222,7 +225,7 @@ public class ReportDialog extends MessageDialog {
                 public void handleChange(ChangeEvent event) {
                     Object report = selectedErrorReport.getValue();
                     if (report != null && !messageText.isDisposed()) {
-                        messageText.setText(Reports.prettyPrint((ErrorReport) report, settings));
+                        messageText.setText(Reports.prettyPrint((ErrorReport) report, settings, configuration));
                     }
                 }
             });

@@ -21,6 +21,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Throwable;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 
 public class TestReports {
     private static final ModelFactory FACTORY = ModelFactory.eINSTANCE;
@@ -67,10 +68,11 @@ public class TestReports {
         IStatus status = new org.eclipse.core.runtime.Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "some error message",
                 exception);
 
-        Settings settings = ModelFactory.eINSTANCE.createSettings();
-        settings.setWhitelistedPackages(newArrayList("org."));
+        Settings settings = FACTORY.createSettings();
+        ServerConfiguration configuration = new ServerConfiguration();
+        configuration.setAcceptedPackages(newArrayList("org."));
 
-        return newErrorReport(status, settings);
+        return newErrorReport(status, settings, configuration);
     }
 
     public static Throwable createThrowable(String className) {

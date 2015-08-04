@@ -42,6 +42,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Reports;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.RetainSystemProperties;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -60,6 +61,7 @@ public class LogListenerTest {
     private EventBus bus;
     private BlockingQueue<Object> queue;
     private Settings settings;
+    private ServerConfiguration configuration;
     private LogListener sut;
     private ReportHistory history;
     private ExpiringReportHistory expiringHistory;
@@ -80,8 +82,9 @@ public class LogListenerTest {
         System.setProperty(SYSPROP_ECLIPSE_BUILD_ID, "unit-tests");
         settings = ModelFactory.eINSTANCE.createSettings();
         settings.setConfigured(true);
-        settings.setWhitelistedPluginIds(newArrayList(TEST_PLUGIN_ID));
-        settings.setWhitelistedPackages(newArrayList("java"));
+        configuration = new ServerConfiguration();
+        configuration.setAcceptedPlugins(newArrayList(TEST_PLUGIN_ID));
+        configuration.setAcceptedPackages(newArrayList("java.*"));
         settings.setAction(SendAction.SILENT);
         settings.setSkipSimilarErrors(true);
 
@@ -103,7 +106,7 @@ public class LogListenerTest {
 
         when(problemStatusIndex.seen(org.mockito.Matchers.any(ErrorReport.class))).thenReturn(noStatus);
 
-        sut = LogListener.createLogListener(settings, history, bus, expiringHistory, problemStatusIndex);
+        sut = LogListener.createLogListener(settings, configuration, history, bus, expiringHistory, problemStatusIndex);
     }
 
     @Subscribe
@@ -362,7 +365,7 @@ public class LogListenerTest {
         Throwable t1 = new Throwable();
         t1.fillInStackTrace();
         Status s1 = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message", t1);
-        ErrorReport report = Reports.newErrorReport(s1, settings);
+        ErrorReport report = Reports.newErrorReport(s1, settings, configuration);
 
         ProblemStatus status = new ProblemStatus();
         status.setIncidentFingerprint(Reports.traceIdentityHash(report));

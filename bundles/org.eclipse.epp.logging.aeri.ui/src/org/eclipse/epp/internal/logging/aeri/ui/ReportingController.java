@@ -50,6 +50,8 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Browsers;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Shells;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.AeriServer;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -89,15 +91,17 @@ public class ReportingController {
     private ReportHistory history;
     private ProblemsDatabaseService problemsDb;
     private UploadHandler uploadHandler;
+    private ServerConfiguration configuration;
 
-    public ReportingController(EventBus bus, Settings settings, INotificationService notifications, ReportHistory history,
-            ProblemsDatabaseService problemsDb) {
+    public ReportingController(EventBus bus, Settings settings, ServerConfiguration configuration, AeriServer server,
+            INotificationService notifications, ReportHistory history, ProblemsDatabaseService problemsDb) {
         this.bus = bus;
         this.settings = settings;
+        this.configuration = configuration;
         this.notifications = notifications;
         this.history = history;
         this.problemsDb = problemsDb;
-        uploadHandler = new UploadHandler(settings, history, bus);
+        uploadHandler = new UploadHandler(settings, configuration, server, history, bus);
         initalizeLists();
     }
 
@@ -363,7 +367,7 @@ public class ReportingController {
 
             @Override
             public void run() {
-                ReportDialog d = new ReportDialog(Shells.getWorkbenchWindowShell().orNull(), settings, queueUI, bus);
+                ReportDialog d = new ReportDialog(Shells.getWorkbenchWindowShell().orNull(), settings, configuration, queueUI, bus);
                 d.setBlockOnOpen(true);
                 int status = d.open();
                 setNotificationInProgress(false);

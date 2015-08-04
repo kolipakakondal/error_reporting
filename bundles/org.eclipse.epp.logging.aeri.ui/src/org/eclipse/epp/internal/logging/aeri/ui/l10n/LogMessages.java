@@ -30,6 +30,8 @@ public final class LogMessages extends DefaultLogMessage {
     public static final LogMessages ERROR_SAVE_PREFERENCES_FAILED = new LogMessages(ERROR, Messages.LOG_ERROR_SAVE_PREFERENCES_FAILED);
     public static final LogMessages INFO_PAUSE_PERIOD_ELAPSED = new LogMessages(INFO, Messages.LOG_INFO_PAUSE_PERIOD_ELAPSED);
     public static final LogMessages INFO_SERVER_NOT_AVAILABLE = new LogMessages(INFO, Messages.LOG_INFO_SERVER_NOT_AVAILABLE);
+    public static final LogMessages WARN_CONFIGURATION_DOWNLOAD_FAILED = new LogMessages(WARNING,
+            Messages.LOG_WARN_CONFIGURATION_DOWNLOAD_FAILED);
     public static final LogMessages WARN_CONFIGURATION_TIMED_OUT = new LogMessages(WARNING, Messages.LOG_WARN_CONFIGURATION_TIMED_OUT);
     public static final LogMessages WARN_FAILED_TO_FETCH_PROBLEM_DB_ETAG = new LogMessages(WARNING,
             Messages.LOG_WARN_FAILED_TO_FETCH_PROBLEM_DB_ETAG);

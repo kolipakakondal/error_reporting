@@ -21,14 +21,11 @@ import org.apache.lucene.store.RAMDirectory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ModelFactory;
-import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.TestReports;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.Lists;
 
 public class ReportHistoryTest {
     private static ModelFactory factory = ModelFactory.eINSTANCE;
@@ -36,9 +33,6 @@ public class ReportHistoryTest {
 
     @Before
     public void setUp() throws Exception {
-        Settings s = ModelFactory.eINSTANCE.createSettings();
-        s.setWhitelistedPackages(Lists.newArrayList("org."));
-        s.setWhitelistedPluginIds(Lists.newArrayList("org."));
         sut = new ReportHistory() {
             @Override
             protected Directory createIndexDirectory() throws IOException {

@@ -10,13 +10,16 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ide;
 
+import static java.lang.Math.max;
 import static java.util.concurrent.TimeUnit.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
+import java.net.UnknownHostException;
 
+import org.apache.http.client.fluent.Executor;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -32,8 +35,12 @@ import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseUpdateJob;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.PreferenceInitializer;
+import org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction;
+import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.notifications.MylynNotificationService;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.AeriServer;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchListener;
@@ -48,6 +55,8 @@ public class Startup implements IStartup {
 
     private ReportHistory history;
     private Settings settings;
+    private AeriServer server;
+    private ServerConfiguration configuration;
     private ReportingController controller;
     private EventBus bus;
     private ExpiringReportHistory expiringReportHistory;
@@ -59,31 +68,43 @@ public class Startup implements IStartup {
 
             @Override
             protected IStatus run(IProgressMonitor monitor) {
-                SubMonitor progress = SubMonitor.convert(monitor, "Initializing error reporting", 8);
+                SubMonitor progress = SubMonitor.convert(monitor, "Initializing error reporting", 10);
                 progress.subTask("history");
                 initializeHistory();
                 progress.worked(1);
+
                 progress.subTask("expiring history");
                 initializeExpiringHistory();
                 progress.worked(1);
+
                 progress.subTask("problem database");
                 initializeProblemsDatabase();
                 progress.worked(1);
+
                 progress.subTask("settings");
                 initalizeSettings();
                 progress.worked(1);
+
+                progress.subTask("server");
+                initializeServerAndConfiguration();
+                progress.worked(1);
+
                 progress.subTask("eventbus");
                 initalizeEventBus();
                 progress.worked(1);
+
                 progress.subTask("controller");
                 initalizeController();
                 progress.worked(1);
+
                 progress.subTask("log listener");
                 initalizeLogListener();
                 progress.worked(1);
+
                 progress.subTask("jobs");
                 scheduleJobs();
                 progress.worked(1);
+
                 monitor.done();
                 return Status.OK_STATUS;
             }
@@ -155,25 +176,51 @@ public class Startup implements IStartup {
         settings = PreferenceInitializer.getDefault();
     }
 
+    private void initializeServerAndConfiguration() {
+        try {
+            Executor executor = Executor.newInstance();
+            File configurationFile = new File(settings.getServerConfigurationLocalFile());
+            if (configurationFile.exists()) {
+                configuration = AeriServer.loadFromFile(configurationFile);
+            }
+            if (configuration == null || System.currentTimeMillis() - configuration.getTimestamp() > configuration.getTtlMs()) {
+                configuration = AeriServer.download(new URI("https://dev.eclipse.org/recommenders/community/confess/v2/discovery"),
+                        executor);
+                AeriServer.saveToFile(configurationFile, configuration);
+            }
+            server = new AeriServer(executor, configuration, settings);
+        } catch (UnknownHostException e) {
+            // no network -> ignore silently
+            settings.setAction(SendAction.IGNORE);
+            settings.setRememberSendAction(RememberSendAction.RESTART);
+        } catch (Exception e) {
+            log(WARN_CONFIGURATION_DOWNLOAD_FAILED, e);
+            settings.setAction(SendAction.IGNORE);
+            settings.setRememberSendAction(RememberSendAction.RESTART);
+        }
+    }
+
     private void initalizeEventBus() {
         bus = new EventBus("Error Reporting Bus");
     }
 
     private void initalizeController() {
-        controller = new ReportingController(bus, settings, new MylynNotificationService(bus), history, problemsDb);
+        controller = new ReportingController(bus, settings, configuration, server, new MylynNotificationService(bus), history, problemsDb);
         bus.register(controller);
     }
 
     private void initalizeLogListener() {
-        org.eclipse.epp.internal.logging.aeri.ui.log.LogListener listener = LogListener.createLogListener(settings, history, bus,
-                expiringReportHistory, problemsDb);
+        org.eclipse.epp.internal.logging.aeri.ui.log.LogListener listener = LogListener.createLogListener(settings, configuration, history,
+                bus, expiringReportHistory, problemsDb);
         Platform.addLogListener(listener);
     }
 
     private void scheduleJobs() {
         try {
-            URL indexZipUrl = new URL(Constants.PROBLEMS_STATUS_INDEX_ZIP_URL);
-            new ProblemsDatabaseUpdateJob(problemsDb, indexZipUrl, settings).schedule(MILLISECONDS.convert(10, SECONDS));
+            long outdatedTimestamp = settings.getProblemsZipLastDownloadTimestamp() + configuration.getProblemsTtlMs();
+            long timeToUpdate = outdatedTimestamp - System.currentTimeMillis();
+            long scheduleMs = max(MILLISECONDS.convert(10, SECONDS), timeToUpdate);
+            new ProblemsDatabaseUpdateJob(problemsDb, server, settings).schedule(scheduleMs);
         } catch (Exception e) {
             Throwables.propagate(e);
         }

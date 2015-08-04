@@ -10,7 +10,6 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +22,8 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.AeriServer;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
@@ -35,9 +36,13 @@ public class UploadHandler extends JobChangeAdapter {
 
     volatile Job scheduledJob;
     private ReportHistory history;
+    private AeriServer server;
+    private ServerConfiguration configuration;
 
-    public UploadHandler(Settings settings, ReportHistory history, EventBus bus) {
+    public UploadHandler(Settings settings, ServerConfiguration configuration, AeriServer server, ReportHistory history, EventBus bus) {
         this.settings = settings;
+        this.configuration = configuration;
+        this.server = server;
         this.history = history;
         this.bus = bus;
     }
@@ -78,8 +83,7 @@ public class UploadHandler extends JobChangeAdapter {
     }
 
     private void scheduleJob() {
-        URI target = URI.create(settings.getServerUrl());
-        scheduledJob = new UploadJob(events, settings, target, bus);
+        scheduledJob = new UploadJob(events, settings, configuration, server, bus);
         scheduledJob.addJobChangeListener(this);
     }
 }

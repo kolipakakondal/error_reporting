@@ -83,6 +83,7 @@ public class Messages extends NLS {
     public static String LOG_ERROR_SAVE_PREFERENCES_FAILED;
     public static String LOG_INFO_PAUSE_PERIOD_ELAPSED;
     public static String LOG_INFO_SERVER_NOT_AVAILABLE;
+    public static String LOG_WARN_CONFIGURATION_DOWNLOAD_FAILED;
     public static String LOG_WARN_CONFIGURATION_TIMED_OUT;
     public static String LOG_WARN_FAILED_TO_FETCH_PROBLEM_DB_ETAG;
     public static String LOG_WARN_FAILED_TO_LOAD_DEFAULT_PREFERENCES;

@@ -16,11 +16,14 @@ import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction.NONE;
 import static org.eclipse.epp.internal.logging.aeri.ui.model.SendAction.ASK;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.DefaultScope;
@@ -37,6 +40,8 @@ import org.eclipse.epp.internal.logging.aeri.ui.Constants;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -52,16 +57,25 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
     public static final String PROP_REMEMBER_SEND_ACTION = PKG.getSettings_RememberSendAction().getName();
     public static final String PROP_REMEMBER_SETTING_PERIOD_START = PKG.getSettings_RememberSendActionPeriodStart().getName();
     public static final String PROP_SEND_ACTION = PKG.getSettings_Action().getName();
-    public static final String PROP_SERVER = PKG.getSettings_ServerUrl().getName();
+    public static final String PROP_SERVER = PKG.getSettings_ServerConfigurationUrl().getName();
     public static final String PROP_SKIP_SIMILAR_ERRORS = PKG.getSettings_SkipSimilarErrors().getName();
-    public static final String PROP_WHITELISTED_PACKAGES = PKG.getSettings_WhitelistedPackages().getName();
-    public static final String PROP_WHITELISTED_PLUGINS = PKG.getSettings_WhitelistedPluginIds().getName();
+    public static final String PROP_SERVER_CONFIGURATION_LOCAL_FILE = PKG.getSettings_ServerConfigurationLocalFile().getName();
+    public static final String PROP_PROBLEM_INDEX_LAST_DOWNLOAD = PKG.getSettings_ProblemsZipLastDownloadTimestamp().getName();
 
     private static String getServerUrl() {
-        return System.getProperty(PLUGIN_ID + "." + PROP_SERVER, "https://dev.eclipse.org/recommenders/community/confess/0.5/reports/");
+        return System.getProperty(PLUGIN_ID + "." + PROP_SERVER, "https://dev.eclipse.org/recommenders/community/confess/v2/discovery");
     }
 
     public static final String SERVER_URL = getServerUrl();
+
+    public static final String SERVER_CONFIGURATION_FILE;
+
+    static {
+        Bundle bundle = FrameworkUtil.getBundle(PreferenceInitializer.class);
+        IPath stateLocation = Platform.getStateLocation(bundle);
+        File indexDirectory = new File(stateLocation.toFile(), Constants.SERVER_CONFIGURATION_FILE);
+        SERVER_CONFIGURATION_FILE = indexDirectory.getAbsolutePath();
+    }
 
     private static long MS_PER_DAY = TimeUnit.DAYS.toMillis(1);
     private static Settings settings;
@@ -87,6 +101,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
             log(WARN_FAILED_TO_LOAD_DEFAULT_PREFERENCES, e);
         }
         s.put(PROP_SERVER, SERVER_URL);
+        s.put(PROP_SERVER_CONFIGURATION_LOCAL_FILE, SERVER_CONFIGURATION_FILE);
         s.put(PROP_NAME, name);
         s.put(PROP_EMAIL, email);
         s.putBoolean(PROP_ANONYMIZE_STACKTRACES, anonymizeStacktraces);
@@ -94,10 +109,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         s.putBoolean(PROP_SKIP_SIMILAR_ERRORS, true);
         s.putBoolean(PROP_CONFIGURED, false);
         s.putLong(PROP_REMEMBER_SETTING_PERIOD_START, 0L);
-        s.put(PROP_WHITELISTED_PLUGINS, Constants.WHITELISTED_PLUGINS);
-        s.put(PROP_WHITELISTED_PACKAGES, Constants.WHITELISTED_PACKAGES);
         s.put(PROP_SEND_ACTION, SendAction.ASK.name());
         s.put(PROP_REMEMBER_SEND_ACTION, RememberSendAction.NONE.name());
+        s.putLong(PROP_PROBLEM_INDEX_LAST_DOWNLOAD, 0L);
     }
 
     public static Settings getDefault() {

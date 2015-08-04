@@ -19,9 +19,8 @@ import static org.mockito.Mockito.never;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.epp.internal.logging.aeri.ui.model.ModelFactory;
-import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,13 +45,13 @@ public class StandInStacktraceProviderTest {
 
     private static final Set<String> BLACKLIST = Sets.newHashSet(BLACKLISTED_CLASS_1, BLACKLISTED_CLASS_2);
 
-    private Settings settings;
+    private ServerConfiguration configuration;
 
     @Before
     public void setUp() {
-        settings = ModelFactory.eINSTANCE.createSettings();
-        settings.setWhitelistedPluginIds(newArrayList("plugin.id"));
-        settings.setWhitelistedPackages(newArrayList("java"));
+        configuration = new ServerConfiguration();
+        configuration.setAcceptedPackages(newArrayList("java"));
+        configuration.setAcceptedPlugins(newArrayList("plugin.id"));
     }
 
     @Spy
@@ -112,7 +111,7 @@ public class StandInStacktraceProviderTest {
     @Test
     public void testInsertStacktraceForStatusWithNoException() {
         Status status = createStatus(IStatus.ERROR, "plugin.id", "any message");
-        stacktraceProvider.insertStandInStacktraceIfEmpty(status, settings);
+        stacktraceProvider.insertStandInStacktraceIfEmpty(status, configuration);
         Mockito.verify(stacktraceProvider).clearBlacklistedTopStackframes(Matchers.any(StackTraceElement[].class),
                 Matchers.anySetOf(String.class));
     }
@@ -120,14 +119,14 @@ public class StandInStacktraceProviderTest {
     @Test
     public void testInsertedExceptionClass() {
         Status status = createStatus(IStatus.ERROR, "plugin.id", "any message");
-        stacktraceProvider.insertStandInStacktraceIfEmpty(status, settings);
+        stacktraceProvider.insertStandInStacktraceIfEmpty(status, configuration);
         Assert.assertThat(status.getException().getClassName(), is(StandInStacktraceProvider.StandInException.class.getName()));
     }
 
     @Test
     public void testInsertStacktraceSkippedForStatusWithException() {
         Status status = createStatus(IStatus.ERROR, "plugin.id", "any message", new RuntimeException());
-        stacktraceProvider.insertStandInStacktraceIfEmpty(status, settings);
+        stacktraceProvider.insertStandInStacktraceIfEmpty(status, configuration);
         Mockito.verify(stacktraceProvider, never()).clearBlacklistedTopStackframes(Matchers.any(StackTraceElement[].class),
                 Matchers.anySetOf(String.class));
     }
@@ -135,7 +134,7 @@ public class StandInStacktraceProviderTest {
     @Test
     public void testInserterClassNotContainedInStacktrace() {
         Status status = createStatus(IStatus.ERROR, "plugin.id", "any message");
-        new StandInStacktraceProvider().insertStandInStacktraceIfEmpty(status, settings);
+        new StandInStacktraceProvider().insertStandInStacktraceIfEmpty(status, configuration);
         for (org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement e : status.getException().getStackTrace()) {
             assertThat(e.getClassName(), not(is(StandInStacktraceProvider.class.getCanonicalName())));
         }
@@ -145,7 +144,7 @@ public class StandInStacktraceProviderTest {
     public void testFingerprintUpdated() {
         Status status = createStatus(IStatus.ERROR, "plugin.id", "any message");
         String oldFingerprint = status.getFingerprint();
-        new StandInStacktraceProvider().insertStandInStacktraceIfEmpty(status, settings);
+        new StandInStacktraceProvider().insertStandInStacktraceIfEmpty(status, configuration);
         assertThat(status.getFingerprint(), not(is(oldFingerprint)));
     }
 }

@@ -14,9 +14,12 @@ import static com.google.common.base.Objects.equal;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.*;
 
+import java.util.regex.Pattern;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 import org.eclipse.ui.IWorkbench;
 
 import com.google.common.base.Predicate;
@@ -40,17 +43,17 @@ public class StatusPredicates {
 
     public static class WhitelistedPluginIdPresentPredicate implements Predicate<IStatus> {
 
-        private Settings settings;
+        private ServerConfiguration configuration;
 
-        public WhitelistedPluginIdPresentPredicate(Settings settings) {
-            this.settings = settings;
+        public WhitelistedPluginIdPresentPredicate(ServerConfiguration configuration) {
+            this.configuration = configuration;
         }
 
         @Override
         public boolean apply(IStatus input) {
             String pluginId = input.getPlugin();
-            for (String id : settings.getWhitelistedPluginIds()) {
-                if (pluginId.startsWith(id)) {
+            for (Pattern id : configuration.getAcceptedPluginsPatterns()) {
+                if (id.matcher(pluginId).matches()) {
                     return true;
                 }
             }

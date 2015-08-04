@@ -43,6 +43,8 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.notifications.MylynNotificationService;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.AeriServer;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -65,6 +67,8 @@ public class ReportingControllerTest {
 
     private EventBus bus;
     private Settings settings;
+    private ServerConfiguration configuration;
+    private AeriServer server;
     private MylynNotificationService notifications;
     private ReportingController sut;
     private ReportHistory history;
@@ -83,7 +87,7 @@ public class ReportingControllerTest {
 
         problems = spy(new TestProblemsDatabaseService(null));
         bus = spy(new EventBus());
-        sut = spy(new ReportingController(bus, settings, notifications, history, problems));
+        sut = spy(new ReportingController(bus, settings, configuration, server, notifications, history, problems));
         bus.register(sut);
         doNothing().when(sut).scheduleForSending(anyListOfReports());
     }
