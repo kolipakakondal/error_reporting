@@ -53,6 +53,8 @@ import com.google.common.eventbus.EventBus;
 
 public class Startup implements IStartup {
 
+    private static final boolean DEBUG = "true".equalsIgnoreCase(Platform.getDebugOption("org.eclipse.epp.logging.aeri.ide/debug"));
+
     private ReportHistory history;
     private Settings settings;
     private AeriServer server;
@@ -69,43 +71,55 @@ public class Startup implements IStartup {
             @Override
             protected IStatus run(IProgressMonitor monitor) {
                 SubMonitor progress = SubMonitor.convert(monitor, "Initializing error reporting", 10);
-                progress.subTask("history");
-                initializeHistory();
-                progress.worked(1);
+                try {
+                    progress.subTask("history");
+                    initializeHistory();
+                    progress.worked(1);
 
-                progress.subTask("expiring history");
-                initializeExpiringHistory();
-                progress.worked(1);
+                    progress.subTask("expiring history");
+                    initializeExpiringHistory();
+                    progress.worked(1);
 
-                progress.subTask("problem database");
-                initializeProblemsDatabase();
-                progress.worked(1);
+                    progress.subTask("problem database");
+                    initializeProblemsDatabase();
+                    progress.worked(1);
 
-                progress.subTask("settings");
-                initalizeSettings();
-                progress.worked(1);
+                    progress.subTask("settings");
+                    initalizeSettings();
+                    progress.worked(1);
 
-                progress.subTask("server");
-                initializeServerAndConfiguration();
-                progress.worked(1);
+                    progress.subTask("server");
+                    initializeServerAndConfiguration();
+                    progress.worked(1);
 
-                progress.subTask("eventbus");
-                initalizeEventBus();
-                progress.worked(1);
+                    progress.subTask("eventbus");
+                    initalizeEventBus();
+                    progress.worked(1);
 
-                progress.subTask("controller");
-                initalizeController();
-                progress.worked(1);
+                    progress.subTask("controller");
+                    initalizeController();
+                    progress.worked(1);
 
-                progress.subTask("log listener");
-                initalizeLogListener();
-                progress.worked(1);
+                    progress.subTask("log listener");
+                    initalizeLogListener();
+                    progress.worked(1);
 
-                progress.subTask("jobs");
-                scheduleJobs();
-                progress.worked(1);
+                    progress.subTask("jobs");
+                    scheduleJobs();
+                    progress.worked(1);
 
-                monitor.done();
+                    monitor.done();
+                } catch (UnknownHostException e) {
+                    if (DEBUG) {
+                        log(WARN_STARTUP_FAILED, e);
+                    }
+                    settings.setAction(SendAction.IGNORE);
+                    settings.setRememberSendAction(RememberSendAction.RESTART);
+                } catch (Exception e) {
+                    log(WARN_STARTUP_FAILED, e);
+                    settings.setAction(SendAction.IGNORE);
+                    settings.setRememberSendAction(RememberSendAction.RESTART);
+                }
                 return Status.OK_STATUS;
             }
 
@@ -135,6 +149,7 @@ public class Startup implements IStartup {
             });
         } catch (Exception e) {
             log(WARN_HISTORY_START_FAILED, e);
+            Throwables.propagate(e);
         }
     }
 
@@ -165,6 +180,7 @@ public class Startup implements IStartup {
             });
         } catch (Exception e) {
             log(WARN_INDEX_START_FAILED, e);
+            Throwables.propagate(e);
         }
     }
 
@@ -176,7 +192,7 @@ public class Startup implements IStartup {
         settings = PreferenceInitializer.getDefault();
     }
 
-    private void initializeServerAndConfiguration() {
+    private void initializeServerAndConfiguration() throws UnknownHostException {
         try {
             Executor executor = Executor.newInstance();
             File configurationFile = new File(settings.getServerConfigurationLocalFile());
@@ -190,13 +206,10 @@ public class Startup implements IStartup {
             }
             server = new AeriServer(executor, configuration, settings);
         } catch (UnknownHostException e) {
-            // no network -> ignore silently
-            settings.setAction(SendAction.IGNORE);
-            settings.setRememberSendAction(RememberSendAction.RESTART);
+            throw e;
         } catch (Exception e) {
             log(WARN_CONFIGURATION_DOWNLOAD_FAILED, e);
-            settings.setAction(SendAction.IGNORE);
-            settings.setRememberSendAction(RememberSendAction.RESTART);
+            Throwables.propagate(e);
         }
     }
 

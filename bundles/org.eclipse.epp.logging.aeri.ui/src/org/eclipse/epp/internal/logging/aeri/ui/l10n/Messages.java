@@ -106,6 +106,7 @@ public class Messages extends NLS {
     public static String LOG_WARN_REPORTING_ERROR;
     public static String LOG_WARN_SERVER_AVAILABILITY_CHECK_FAILED;
     public static String LOG_WARN_STATUS_INDEX_NOT_AVAILABLE;
+    public static String LOG_WARN_STARTUP_FAILED;
     public static String LOG_WARN_THANK_YOU_DIALOG_ERROR;
     public static String LOG_WARN_CYCLIC_EXCEPTION;
     public static String LOG_ERROR_NETWORK_COMMUNICATION_URL_PARSING_FAILED;
