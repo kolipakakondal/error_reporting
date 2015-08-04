@@ -85,5 +85,6 @@ public class UploadHandler extends JobChangeAdapter {
     private void scheduleJob() {
         scheduledJob = new UploadJob(events, settings, configuration, server, bus);
         scheduledJob.addJobChangeListener(this);
+        scheduledJob.schedule();
     }
 }
