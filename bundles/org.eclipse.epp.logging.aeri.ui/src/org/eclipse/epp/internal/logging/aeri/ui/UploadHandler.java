@@ -25,6 +25,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.v2.AeriServer;
 import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
 
@@ -33,8 +34,8 @@ public class UploadHandler extends JobChangeAdapter {
     private final Settings settings;
     private final EventBus bus;
     private final Set<ErrorReport> events = Sets.newConcurrentHashSet();
-
-    volatile Job scheduledJob;
+    @VisibleForTesting
+    protected volatile Job scheduledJob;
     private ReportHistory history;
     private AeriServer server;
     private ServerConfiguration configuration;
@@ -82,7 +83,8 @@ public class UploadHandler extends JobChangeAdapter {
         }
     }
 
-    private void scheduleJob() {
+    @VisibleForTesting
+    protected void scheduleJob() {
         scheduledJob = new UploadJob(events, settings, configuration, server, bus);
         scheduledJob.addJobChangeListener(this);
         scheduledJob.schedule();

@@ -143,6 +143,22 @@ public class ReportingControllerTest {
     }
 
     @Test
+    public void testIgnoreStatus() {
+        settings.setConfigured(true);
+
+        ErrorReport report = createTestReport();
+
+        ProblemStatus status = new ProblemStatus();
+        status.setAction(RequiredAction.IGNORE);
+        when(problems.seen(report)).thenReturn(Optional.of(status));
+
+        sut.on(new NewReportLogged(report));
+
+        verify(bus, never()).post(any());
+        verifyNoReportSendOrShown();
+    }
+
+    @Test
     public void testFixedStatus() {
         settings.setConfigured(true);
 
