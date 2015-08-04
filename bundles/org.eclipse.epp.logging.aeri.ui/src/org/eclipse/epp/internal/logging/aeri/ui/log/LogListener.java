@@ -24,8 +24,8 @@ import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.UnseenError
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.EclipseBuildIdPresentPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ErrorStatusOnlyPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.HistoryReadyPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.IgnorePatternPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ReporterNotDisabledPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.SkipProvisionExceptionsPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.SkipReportsAbsentPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WhitelistedPluginIdPresentPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WorkbenchRunningPredicate;
@@ -49,7 +49,7 @@ public class LogListener implements ILogListener {
                 new WhitelistedPluginIdPresentPredicate(configuration), new SkipReportsAbsentPredicate(),
                 new EclipseBuildIdPresentPredicate(), new ErrorStatusOnlyPredicate(),
                 new WorkbenchRunningPredicate(PlatformUI.getWorkbench()), new HistoryReadyPredicate(history),
-                new SkipProvisionExceptionsPredicate());
+                new IgnorePatternPredicate(configuration.getIgnoredPluginMessagesPatterns()));
         Predicate<ErrorReport> reportFilters = Predicates.and(new UnseenErrorReportPredicate(history, settings),
                 new CompleteErrorReportPredicate(), new ReportsHistoryPredicate(expiringReportHistory, settings),
                 new ReportPredicates.ProblemDatabaseIgnoredPredicate(serverProblemsStatusIndex, settings));

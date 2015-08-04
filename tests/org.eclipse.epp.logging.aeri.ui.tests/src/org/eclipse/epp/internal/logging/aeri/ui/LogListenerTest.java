@@ -19,6 +19,7 @@ import static org.mockito.Mockito.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -85,6 +86,7 @@ public class LogListenerTest {
         configuration = new ServerConfiguration();
         configuration.setAcceptedPlugins(newArrayList(TEST_PLUGIN_ID));
         configuration.setAcceptedPackages(newArrayList("java.*"));
+        configuration.setIgnoredPluginMessages(new ArrayList<String>());
         settings.setAction(SendAction.SILENT);
         settings.setSkipSimilarErrors(true);
 
