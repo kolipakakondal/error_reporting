@@ -26,13 +26,13 @@ import com.google.common.base.Splitter;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
- * 
+ *
  * @generated
  */
 public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
     /**
      * Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     public static ModelFactory init() {
@@ -49,7 +49,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     public ModelFactoryImpl() {
@@ -58,7 +58,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     @Override
@@ -83,7 +83,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     @Override
@@ -104,7 +104,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     @Override
@@ -125,7 +125,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     @Override
@@ -136,7 +136,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     @Override
@@ -147,7 +147,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     @Override
@@ -158,7 +158,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     @Override
@@ -169,7 +169,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     @Override
@@ -180,7 +180,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     @Override
@@ -191,20 +191,21 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     public SendAction createSendActionFromString(EDataType eDataType, String initialValue) {
         SendAction result = SendAction.get(initialValue);
-        if (result == null)
+        if (result == null) {
             throw new IllegalArgumentException(
                     "The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+        }
         return result;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     public String convertSendActionToString(EDataType eDataType, Object instanceValue) {
@@ -213,20 +214,21 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     public RememberSendAction createRememberSendActionFromString(EDataType eDataType, String initialValue) {
         RememberSendAction result = RememberSendAction.get(initialValue);
-        if (result == null)
+        if (result == null) {
             throw new IllegalArgumentException(
                     "The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+        }
         return result;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     public String convertRememberSendActionToString(EDataType eDataType, Object instanceValue) {
@@ -235,7 +237,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     public UUID createUUIDFromString(EDataType eDataType, String initialValue) {
@@ -244,35 +246,25 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     public String convertUUIDToString(EDataType eDataType, Object instanceValue) {
         return super.convertToString(eDataType, instanceValue);
     }
 
-    /**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @generated
-     */
-    @SuppressWarnings("unchecked")
     public List<String> createListOfStringsFromString(EDataType eDataType, String initialValue) {
         return Splitter.on(';').omitEmptyStrings().trimResults().splitToList(initialValue);
+
     }
 
-    /**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @generated
-     */
     public String convertListOfStringsToString(EDataType eDataType, Object instanceValue) {
         return Joiner.on(";").skipNulls().join((Iterable<?>) instanceValue);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated
      */
     @Override
@@ -282,7 +274,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @deprecated
      * @generated
      */

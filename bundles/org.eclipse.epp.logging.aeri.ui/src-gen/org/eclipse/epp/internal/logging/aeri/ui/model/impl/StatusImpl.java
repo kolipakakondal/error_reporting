@@ -19,24 +19,24 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Status</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
- * <ul>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getPluginId <em>Plugin Id</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getPluginVersion <em>Plugin Version</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getCode <em>Code</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getSeverity <em>Severity</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getMessage <em>Message</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getFingerprint <em>Fingerprint</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getChildren <em>Children</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getException <em>Exception</em>}</li>
- * </ul>
  * </p>
+ * <ul>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getPluginId <em>Plugin Id</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getPluginVersion <em>Plugin Version</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getCode <em>Code</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getSeverity <em>Severity</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getMessage <em>Message</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getFingerprint <em>Fingerprint</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getChildren <em>Children</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.StatusImpl#getException <em>Exception</em>}</li>
+ * </ul>
  *
  * @generated
  */
 public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
     /**
-     * The default value of the '{@link #getPluginId() <em>Plugin Id</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The default value of the '{@link #getPluginId() <em>Plugin Id</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getPluginId()
      * @generated
      * @ordered
@@ -44,8 +44,8 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
     protected static final String PLUGIN_ID_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getPluginId() <em>Plugin Id</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The cached value of the '{@link #getPluginId() <em>Plugin Id</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getPluginId()
      * @generated
      * @ordered
@@ -73,8 +73,8 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
     protected String pluginVersion = PLUGIN_VERSION_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getCode() <em>Code</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The default value of the '{@link #getCode() <em>Code</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getCode()
      * @generated
      * @ordered
@@ -82,8 +82,8 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
     protected static final int CODE_EDEFAULT = 0;
 
     /**
-     * The cached value of the '{@link #getCode() <em>Code</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The cached value of the '{@link #getCode() <em>Code</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getCode()
      * @generated
      * @ordered
@@ -91,8 +91,8 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
     protected int code = CODE_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getSeverity() <em>Severity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The default value of the '{@link #getSeverity() <em>Severity</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getSeverity()
      * @generated
      * @ordered
@@ -100,8 +100,8 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
     protected static final int SEVERITY_EDEFAULT = 0;
 
     /**
-     * The cached value of the '{@link #getSeverity() <em>Severity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The cached value of the '{@link #getSeverity() <em>Severity</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getSeverity()
      * @generated
      * @ordered
@@ -109,8 +109,8 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
     protected int severity = SEVERITY_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getMessage() <em>Message</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The default value of the '{@link #getMessage() <em>Message</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getMessage()
      * @generated
      * @ordered
@@ -118,8 +118,8 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
     protected static final String MESSAGE_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getMessage() <em>Message</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The cached value of the '{@link #getMessage() <em>Message</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getMessage()
      * @generated
      * @ordered
@@ -127,8 +127,8 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
     protected String message = MESSAGE_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getFingerprint() <em>Fingerprint</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The default value of the '{@link #getFingerprint() <em>Fingerprint</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getFingerprint()
      * @generated
      * @ordered
@@ -136,8 +136,8 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
     protected static final String FINGERPRINT_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getFingerprint() <em>Fingerprint</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The cached value of the '{@link #getFingerprint() <em>Fingerprint</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getFingerprint()
      * @generated
      * @ordered
@@ -145,9 +145,9 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
     protected String fingerprint = FINGERPRINT_EDEFAULT;
 
     /**
-     * The cached value of the '{@link #getChildren() <em>Children</em>}' containment reference list. <!-- begin-user-doc --> <!--
+     * The cached value of the '{@link #getChildren() <em>Children</em>}' containment reference list.
+     * <!-- begin-user-doc --> <!--
      * end-user-doc -->
-     * 
      * @see #getChildren()
      * @generated
      * @ordered
@@ -166,7 +166,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     protected StatusImpl() {
@@ -175,7 +174,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
@@ -185,7 +183,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getPluginId() {
@@ -194,7 +191,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setPluginId(String newPluginId) {
@@ -206,7 +202,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getPluginVersion() {
@@ -215,7 +210,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setPluginVersion(String newPluginVersion) {
@@ -227,7 +221,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public int getCode() {
@@ -236,7 +229,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setCode(int newCode) {
@@ -248,7 +240,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public int getSeverity() {
@@ -257,7 +248,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setSeverity(int newSeverity) {
@@ -269,7 +259,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getMessage() {
@@ -278,7 +267,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setMessage(String newMessage) {
@@ -290,7 +278,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getFingerprint() {
@@ -299,7 +286,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setFingerprint(String newFingerprint) {
@@ -311,7 +297,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EList<Status> getChildren() {
@@ -323,7 +308,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public org.eclipse.epp.internal.logging.aeri.ui.model.Throwable getException() {
@@ -332,7 +316,6 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public NotificationChain basicSetException(org.eclipse.epp.internal.logging.aeri.ui.model.Throwable newException,
@@ -340,192 +323,178 @@ public class StatusImpl extends MinimalEObjectImpl.Container implements Status {
         org.eclipse.epp.internal.logging.aeri.ui.model.Throwable oldException = exception;
         exception = newException;
         if (eNotificationRequired()) {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ModelPackage.STATUS__EXCEPTION, oldException,
-                    newException);
-            if (msgs == null)
-                msgs = notification;
-            else
-                msgs.add(notification);
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ModelPackage.STATUS__EXCEPTION, oldException, newException);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
         }
         return msgs;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setException(org.eclipse.epp.internal.logging.aeri.ui.model.Throwable newException) {
         if (newException != exception) {
             NotificationChain msgs = null;
             if (exception != null)
-                msgs = ((InternalEObject) exception).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ModelPackage.STATUS__EXCEPTION, null,
-                        msgs);
+                msgs = ((InternalEObject)exception).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ModelPackage.STATUS__EXCEPTION, null, msgs);
             if (newException != null)
-                msgs = ((InternalEObject) newException).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ModelPackage.STATUS__EXCEPTION, null,
-                        msgs);
+                msgs = ((InternalEObject)newException).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ModelPackage.STATUS__EXCEPTION, null, msgs);
             msgs = basicSetException(newException, msgs);
-            if (msgs != null)
-                msgs.dispatch();
-        } else if (eNotificationRequired())
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
             eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.STATUS__EXCEPTION, newException, newException));
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
         switch (featureID) {
-        case ModelPackage.STATUS__CHILDREN:
-            return ((InternalEList<?>) getChildren()).basicRemove(otherEnd, msgs);
-        case ModelPackage.STATUS__EXCEPTION:
-            return basicSetException(null, msgs);
+            case ModelPackage.STATUS__CHILDREN:
+                return ((InternalEList<?>)getChildren()).basicRemove(otherEnd, msgs);
+            case ModelPackage.STATUS__EXCEPTION:
+                return basicSetException(null, msgs);
         }
         return super.eInverseRemove(otherEnd, featureID, msgs);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-        case ModelPackage.STATUS__PLUGIN_ID:
-            return getPluginId();
-        case ModelPackage.STATUS__PLUGIN_VERSION:
-            return getPluginVersion();
-        case ModelPackage.STATUS__CODE:
-            return getCode();
-        case ModelPackage.STATUS__SEVERITY:
-            return getSeverity();
-        case ModelPackage.STATUS__MESSAGE:
-            return getMessage();
-        case ModelPackage.STATUS__FINGERPRINT:
-            return getFingerprint();
-        case ModelPackage.STATUS__CHILDREN:
-            return getChildren();
-        case ModelPackage.STATUS__EXCEPTION:
-            return getException();
+            case ModelPackage.STATUS__PLUGIN_ID:
+                return getPluginId();
+            case ModelPackage.STATUS__PLUGIN_VERSION:
+                return getPluginVersion();
+            case ModelPackage.STATUS__CODE:
+                return getCode();
+            case ModelPackage.STATUS__SEVERITY:
+                return getSeverity();
+            case ModelPackage.STATUS__MESSAGE:
+                return getMessage();
+            case ModelPackage.STATUS__FINGERPRINT:
+                return getFingerprint();
+            case ModelPackage.STATUS__CHILDREN:
+                return getChildren();
+            case ModelPackage.STATUS__EXCEPTION:
+                return getException();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-        case ModelPackage.STATUS__PLUGIN_ID:
-            setPluginId((String) newValue);
-            return;
-        case ModelPackage.STATUS__PLUGIN_VERSION:
-            setPluginVersion((String) newValue);
-            return;
-        case ModelPackage.STATUS__CODE:
-            setCode((Integer) newValue);
-            return;
-        case ModelPackage.STATUS__SEVERITY:
-            setSeverity((Integer) newValue);
-            return;
-        case ModelPackage.STATUS__MESSAGE:
-            setMessage((String) newValue);
-            return;
-        case ModelPackage.STATUS__FINGERPRINT:
-            setFingerprint((String) newValue);
-            return;
-        case ModelPackage.STATUS__CHILDREN:
-            getChildren().clear();
-            getChildren().addAll((Collection<? extends Status>) newValue);
-            return;
-        case ModelPackage.STATUS__EXCEPTION:
-            setException((org.eclipse.epp.internal.logging.aeri.ui.model.Throwable) newValue);
-            return;
+            case ModelPackage.STATUS__PLUGIN_ID:
+                setPluginId((String)newValue);
+                return;
+            case ModelPackage.STATUS__PLUGIN_VERSION:
+                setPluginVersion((String)newValue);
+                return;
+            case ModelPackage.STATUS__CODE:
+                setCode((Integer)newValue);
+                return;
+            case ModelPackage.STATUS__SEVERITY:
+                setSeverity((Integer)newValue);
+                return;
+            case ModelPackage.STATUS__MESSAGE:
+                setMessage((String)newValue);
+                return;
+            case ModelPackage.STATUS__FINGERPRINT:
+                setFingerprint((String)newValue);
+                return;
+            case ModelPackage.STATUS__CHILDREN:
+                getChildren().clear();
+                getChildren().addAll((Collection<? extends Status>)newValue);
+                return;
+            case ModelPackage.STATUS__EXCEPTION:
+                setException((org.eclipse.epp.internal.logging.aeri.ui.model.Throwable)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-        case ModelPackage.STATUS__PLUGIN_ID:
-            setPluginId(PLUGIN_ID_EDEFAULT);
-            return;
-        case ModelPackage.STATUS__PLUGIN_VERSION:
-            setPluginVersion(PLUGIN_VERSION_EDEFAULT);
-            return;
-        case ModelPackage.STATUS__CODE:
-            setCode(CODE_EDEFAULT);
-            return;
-        case ModelPackage.STATUS__SEVERITY:
-            setSeverity(SEVERITY_EDEFAULT);
-            return;
-        case ModelPackage.STATUS__MESSAGE:
-            setMessage(MESSAGE_EDEFAULT);
-            return;
-        case ModelPackage.STATUS__FINGERPRINT:
-            setFingerprint(FINGERPRINT_EDEFAULT);
-            return;
-        case ModelPackage.STATUS__CHILDREN:
-            getChildren().clear();
-            return;
-        case ModelPackage.STATUS__EXCEPTION:
-            setException((org.eclipse.epp.internal.logging.aeri.ui.model.Throwable) null);
-            return;
+            case ModelPackage.STATUS__PLUGIN_ID:
+                setPluginId(PLUGIN_ID_EDEFAULT);
+                return;
+            case ModelPackage.STATUS__PLUGIN_VERSION:
+                setPluginVersion(PLUGIN_VERSION_EDEFAULT);
+                return;
+            case ModelPackage.STATUS__CODE:
+                setCode(CODE_EDEFAULT);
+                return;
+            case ModelPackage.STATUS__SEVERITY:
+                setSeverity(SEVERITY_EDEFAULT);
+                return;
+            case ModelPackage.STATUS__MESSAGE:
+                setMessage(MESSAGE_EDEFAULT);
+                return;
+            case ModelPackage.STATUS__FINGERPRINT:
+                setFingerprint(FINGERPRINT_EDEFAULT);
+                return;
+            case ModelPackage.STATUS__CHILDREN:
+                getChildren().clear();
+                return;
+            case ModelPackage.STATUS__EXCEPTION:
+                setException((org.eclipse.epp.internal.logging.aeri.ui.model.Throwable)null);
+                return;
         }
         super.eUnset(featureID);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-        case ModelPackage.STATUS__PLUGIN_ID:
-            return PLUGIN_ID_EDEFAULT == null ? pluginId != null : !PLUGIN_ID_EDEFAULT.equals(pluginId);
-        case ModelPackage.STATUS__PLUGIN_VERSION:
-            return PLUGIN_VERSION_EDEFAULT == null ? pluginVersion != null : !PLUGIN_VERSION_EDEFAULT.equals(pluginVersion);
-        case ModelPackage.STATUS__CODE:
-            return code != CODE_EDEFAULT;
-        case ModelPackage.STATUS__SEVERITY:
-            return severity != SEVERITY_EDEFAULT;
-        case ModelPackage.STATUS__MESSAGE:
-            return MESSAGE_EDEFAULT == null ? message != null : !MESSAGE_EDEFAULT.equals(message);
-        case ModelPackage.STATUS__FINGERPRINT:
-            return FINGERPRINT_EDEFAULT == null ? fingerprint != null : !FINGERPRINT_EDEFAULT.equals(fingerprint);
-        case ModelPackage.STATUS__CHILDREN:
-            return children != null && !children.isEmpty();
-        case ModelPackage.STATUS__EXCEPTION:
-            return exception != null;
+            case ModelPackage.STATUS__PLUGIN_ID:
+                return PLUGIN_ID_EDEFAULT == null ? pluginId != null : !PLUGIN_ID_EDEFAULT.equals(pluginId);
+            case ModelPackage.STATUS__PLUGIN_VERSION:
+                return PLUGIN_VERSION_EDEFAULT == null ? pluginVersion != null : !PLUGIN_VERSION_EDEFAULT.equals(pluginVersion);
+            case ModelPackage.STATUS__CODE:
+                return code != CODE_EDEFAULT;
+            case ModelPackage.STATUS__SEVERITY:
+                return severity != SEVERITY_EDEFAULT;
+            case ModelPackage.STATUS__MESSAGE:
+                return MESSAGE_EDEFAULT == null ? message != null : !MESSAGE_EDEFAULT.equals(message);
+            case ModelPackage.STATUS__FINGERPRINT:
+                return FINGERPRINT_EDEFAULT == null ? fingerprint != null : !FINGERPRINT_EDEFAULT.equals(fingerprint);
+            case ModelPackage.STATUS__CHILDREN:
+                return children != null && !children.isEmpty();
+            case ModelPackage.STATUS__EXCEPTION:
+                return exception != null;
         }
         return super.eIsSet(featureID);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public String toString() {
-        if (eIsProxy())
-            return super.toString();
+        if (eIsProxy()) return super.toString();
 
         StringBuffer result = new StringBuffer(super.toString());
         result.append(" (pluginId: ");

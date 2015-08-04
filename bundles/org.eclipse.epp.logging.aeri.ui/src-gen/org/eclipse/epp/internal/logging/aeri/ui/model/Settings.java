@@ -2,7 +2,6 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui.model;
 
-import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -10,24 +9,22 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
- * <ul>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getName <em>Name</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getEmail <em>Email</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isAnonymizeMessages <em>Anonymize Messages</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isAnonymizeStrackTraceElements
- * <em>Anonymize Strack Trace Elements</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isConfigured <em>Configured</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isSkipSimilarErrors <em>Skip Similar Errors</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getAction <em>Action</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendAction <em>Remember Send Action</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendActionPeriodStart
- * <em>Remember Send Action Period Start</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerUrl <em>Server Url</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getWhitelistedPackages <em>Whitelisted Packages</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getWhitelistedPluginIds <em>Whitelisted Plugin Ids</em>}</li>
- * <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}</li>
- * </ul>
  * </p>
+ * <ul>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getEmail <em>Email</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isAnonymizeMessages <em>Anonymize Messages</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isAnonymizeStrackTraceElements <em>Anonymize Strack Trace Elements</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isConfigured <em>Configured</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isSkipSimilarErrors <em>Skip Similar Errors</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getAction <em>Action</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendAction <em>Remember Send Action</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendActionPeriodStart <em>Remember Send Action Period Start</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerConfigurationUrl <em>Server Configuration Url</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerConfigurationLocalFile <em>Server Configuration Local File</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipLastDownloadTimestamp <em>Problems Zip Last Download Timestamp</em>}</li>
+ * </ul>
  *
  * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings()
  * @model
@@ -35,12 +32,12 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Settings extends EObject {
     /**
-     * Returns the value of the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Name</em>' attribute isn't clear, there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * 
      * @return the value of the '<em>Name</em>' attribute.
      * @see #setName(String)
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_Name()
@@ -61,12 +58,12 @@ public interface Settings extends EObject {
     void setName(String value);
 
     /**
-     * Returns the value of the '<em><b>Email</b></em>' attribute. <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Email</b></em>' attribute.
+     * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Email</em>' attribute isn't clear, there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * 
      * @return the value of the '<em>Email</em>' attribute.
      * @see #setEmail(String)
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_Email()
@@ -87,12 +84,12 @@ public interface Settings extends EObject {
     void setEmail(String value);
 
     /**
-     * Returns the value of the '<em><b>Anonymize Messages</b></em>' attribute. <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Anonymize Messages</b></em>' attribute.
+     * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Anonymize Messages</em>' attribute isn't clear, there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * 
      * @return the value of the '<em>Anonymize Messages</em>' attribute.
      * @see #setAnonymizeMessages(boolean)
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_AnonymizeMessages()
@@ -102,24 +99,22 @@ public interface Settings extends EObject {
     boolean isAnonymizeMessages();
 
     /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isAnonymizeMessages <em>Anonymize Messages</em>
-     * }' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @param value
-     *            the new value of the '<em>Anonymize Messages</em>' attribute.
+     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isAnonymizeMessages <em>Anonymize Messages</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * @param value the new value of the '<em>Anonymize Messages</em>' attribute.
      * @see #isAnonymizeMessages()
      * @generated
      */
     void setAnonymizeMessages(boolean value);
 
     /**
-     * Returns the value of the '<em><b>Anonymize Strack Trace Elements</b></em>' attribute. <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Anonymize Strack Trace Elements</b></em>' attribute.
+     * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Anonymize Strack Trace Elements</em>' attribute isn't clear, there really should be more of a description
      * here...
      * </p>
      * <!-- end-user-doc -->
-     * 
      * @return the value of the '<em>Anonymize Strack Trace Elements</em>' attribute.
      * @see #setAnonymizeStrackTraceElements(boolean)
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_AnonymizeStrackTraceElements()
@@ -129,23 +124,21 @@ public interface Settings extends EObject {
     boolean isAnonymizeStrackTraceElements();
 
     /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isAnonymizeStrackTraceElements
-     * <em>Anonymize Strack Trace Elements</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @param value
-     *            the new value of the '<em>Anonymize Strack Trace Elements</em>' attribute.
+     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isAnonymizeStrackTraceElements <em>Anonymize Strack Trace Elements</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * @param value the new value of the '<em>Anonymize Strack Trace Elements</em>' attribute.
      * @see #isAnonymizeStrackTraceElements()
      * @generated
      */
     void setAnonymizeStrackTraceElements(boolean value);
 
     /**
-     * Returns the value of the '<em><b>Configured</b></em>' attribute. <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Configured</b></em>' attribute.
+     * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Configured</em>' attribute isn't clear, there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * 
      * @return the value of the '<em>Configured</em>' attribute.
      * @see #setConfigured(boolean)
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_Configured()
@@ -157,21 +150,19 @@ public interface Settings extends EObject {
     /**
      * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isConfigured <em>Configured</em>}' attribute.
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @param value
-     *            the new value of the '<em>Configured</em>' attribute.
+     * @param value the new value of the '<em>Configured</em>' attribute.
      * @see #isConfigured()
      * @generated
      */
     void setConfigured(boolean value);
 
     /**
-     * Returns the value of the '<em><b>Skip Similar Errors</b></em>' attribute. <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Skip Similar Errors</b></em>' attribute.
+     * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Skip Similar Errors</em>' attribute isn't clear, there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * 
      * @return the value of the '<em>Skip Similar Errors</em>' attribute.
      * @see #setSkipSimilarErrors(boolean)
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_SkipSimilarErrors()
@@ -181,24 +172,22 @@ public interface Settings extends EObject {
     boolean isSkipSimilarErrors();
 
     /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isSkipSimilarErrors
-     * <em>Skip Similar Errors</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @param value
-     *            the new value of the '<em>Skip Similar Errors</em>' attribute.
+     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#isSkipSimilarErrors <em>Skip Similar Errors</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * @param value the new value of the '<em>Skip Similar Errors</em>' attribute.
      * @see #isSkipSimilarErrors()
      * @generated
      */
     void setSkipSimilarErrors(boolean value);
 
     /**
-     * Returns the value of the '<em><b>Action</b></em>' attribute. The literals are from the enumeration
-     * {@link org.eclipse.epp.internal.logging.aeri.ui.model.SendAction}. <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Action</b></em>' attribute.
+     * The literals are from the enumeration {@link org.eclipse.epp.internal.logging.aeri.ui.model.SendAction}.
+     * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Action</em>' attribute isn't clear, there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * 
      * @return the value of the '<em>Action</em>' attribute.
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.SendAction
      * @see #setAction(SendAction)
@@ -221,13 +210,13 @@ public interface Settings extends EObject {
     void setAction(SendAction value);
 
     /**
-     * Returns the value of the '<em><b>Remember Send Action</b></em>' attribute. The literals are from the enumeration
-     * {@link org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction}. <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Remember Send Action</b></em>' attribute.
+     * The literals are from the enumeration {@link org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction}.
+     * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Remember Send Action</em>' attribute isn't clear, there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * 
      * @return the value of the '<em>Remember Send Action</em>' attribute.
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction
      * @see #setRememberSendAction(RememberSendAction)
@@ -238,11 +227,9 @@ public interface Settings extends EObject {
     RememberSendAction getRememberSendAction();
 
     /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendAction
-     * <em>Remember Send Action</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @param value
-     *            the new value of the '<em>Remember Send Action</em>' attribute.
+     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendAction <em>Remember Send Action</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * @param value the new value of the '<em>Remember Send Action</em>' attribute.
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction
      * @see #getRememberSendAction()
      * @generated
@@ -250,13 +237,13 @@ public interface Settings extends EObject {
     void setRememberSendAction(RememberSendAction value);
 
     /**
-     * Returns the value of the '<em><b>Remember Send Action Period Start</b></em>' attribute. <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Remember Send Action Period Start</b></em>' attribute.
+     * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Remember Send Action Period Start</em>' attribute isn't clear, there really should be more of a
      * description here...
      * </p>
      * <!-- end-user-doc -->
-     * 
      * @return the value of the '<em>Remember Send Action Period Start</em>' attribute.
      * @see #setRememberSendActionPeriodStart(long)
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_RememberSendActionPeriodStart()
@@ -266,104 +253,47 @@ public interface Settings extends EObject {
     long getRememberSendActionPeriodStart();
 
     /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendActionPeriodStart
-     * <em>Remember Send Action Period Start</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @param value
-     *            the new value of the '<em>Remember Send Action Period Start</em>' attribute.
+     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendActionPeriodStart <em>Remember Send Action Period Start</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * @param value the new value of the '<em>Remember Send Action Period Start</em>' attribute.
      * @see #getRememberSendActionPeriodStart()
      * @generated
      */
     void setRememberSendActionPeriodStart(long value);
 
     /**
-     * Returns the value of the '<em><b>Server Url</b></em>' attribute. <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Server Configuration Url</b></em>' attribute.
+     * <!-- begin-user-doc -->
      * <p>
-     * If the meaning of the '<em>Server Url</em>' attribute isn't clear, there really should be more of a description here...
+     * If the meaning of the '<em>Server Configuration Url</em>' attribute isn't clear,
+     * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * 
-     * @return the value of the '<em>Server Url</em>' attribute.
-     * @see #setServerUrl(String)
-     * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_ServerUrl()
+     * @return the value of the '<em>Server Configuration Url</em>' attribute.
+     * @see #setServerConfigurationUrl(String)
+     * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_ServerConfigurationUrl()
      * @model
      * @generated
      */
-    String getServerUrl();
+    String getServerConfigurationUrl();
 
     /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerUrl <em>Server Url</em>}' attribute.
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @param value
-     *            the new value of the '<em>Server Url</em>' attribute.
-     * @see #getServerUrl()
-     * @generated
-     */
-    void setServerUrl(String value);
-
-    /**
-     * Returns the value of the '<em><b>Whitelisted Packages</b></em>' attribute. The default value is <code>""</code>. <!-- begin-user-doc
-     * -->
-     * <p>
-     * If the meaning of the '<em>Whitelisted Packages</em>' attribute list isn't clear, there really should be more of a description
-     * here...
-     * </p>
+     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerConfigurationUrl <em>Server Configuration Url</em>}' attribute.
+     * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * 
-     * @return the value of the '<em>Whitelisted Packages</em>' attribute.
-     * @see #setWhitelistedPackages(List)
-     * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_WhitelistedPackages()
-     * @model default="" dataType="org.eclipse.epp.internal.logging.aeri.ui.model.ListOfStrings"
+     * @param value the new value of the '<em>Server Configuration Url</em>' attribute.
+     * @see #getServerConfigurationUrl()
      * @generated
      */
-    List<String> getWhitelistedPackages();
+    void setServerConfigurationUrl(String value);
 
     /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getWhitelistedPackages
-     * <em>Whitelisted Packages</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @param value
-     *            the new value of the '<em>Whitelisted Packages</em>' attribute.
-     * @see #getWhitelistedPackages()
-     * @generated
-     */
-    void setWhitelistedPackages(List<String> value);
-
-    /**
-     * Returns the value of the '<em><b>Whitelisted Plugin Ids</b></em>' attribute. <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of the '<em>Whitelisted Plugin Ids</em>' attribute list isn't clear, there really should be more of a description
-     * here...
-     * </p>
-     * <!-- end-user-doc -->
-     * 
-     * @return the value of the '<em>Whitelisted Plugin Ids</em>' attribute.
-     * @see #setWhitelistedPluginIds(List)
-     * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_WhitelistedPluginIds()
-     * @model dataType="org.eclipse.epp.internal.logging.aeri.ui.model.ListOfStrings"
-     * @generated
-     */
-    List<String> getWhitelistedPluginIds();
-
-    /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getWhitelistedPluginIds
-     * <em>Whitelisted Plugin Ids</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @param value
-     *            the new value of the '<em>Whitelisted Plugin Ids</em>' attribute.
-     * @see #getWhitelistedPluginIds()
-     * @generated
-     */
-    void setWhitelistedPluginIds(List<String> value);
-
-    /**
-     * Returns the value of the '<em><b>Problems Zip Etag</b></em>' attribute. <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Problems Zip Etag</b></em>' attribute.
+     * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Problems Zip Etag</em>' attribute isn't clear, there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * 
      * @return the value of the '<em>Problems Zip Etag</em>' attribute.
      * @see #setProblemsZipEtag(String)
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_ProblemsZipEtag()
@@ -373,14 +303,64 @@ public interface Settings extends EObject {
     String getProblemsZipEtag();
 
     /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}'
-     * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @param value
-     *            the new value of the '<em>Problems Zip Etag</em>' attribute.
+     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * @param value the new value of the '<em>Problems Zip Etag</em>' attribute.
      * @see #getProblemsZipEtag()
      * @generated
      */
     void setProblemsZipEtag(String value);
+
+    /**
+     * Returns the value of the '<em><b>Server Configuration Local File</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Server Configuration Local File</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Server Configuration Local File</em>' attribute.
+     * @see #setServerConfigurationLocalFile(String)
+     * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_ServerConfigurationLocalFile()
+     * @model
+     * @generated
+     */
+    String getServerConfigurationLocalFile();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerConfigurationLocalFile <em>Server Configuration Local File</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Server Configuration Local File</em>' attribute.
+     * @see #getServerConfigurationLocalFile()
+     * @generated
+     */
+    void setServerConfigurationLocalFile(String value);
+
+    /**
+     * Returns the value of the '<em><b>Problems Zip Last Download Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Problems Zip Last Download Timestamp</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Problems Zip Last Download Timestamp</em>' attribute.
+     * @see #setProblemsZipLastDownloadTimestamp(long)
+     * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_ProblemsZipLastDownloadTimestamp()
+     * @model
+     * @generated
+     */
+    long getProblemsZipLastDownloadTimestamp();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipLastDownloadTimestamp <em>Problems Zip Last Download Timestamp</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Problems Zip Last Download Timestamp</em>' attribute.
+     * @see #getProblemsZipLastDownloadTimestamp()
+     * @generated
+     */
+    void setProblemsZipLastDownloadTimestamp(long value);
 
 } // Settings

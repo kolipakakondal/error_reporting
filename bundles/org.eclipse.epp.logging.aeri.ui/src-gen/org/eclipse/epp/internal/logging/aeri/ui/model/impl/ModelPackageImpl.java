@@ -24,87 +24,78 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!-- end-user-doc -->
- * 
  * @generated
  */
 public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private EClass errorReportEClass = null;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private EClass bundleEClass = null;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private EClass statusEClass = null;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private EClass throwableEClass = null;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private EClass stackTraceElementEClass = null;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private EClass settingsEClass = null;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private EEnum sendActionEEnum = null;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private EEnum rememberSendActionEEnum = null;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private EDataType uuidEDataType = null;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private EDataType listOfStringsEDataType = null;
 
     /**
-     * Creates an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by
-     * the package package URI value.
-     * <p>
-     * Note: the correct way to create the package is via the static factory method {@link #init init()}, which also performs initialization
-     * of the package, or returns the registered package, if one already exists. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * Creates an instance of the model <b>Package</b>, registered with
+     * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
+     * package URI value.
+     * <p>Note: the correct way to create the package is via the static
+     * factory method {@link #init init()}, which also performs
+     * initialization of the package, or returns the registered package,
+     * if one already exists.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see org.eclipse.emf.ecore.EPackage.Registry
      * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#eNS_URI
      * @see #init()
@@ -116,7 +107,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private static boolean isInited = false;
@@ -124,22 +114,19 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
     /**
      * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
      * 
-     * <p>
-     * This method is used to initialize {@link ModelPackage#eINSTANCE} when that field is accessed. Clients should not invoke it directly.
-     * Instead, they should simply access that field to obtain the package. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * <p>This method is used to initialize {@link ModelPackage#eINSTANCE} when that field is accessed.
+     * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #eNS_URI
      * @see #createPackageContents()
      * @see #initializePackageContents()
      * @generated
      */
     public static ModelPackage init() {
-        if (isInited)
-            return (ModelPackage) EPackage.Registry.INSTANCE.getEPackage(ModelPackage.eNS_URI);
+        if (isInited) return (ModelPackage)EPackage.Registry.INSTANCE.getEPackage(ModelPackage.eNS_URI);
 
         // Obtain or create and register package
-        ModelPackageImpl theModelPackage = (ModelPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ModelPackageImpl
-                ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ModelPackageImpl());
+        ModelPackageImpl theModelPackage = (ModelPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ModelPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ModelPackageImpl());
 
         isInited = true;
 
@@ -152,6 +139,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
         // Mark meta-data to indicate it can't be changed
         theModelPackage.freeze();
 
+  
         // Update the registry and return the package
         EPackage.Registry.INSTANCE.put(ModelPackage.eNS_URI, theModelPackage);
         return theModelPackage;
@@ -159,7 +147,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EClass getErrorReport() {
@@ -168,142 +155,126 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_AnonymousId() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(0);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(0);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_Name() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(1);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(1);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_Email() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(2);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(2);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_Comment() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(3);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(3);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_EclipseBuildId() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(4);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(4);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_EclipseProduct() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(5);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(5);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_JavaRuntimeVersion() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(6);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(6);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_OsgiWs() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(7);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(7);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_OsgiOs() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(8);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(8);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_OsgiOsVersion() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(9);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(9);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_OsgiArch() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(10);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(10);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_LogMessage() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(11);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(11);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getErrorReport_IgnoreSimilar() {
-        return (EAttribute) errorReportEClass.getEStructuralFeatures().get(12);
+        return (EAttribute)errorReportEClass.getEStructuralFeatures().get(12);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EReference getErrorReport_PresentBundles() {
-        return (EReference) errorReportEClass.getEStructuralFeatures().get(13);
+        return (EReference)errorReportEClass.getEStructuralFeatures().get(13);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EReference getErrorReport_Status() {
-        return (EReference) errorReportEClass.getEStructuralFeatures().get(14);
+        return (EReference)errorReportEClass.getEStructuralFeatures().get(14);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EClass getBundle() {
@@ -312,25 +283,22 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getBundle_Name() {
-        return (EAttribute) bundleEClass.getEStructuralFeatures().get(0);
+        return (EAttribute)bundleEClass.getEStructuralFeatures().get(0);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getBundle_Version() {
-        return (EAttribute) bundleEClass.getEStructuralFeatures().get(1);
+        return (EAttribute)bundleEClass.getEStructuralFeatures().get(1);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EClass getStatus() {
@@ -339,79 +307,70 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getStatus_PluginId() {
-        return (EAttribute) statusEClass.getEStructuralFeatures().get(0);
+        return (EAttribute)statusEClass.getEStructuralFeatures().get(0);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getStatus_PluginVersion() {
-        return (EAttribute) statusEClass.getEStructuralFeatures().get(1);
+        return (EAttribute)statusEClass.getEStructuralFeatures().get(1);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getStatus_Code() {
-        return (EAttribute) statusEClass.getEStructuralFeatures().get(2);
+        return (EAttribute)statusEClass.getEStructuralFeatures().get(2);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getStatus_Severity() {
-        return (EAttribute) statusEClass.getEStructuralFeatures().get(3);
+        return (EAttribute)statusEClass.getEStructuralFeatures().get(3);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getStatus_Message() {
-        return (EAttribute) statusEClass.getEStructuralFeatures().get(4);
+        return (EAttribute)statusEClass.getEStructuralFeatures().get(4);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getStatus_Fingerprint() {
-        return (EAttribute) statusEClass.getEStructuralFeatures().get(5);
+        return (EAttribute)statusEClass.getEStructuralFeatures().get(5);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EReference getStatus_Children() {
-        return (EReference) statusEClass.getEStructuralFeatures().get(6);
+        return (EReference)statusEClass.getEStructuralFeatures().get(6);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EReference getStatus_Exception() {
-        return (EReference) statusEClass.getEStructuralFeatures().get(7);
+        return (EReference)statusEClass.getEStructuralFeatures().get(7);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EClass getThrowable() {
@@ -420,43 +379,38 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getThrowable_ClassName() {
-        return (EAttribute) throwableEClass.getEStructuralFeatures().get(0);
+        return (EAttribute)throwableEClass.getEStructuralFeatures().get(0);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getThrowable_Message() {
-        return (EAttribute) throwableEClass.getEStructuralFeatures().get(1);
+        return (EAttribute)throwableEClass.getEStructuralFeatures().get(1);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EReference getThrowable_Cause() {
-        return (EReference) throwableEClass.getEStructuralFeatures().get(2);
+        return (EReference)throwableEClass.getEStructuralFeatures().get(2);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EReference getThrowable_StackTrace() {
-        return (EReference) throwableEClass.getEStructuralFeatures().get(3);
+        return (EReference)throwableEClass.getEStructuralFeatures().get(3);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EClass getStackTraceElement() {
@@ -465,52 +419,46 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getStackTraceElement_FileName() {
-        return (EAttribute) stackTraceElementEClass.getEStructuralFeatures().get(0);
+        return (EAttribute)stackTraceElementEClass.getEStructuralFeatures().get(0);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getStackTraceElement_ClassName() {
-        return (EAttribute) stackTraceElementEClass.getEStructuralFeatures().get(1);
+        return (EAttribute)stackTraceElementEClass.getEStructuralFeatures().get(1);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getStackTraceElement_MethodName() {
-        return (EAttribute) stackTraceElementEClass.getEStructuralFeatures().get(2);
+        return (EAttribute)stackTraceElementEClass.getEStructuralFeatures().get(2);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getStackTraceElement_LineNumber() {
-        return (EAttribute) stackTraceElementEClass.getEStructuralFeatures().get(3);
+        return (EAttribute)stackTraceElementEClass.getEStructuralFeatures().get(3);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getStackTraceElement_Native() {
-        return (EAttribute) stackTraceElementEClass.getEStructuralFeatures().get(4);
+        return (EAttribute)stackTraceElementEClass.getEStructuralFeatures().get(4);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EClass getSettings() {
@@ -519,124 +467,113 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getSettings_Name() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(0);
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(0);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getSettings_Email() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(1);
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(1);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getSettings_AnonymizeMessages() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(2);
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(2);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getSettings_AnonymizeStrackTraceElements() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(3);
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(3);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getSettings_Configured() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(4);
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(4);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getSettings_SkipSimilarErrors() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(5);
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(5);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getSettings_Action() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(6);
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(6);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getSettings_RememberSendAction() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(7);
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(7);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getSettings_RememberSendActionPeriodStart() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(8);
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(8);
     }
 
     /**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getSettings_ServerUrl() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(9);
+    public EAttribute getSettings_ServerConfigurationUrl() {
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(9);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @generated
-     */
-    public EAttribute getSettings_WhitelistedPackages() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(10);
-    }
-
-    /**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @generated
-     */
-    public EAttribute getSettings_WhitelistedPluginIds() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(11);
-    }
-
-    /**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EAttribute getSettings_ProblemsZipEtag() {
-        return (EAttribute) settingsEClass.getEStructuralFeatures().get(12);
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(10);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getSettings_ServerConfigurationLocalFile() {
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(11);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getSettings_ProblemsZipLastDownloadTimestamp() {
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(12);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EEnum getSendAction() {
@@ -645,7 +582,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EEnum getRememberSendAction() {
@@ -654,7 +590,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EDataType getUUID() {
@@ -663,7 +598,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EDataType getListOfStrings() {
@@ -672,16 +606,14 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public ModelFactory getModelFactory() {
-        return (ModelFactory) getEFactoryInstance();
+        return (ModelFactory)getEFactoryInstance();
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private boolean isCreated = false;
@@ -693,8 +625,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
      * @generated
      */
     public void createPackageContents() {
-        if (isCreated)
-            return;
+        if (isCreated) return;
         isCreated = true;
 
         // Create classes and their features
@@ -752,10 +683,10 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
         createEAttribute(settingsEClass, SETTINGS__ACTION);
         createEAttribute(settingsEClass, SETTINGS__REMEMBER_SEND_ACTION);
         createEAttribute(settingsEClass, SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START);
-        createEAttribute(settingsEClass, SETTINGS__SERVER_URL);
-        createEAttribute(settingsEClass, SETTINGS__WHITELISTED_PACKAGES);
-        createEAttribute(settingsEClass, SETTINGS__WHITELISTED_PLUGIN_IDS);
+        createEAttribute(settingsEClass, SETTINGS__SERVER_CONFIGURATION_URL);
         createEAttribute(settingsEClass, SETTINGS__PROBLEMS_ZIP_ETAG);
+        createEAttribute(settingsEClass, SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE);
+        createEAttribute(settingsEClass, SETTINGS__PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP);
 
         // Create enums
         sendActionEEnum = createEEnum(SEND_ACTION);
@@ -768,20 +699,18 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     private boolean isInitialized = false;
 
     /**
-     * Complete the initialization of the package and its meta-model. This method is guarded to have no affect on any invocation but its
-     * first. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * Complete the initialization of the package and its meta-model.  This
+     * method is guarded to have no affect on any invocation but its first.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     public void initializePackageContents() {
-        if (isInitialized)
-            return;
+        if (isInitialized) return;
         isInitialized = true;
 
         // Initialize package
@@ -797,117 +726,63 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
         // Initialize classes, features, and operations; add parameters
         initEClass(errorReportEClass, ErrorReport.class, "ErrorReport", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getErrorReport_AnonymousId(), this.getUUID(), "anonymousId", null, 0, 1, ErrorReport.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_Name(), ecorePackage.getEString(), "name", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_Email(), ecorePackage.getEString(), "email", null, 0, 1, ErrorReport.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, ErrorReport.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_EclipseBuildId(), ecorePackage.getEString(), "eclipseBuildId", null, 0, 1, ErrorReport.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_EclipseProduct(), ecorePackage.getEString(), "eclipseProduct", null, 0, 1, ErrorReport.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_JavaRuntimeVersion(), ecorePackage.getEString(), "javaRuntimeVersion", null, 0, 1, ErrorReport.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_OsgiWs(), ecorePackage.getEString(), "osgiWs", null, 0, 1, ErrorReport.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_OsgiOs(), ecorePackage.getEString(), "osgiOs", null, 0, 1, ErrorReport.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_OsgiOsVersion(), ecorePackage.getEString(), "osgiOsVersion", null, 0, 1, ErrorReport.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_OsgiArch(), ecorePackage.getEString(), "osgiArch", null, 0, 1, ErrorReport.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_LogMessage(), ecorePackage.getEBoolean(), "logMessage", null, 0, 1, ErrorReport.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getErrorReport_IgnoreSimilar(), ecorePackage.getEBoolean(), "ignoreSimilar", null, 0, 1, ErrorReport.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getErrorReport_PresentBundles(), this.getBundle(), null, "presentBundles", null, 0, -1, ErrorReport.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
-                IS_ORDERED);
-        initEReference(getErrorReport_Status(), this.getStatus(), null, "status", null, 0, 1, ErrorReport.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_AnonymousId(), this.getUUID(), "anonymousId", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_Name(), ecorePackage.getEString(), "name", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_Email(), ecorePackage.getEString(), "email", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_EclipseBuildId(), ecorePackage.getEString(), "eclipseBuildId", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_EclipseProduct(), ecorePackage.getEString(), "eclipseProduct", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_JavaRuntimeVersion(), ecorePackage.getEString(), "javaRuntimeVersion", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_OsgiWs(), ecorePackage.getEString(), "osgiWs", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_OsgiOs(), ecorePackage.getEString(), "osgiOs", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_OsgiOsVersion(), ecorePackage.getEString(), "osgiOsVersion", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_OsgiArch(), ecorePackage.getEString(), "osgiArch", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_LogMessage(), ecorePackage.getEBoolean(), "logMessage", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getErrorReport_IgnoreSimilar(), ecorePackage.getEBoolean(), "ignoreSimilar", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getErrorReport_PresentBundles(), this.getBundle(), null, "presentBundles", null, 0, -1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getErrorReport_Status(), this.getStatus(), null, "status", null, 0, 1, ErrorReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(bundleEClass, Bundle.class, "Bundle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getBundle_Name(), ecorePackage.getEString(), "name", null, 0, 1, Bundle.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getBundle_Version(), ecorePackage.getEString(), "version", null, 0, 1, Bundle.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBundle_Name(), ecorePackage.getEString(), "name", null, 0, 1, Bundle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBundle_Version(), ecorePackage.getEString(), "version", null, 0, 1, Bundle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(statusEClass, Status.class, "Status", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getStatus_PluginId(), ecorePackage.getEString(), "pluginId", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getStatus_PluginVersion(), ecorePackage.getEString(), "pluginVersion", null, 0, 1, Status.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getStatus_Code(), ecorePackage.getEInt(), "code", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getStatus_Severity(), ecorePackage.getEInt(), "severity", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getStatus_Message(), ecorePackage.getEString(), "message", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getStatus_Fingerprint(), ecorePackage.getEString(), "fingerprint", null, 0, 1, Status.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getStatus_Children(), this.getStatus(), null, "children", null, 0, -1, Status.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getStatus_Exception(), this.getThrowable(), null, "exception", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getStatus_PluginId(), ecorePackage.getEString(), "pluginId", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getStatus_PluginVersion(), ecorePackage.getEString(), "pluginVersion", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getStatus_Code(), ecorePackage.getEInt(), "code", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getStatus_Severity(), ecorePackage.getEInt(), "severity", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getStatus_Message(), ecorePackage.getEString(), "message", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getStatus_Fingerprint(), ecorePackage.getEString(), "fingerprint", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getStatus_Children(), this.getStatus(), null, "children", null, 0, -1, Status.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getStatus_Exception(), this.getThrowable(), null, "exception", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(throwableEClass, org.eclipse.epp.internal.logging.aeri.ui.model.Throwable.class, "Throwable", !IS_ABSTRACT,
-                !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getThrowable_ClassName(), ecorePackage.getEString(), "className", null, 0, 1,
-                org.eclipse.epp.internal.logging.aeri.ui.model.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
-                !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getThrowable_Message(), ecorePackage.getEString(), "message", null, 0, 1,
-                org.eclipse.epp.internal.logging.aeri.ui.model.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
-                !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getThrowable_Cause(), this.getThrowable(), null, "cause", null, 0, 1,
-                org.eclipse.epp.internal.logging.aeri.ui.model.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
-                !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getThrowable_StackTrace(), this.getStackTraceElement(), null, "stackTrace", null, 0, -1,
-                org.eclipse.epp.internal.logging.aeri.ui.model.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
-                !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEClass(throwableEClass, org.eclipse.epp.internal.logging.aeri.ui.model.Throwable.class, "Throwable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getThrowable_ClassName(), ecorePackage.getEString(), "className", null, 0, 1, org.eclipse.epp.internal.logging.aeri.ui.model.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getThrowable_Message(), ecorePackage.getEString(), "message", null, 0, 1, org.eclipse.epp.internal.logging.aeri.ui.model.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getThrowable_Cause(), this.getThrowable(), null, "cause", null, 0, 1, org.eclipse.epp.internal.logging.aeri.ui.model.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getThrowable_StackTrace(), this.getStackTraceElement(), null, "stackTrace", null, 0, -1, org.eclipse.epp.internal.logging.aeri.ui.model.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(stackTraceElementEClass, StackTraceElement.class, "StackTraceElement", !IS_ABSTRACT, !IS_INTERFACE,
-                IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getStackTraceElement_FileName(), ecorePackage.getEString(), "fileName", null, 0, 1, StackTraceElement.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getStackTraceElement_ClassName(), ecorePackage.getEString(), "className", null, 0, 1, StackTraceElement.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getStackTraceElement_MethodName(), ecorePackage.getEString(), "methodName", null, 0, 1, StackTraceElement.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getStackTraceElement_LineNumber(), ecorePackage.getEInt(), "lineNumber", null, 0, 1, StackTraceElement.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getStackTraceElement_Native(), ecorePackage.getEBoolean(), "native", null, 0, 1, StackTraceElement.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEClass(stackTraceElementEClass, StackTraceElement.class, "StackTraceElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getStackTraceElement_FileName(), ecorePackage.getEString(), "fileName", null, 0, 1, StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getStackTraceElement_ClassName(), ecorePackage.getEString(), "className", null, 0, 1, StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getStackTraceElement_MethodName(), ecorePackage.getEString(), "methodName", null, 0, 1, StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getStackTraceElement_LineNumber(), ecorePackage.getEInt(), "lineNumber", null, 0, 1, StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getStackTraceElement_Native(), ecorePackage.getEBoolean(), "native", null, 0, 1, StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(settingsEClass, Settings.class, "Settings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getSettings_Name(), ecorePackage.getEString(), "name", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_Email(), ecorePackage.getEString(), "email", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_AnonymizeMessages(), ecorePackage.getEBoolean(), "anonymizeMessages", null, 0, 1, Settings.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_AnonymizeStrackTraceElements(), ecorePackage.getEBoolean(), "anonymizeStrackTraceElements", null, 0, 1,
-                Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_Configured(), ecorePackage.getEBoolean(), "configured", null, 0, 1, Settings.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_SkipSimilarErrors(), ecorePackage.getEBoolean(), "skipSimilarErrors", null, 0, 1, Settings.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_Action(), this.getSendAction(), "action", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE,
-                IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_RememberSendAction(), this.getRememberSendAction(), "rememberSendAction", null, 0, 1, Settings.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_RememberSendActionPeriodStart(), ecorePackage.getELong(), "rememberSendActionPeriodStart", null, 0, 1,
-                Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_ServerUrl(), ecorePackage.getEString(), "serverUrl", null, 0, 1, Settings.class, !IS_TRANSIENT,
-                !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_WhitelistedPackages(), this.getListOfStrings(), "whitelistedPackages", "", 0, 1, Settings.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_WhitelistedPluginIds(), this.getListOfStrings(), "whitelistedPluginIds", null, 0, 1, Settings.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_ProblemsZipEtag(), ecorePackage.getEString(), "problemsZipEtag", null, 0, 1, Settings.class,
-                !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_Name(), ecorePackage.getEString(), "name", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_Email(), ecorePackage.getEString(), "email", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_AnonymizeMessages(), ecorePackage.getEBoolean(), "anonymizeMessages", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_AnonymizeStrackTraceElements(), ecorePackage.getEBoolean(), "anonymizeStrackTraceElements", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_Configured(), ecorePackage.getEBoolean(), "configured", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_SkipSimilarErrors(), ecorePackage.getEBoolean(), "skipSimilarErrors", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_Action(), this.getSendAction(), "action", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_RememberSendAction(), this.getRememberSendAction(), "rememberSendAction", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_RememberSendActionPeriodStart(), ecorePackage.getELong(), "rememberSendActionPeriodStart", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_ServerConfigurationUrl(), ecorePackage.getEString(), "serverConfigurationUrl", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_ProblemsZipEtag(), ecorePackage.getEString(), "problemsZipEtag", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_ServerConfigurationLocalFile(), ecorePackage.getEString(), "serverConfigurationLocalFile", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_ProblemsZipLastDownloadTimestamp(), ecorePackage.getELong(), "problemsZipLastDownloadTimestamp", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize enums and add enum literals
         initEEnum(sendActionEEnum, SendAction.class, "SendAction");
@@ -923,8 +798,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
         // Initialize data types
         initEDataType(uuidEDataType, java.util.UUID.class, "UUID", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-        initEDataType(listOfStringsEDataType, List.class, "ListOfStrings", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS,
-                "java.util.List<java.lang.String>");
+        initEDataType(listOfStringsEDataType, List.class, "ListOfStrings", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS, "java.util.List<java.lang.String>");
 
         // Create resource
         createResource(eNS_URI);
