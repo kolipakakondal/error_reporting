@@ -11,6 +11,8 @@
 package org.eclipse.epp.internal.logging.aeri.ui.notifications;
 
 import static org.apache.commons.lang3.StringUtils.*;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.ERROR_LISTENER_NULL;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
 import java.util.List;
 
@@ -286,7 +288,11 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
         if (notification != null) {
             notification.close();
         }
-        PlatformUI.getWorkbench().getDisplay().removeFilter(SWT.Activate, blockPopupListener);
+        if (blockPopupListener != null) {
+            PlatformUI.getWorkbench().getDisplay().removeFilter(SWT.Activate, blockPopupListener);
+        } else {
+            log(ERROR_LISTENER_NULL);
+        }
         return super.close();
     }
 

@@ -110,6 +110,7 @@ public class Messages extends NLS {
     public static String LOG_WARN_STARTUP_FAILED;
     public static String LOG_WARN_THANK_YOU_DIALOG_ERROR;
     public static String LOG_WARN_CYCLIC_EXCEPTION;
+    public static String LOG_ERROR_LISTENER_NULL;
     public static String LOG_ERROR_NETWORK_COMMUNICATION_URL_PARSING_FAILED;
     public static String LOG_ERROR_ON_PROXY_AUTHENTICATION_TEST;
     public static String LOG_ERROR_ON_APACHE_HEAD_REQUEST;
