@@ -50,6 +50,7 @@ public final class LogMessages extends DefaultLogMessage {
     public static final LogMessages WARN_INDEX_START_FAILED = new LogMessages(WARNING, Messages.LOG_WARN_INDEX_START_FAILED);
     public static final LogMessages WARN_INDEX_STOP_FAILED = new LogMessages(WARNING, Messages.LOG_WARN_INDEX_STOP_FAILED);
     public static final LogMessages WARN_INDEX_UPDATE_FAILED = new LogMessages(WARNING, Messages.LOG_WARN_INDEX_UPDATE_FAILED);
+    public static final LogMessages WARN_INVALID_PATTERN = new LogMessages(WARNING, Messages.LOG_WARN_INVALID_PATTERN);
     public static final LogMessages WARN_NO_INTERNET = new LogMessages(WARNING, Messages.LOG_WARN_NO_INTERNET);
     public static final LogMessages WARN_NOTIFICATION_TIMED_OUT = new LogMessages(WARNING, Messages.LOG_WARN_NOTIFICATION_TIMED_OUT);
     public static final LogMessages WARN_REFLECTION_FAILED = new LogMessages(WARNING, Messages.LOG_WARN_REFLECTION_FAILED);

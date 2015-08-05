@@ -21,16 +21,19 @@ import java.io.IOException;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.HistoryReadyPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WorkbenchRunningPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration.IgnorePattern;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.ui.IWorkbench;
 import org.junit.Test;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
 public class FiltersTest {
 
@@ -47,16 +50,37 @@ public class FiltersTest {
     }
 
     @Test
-    public void testSkipProvisioningExceptionsPredicateTest() {
-        Predicate<IStatus> sut = new StatusPredicates.SkipProvisionExceptionsPredicate();
+    public void testIgnorePatternPredicate() {
+        IgnorePattern pattern = IgnorePattern.fromString("org.eclipse.equinox.p2.ui:^org.eclipse.equinox.p2.core.ProvisionException:*");
+        Predicate<IStatus> sut = new StatusPredicates.IgnorePatternPredicate(Lists.newArrayList(pattern));
         assertThat(sut.apply(OK_STATUS), is(true));
 
-        Status provisionError = new Status(IStatus.ERROR, "some", "some", new ProvisionException(""));
+        Status provisionError = new Status(IStatus.ERROR, "org.eclipse.equinox.p2.ui", "some", new ProvisionException(""));
         assertThat(sut.apply(provisionError), is(false));
     }
 
     @Test
-    public void testSkipReportsPredicateTest() {
+    public void testIgnorePatternPredicateMultiStatusAny() {
+        IgnorePattern anyPattern = IgnorePattern.fromString("plugin.id::");
+        Status status = new Status(IStatus.ERROR, "plugin.id", "message", new RuntimeException());
+        MultiStatus multiStatus = new MultiStatus("other.plugin", IStatus.ERROR, new Status[] { status }, "message", new Throwable());
+        Predicate<IStatus> sut = new StatusPredicates.IgnorePatternPredicate(Lists.newArrayList(anyPattern));
+
+        assertThat(sut.apply(multiStatus), is(false));
+    }
+
+    @Test
+    public void testIgnorePatternPredicateMultiStatusFirst() {
+        IgnorePattern firstOnlyPattern = IgnorePattern.fromString("^plugin.id::");
+        Status status = new Status(IStatus.ERROR, "plugin.id", "message", new RuntimeException());
+        MultiStatus multiStatus = new MultiStatus("other.plugin", IStatus.ERROR, new Status[] { status }, "message", new Throwable());
+        Predicate<IStatus> sut = new StatusPredicates.IgnorePatternPredicate(Lists.newArrayList(firstOnlyPattern));
+
+        assertThat(sut.apply(multiStatus), is(true));
+    }
+
+    @Test
+    public void testSkipReportsPredicate() {
         Predicate<IStatus> sut = new StatusPredicates.SkipReportsAbsentPredicate();
         assertThat(sut.apply(null), is(true));
 
@@ -70,7 +94,7 @@ public class FiltersTest {
     }
 
     @Test
-    public void testSkipNonErrorStatusPredicateTest() {
+    public void testSkipNonErrorStatusPredicate() {
         Predicate<IStatus> sut = new StatusPredicates.ErrorStatusOnlyPredicate();
         assertThat(sut.apply(OK_STATUS), is(false));
         assertThat(sut.apply(CANCEL_STATUS), is(false));

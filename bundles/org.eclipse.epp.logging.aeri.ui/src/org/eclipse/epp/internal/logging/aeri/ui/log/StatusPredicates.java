@@ -14,16 +14,17 @@ import static com.google.common.base.Objects.equal;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.*;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration.IgnorePattern;
 import org.eclipse.ui.IWorkbench;
 
 import com.google.common.base.Predicate;
-import com.google.common.base.Throwables;
 
 public class StatusPredicates {
 
@@ -70,30 +71,22 @@ public class StatusPredicates {
         }
     }
 
-    public static class SkipProvisionExceptionsPredicate implements Predicate<IStatus> {
+    public static class IgnorePatternPredicate implements Predicate<IStatus> {
+
+        private List<IgnorePattern> patterns;
+
+        public IgnorePatternPredicate(List<IgnorePattern> patterns) {
+            this.patterns = patterns;
+        }
 
         @Override
         public boolean apply(IStatus input) {
-            return !visit(input);
-        }
-
-        private boolean visit(IStatus input) {
-            Throwable exception = input.getException();
-            if (exception != null) {
-                for (Throwable t : Throwables.getCausalChain(exception)) {
-                    String type = t.getClass().getName();
-                    if (equal(PROVISION_EXCEPTION, type)) {
-                        return true;
-                    }
+            for (IgnorePattern pattern : patterns) {
+                if (pattern.matches(input)) {
+                    return false;
                 }
             }
-
-            for (IStatus child : input.getChildren()) {
-                if (visit(child)) {
-                    return true;
-                }
-            }
-            return false;
+            return true;
         }
     }
 
