@@ -11,12 +11,15 @@
 package org.eclipse.epp.internal.logging.aeri.ui.model;
 
 import static com.google.common.base.Optional.*;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,16 +37,16 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
 @SuppressWarnings("deprecation")
-public class LinkageErrorAnalyser {
+public class ErrorAnalyser {
 
     private final PackageAdmin packageAdmin;
 
-    public LinkageErrorAnalyser() {
+    public ErrorAnalyser() {
         packageAdmin = getService(PackageAdmin.class).orNull();
     }
 
     @VisibleForTesting
-    protected LinkageErrorAnalyser(PackageAdmin packageAdmin) {
+    protected ErrorAnalyser(PackageAdmin packageAdmin) {
         this.packageAdmin = packageAdmin;
     }
 
@@ -68,8 +71,8 @@ public class LinkageErrorAnalyser {
             return absent();
         }
 
-        String problematicPackage = extractProblematicPackage(throwable).orNull();
-        if (problematicPackage == null) {
+        List<String> problematicPackages = extractProblematicPackage(throwable);
+        if (problematicPackages.isEmpty()) {
             return absent();
         }
 
@@ -78,41 +81,42 @@ public class LinkageErrorAnalyser {
             presentBundlesSymbolicNames.add(presentBundle.getName());
         }
 
-        ExportedPackage[] exportedPackages = packageAdmin.getExportedPackages(problematicPackage);
-        if (ArrayUtils.isEmpty(exportedPackages)) {
-            return Optional.absent();
-        }
-        Multimap<org.osgi.framework.Bundle, org.osgi.framework.Bundle> exportersToImporters = HashMultimap.create();
-        for (ExportedPackage exportedPackage : exportedPackages) {
-            org.osgi.framework.Bundle exportingBundle = exportedPackage.getExportingBundle();
-            if (!isPresent(exportingBundle)) {
+        StringBuilder comment = new StringBuilder();
+        for (String problematicPackage : problematicPackages) {
+            comment.append("The problematic package '").append(problematicPackage).append("' may originate in the following bundles:\n");
+            ExportedPackage[] exportedPackages = packageAdmin.getExportedPackages(problematicPackage);
+            if (ArrayUtils.isEmpty(exportedPackages)) {
                 continue;
             }
-            for (org.osgi.framework.Bundle importingBundle : exportedPackage.getImportingBundles()) {
-                if (!isPresent(importingBundle)) {
+            Multimap<org.osgi.framework.Bundle, org.osgi.framework.Bundle> exportersToImporters = HashMultimap.create();
+            for (ExportedPackage exportedPackage : exportedPackages) {
+                org.osgi.framework.Bundle exportingBundle = exportedPackage.getExportingBundle();
+                if (!isPresent(exportingBundle)) {
                     continue;
                 }
-                if (presentBundlesSymbolicNames.contains(importingBundle.getSymbolicName())) {
-                    exportersToImporters.put(exportingBundle, importingBundle);
+                for (org.osgi.framework.Bundle importingBundle : exportedPackage.getImportingBundles()) {
+                    if (!isPresent(importingBundle)) {
+                        continue;
+                    }
+                    if (presentBundlesSymbolicNames.contains(importingBundle.getSymbolicName())) {
+                        exportersToImporters.put(exportingBundle, importingBundle);
+                    }
+                }
+            }
+            if (exportersToImporters.isEmpty()) {
+                continue;
+            }
+
+            for (Entry<org.osgi.framework.Bundle, Collection<org.osgi.framework.Bundle>> entry : exportersToImporters.asMap().entrySet()) {
+                org.osgi.framework.Bundle exporter = entry.getKey();
+                Collection<org.osgi.framework.Bundle> importers = entry.getValue();
+                comment.append("  ").append(exporter.getSymbolicName()).append(' ').append(exporter.getVersion())
+                        .append(", from which the following bundles present on the stack trace import it:\n");
+                for (org.osgi.framework.Bundle importer : importers) {
+                    comment.append("    ").append(importer.getSymbolicName()).append(' ').append(importer.getVersion()).append('\n');
                 }
             }
         }
-        if (exportersToImporters.isEmpty()) {
-            return absent();
-        }
-
-        StringBuilder comment = new StringBuilder();
-        comment.append("The problematic package '").append(problematicPackage).append("' may originate in the following bundles:\n");
-        for (Entry<org.osgi.framework.Bundle, Collection<org.osgi.framework.Bundle>> entry : exportersToImporters.asMap().entrySet()) {
-            org.osgi.framework.Bundle exporter = entry.getKey();
-            Collection<org.osgi.framework.Bundle> importers = entry.getValue();
-            comment.append("  ").append(exporter.getSymbolicName()).append(' ').append(exporter.getVersion())
-                    .append(", from which the following bundles present on the stack trace import it:\n");
-            for (org.osgi.framework.Bundle importer : importers) {
-                comment.append("    ").append(importer.getSymbolicName()).append(' ').append(importer.getVersion()).append('\n');
-            }
-        }
-
         return Optional.of(comment.toString());
     }
 
@@ -128,10 +132,10 @@ public class LinkageErrorAnalyser {
     }
 
     @VisibleForTesting
-    static Optional<String> extractProblematicPackage(Throwable throwable) {
+    static List<String> extractProblematicPackage(Throwable throwable) {
         String message = throwable.getMessage();
         if (StringUtils.equals(Constants.HIDDEN, message)) {
-            return Optional.absent();
+            return newArrayList();
         }
         if (NoClassDefFoundError.class.getName().equals(throwable.getClassName())
                 || LinkageError.class.getName().equals(throwable.getClassName())) {
@@ -140,41 +144,64 @@ public class LinkageErrorAnalyser {
             return handleClassNotFoundException(message);
         } else if (NoSuchMethodError.class.getName().equals(throwable.getClassName())) {
             return handleMethodNotFoundException(message);
+        } else if (VerifyError.class.getName().equals(throwable.getClassName())) {
+            return handleVerifyError(message);
         } else {
-            return absent();
+            return newArrayList();
         }
     }
 
-    private static Optional<String> handleNoClassDefFoundErrorAndLinkageError(String message) {
+    private static List<String> handleVerifyError(String message) {
+        List<String> packages = newArrayList();
+        // extract foo/bar/baz from all patterns 'foo/bar/baz'
+        Pattern pattern = Pattern.compile("'([\\S]*)'");
+        Matcher matcher = pattern.matcher(message);
+        while (matcher.find()) {
+            // the extracted pattern package/package/Class
+            String clazz = matcher.group(1);
+            int lastIndexOfSlash = clazz.lastIndexOf('/');
+            if (lastIndexOfSlash == -1) {
+                continue;
+            }
+            String packageName = clazz.substring(0, lastIndexOfSlash);
+            packageName = packageName.replaceAll("/", ".");
+            if (!packages.contains(packageName)) {
+                packages.add(packageName);
+            }
+        }
+        return packages;
+    }
+
+    private static List<String> handleNoClassDefFoundErrorAndLinkageError(String message) {
         int lastIndexOfSlash = message.lastIndexOf('/');
         if (lastIndexOfSlash < 0) {
-            return absent();
+            return newArrayList();
         } else {
             String packageName = message.substring(0, lastIndexOfSlash).replace('/', '.');
-            return Optional.of(packageName);
+            return newArrayList(packageName);
         }
     }
 
-    private static Optional<String> handleClassNotFoundException(String message) {
+    private static List<String> handleClassNotFoundException(String message) {
         int firstIndexOfSpace = message.indexOf(" ");
         if (firstIndexOfSpace >= 0) {
             message = message.substring(0, firstIndexOfSpace);
         }
         int lastIndexOfDot = message.lastIndexOf('.');
         if (lastIndexOfDot < 0) {
-            return absent();
+            return newArrayList();
         } else {
             String packageName = message.substring(0, lastIndexOfDot);
-            return Optional.of(packageName);
+            return newArrayList(packageName);
         }
     }
 
-    private static Optional<String> handleMethodNotFoundException(String message) {
+    private static List<String> handleMethodNotFoundException(String message) {
         // java.lang.NoSuchMethodError: org.eclipse.recommenders.utils.Checks.anyIsNull([Ljava/lang/Object;)Z
         // java.lang.NoSuchMethodError: HIDDEN
         String className = substringBeforeLast(message, ".");
         // we assume that there is a package...
         String packageName = substringBeforeLast(className, ".");
-        return Optional.fromNullable(packageName);
+        return newArrayList(packageName);
     }
 }

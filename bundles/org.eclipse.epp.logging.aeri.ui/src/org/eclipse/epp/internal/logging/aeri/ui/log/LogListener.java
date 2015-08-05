@@ -95,7 +95,7 @@ public class LogListener implements ILogListener {
         ErrorReport report = newErrorReport(status, settings, configuration);
         insertStandinStacktrace(report);
         guessInvolvedPlugins(report);
-        insertLinkageErrorComment(report);
+        insertErrorAnalyseComment(report);
         return report;
     }
 

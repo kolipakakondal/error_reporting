@@ -16,7 +16,6 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -58,8 +57,8 @@ public class LogErrorsAction implements IWorkbenchWindowActionDelegate {
     }
 
     private void logLinkageError() {
-        log.log(new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "Test Error without exception",
-                new ClassNotFoundException(StringUtils.class.getName())));
+        log.log(new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "Test Error without exception", new VerifyError(
+                "Bad type on operand stack Exception Details: Location: org/eclipse/recommenders/internal/snipmatch/rcp/EclipseGitSnippetRepository.push(Lorg/eclipse/jgit/lib/Repository;Lorg/eclipse/swt/widgets/Shell;)V @47: invokevirtual Reason: Type 'org/eclipse/egit/ui/internal/credentials/EGitCredentialsProvider' (current frame, stack[1]) is not assignable to 'org/eclipse/jgit/transport/CredentialsProvider' Current Frame: bci: @47 flags: { } locals: { 'org/eclipse/recommenders/internal/snipmatch/rcp/EclipseGitSnippetRepository', 'org/eclipse/jgit/lib/Repository', 'org/eclipse/swt/widgets/Shell', 'org/eclipse/jgit/transport/RemoteConfig', integer, 'org/eclipse/egit/core/op/PushOperation' } stack: { 'org/eclipse/egit/core/op/PushOperation', 'org/eclipse/egit/ui/internal/credentials/EGitCredentialsProvider' } Bytecode: 0x0000000: 2bb8 032b 4eb8 0316 b603 1713 0146 b903 0x0000010: 7f02 0036 04bb 016f 592b 2db6 0338 0315 0x0000020: 04b7 0315 3a05 1905 bb01 7359 b703 1db6 0x0000030: 0314 bb01 8459 2ab2 02ec 1905 b703 513a 0x0000040: 0619 062a b402 e2b6 030e 1906 bb01 8559 0x0000050: 2a2c b703 52b6 030d 1906 b603 0cb1")));
     }
 
     @SuppressWarnings("unused")

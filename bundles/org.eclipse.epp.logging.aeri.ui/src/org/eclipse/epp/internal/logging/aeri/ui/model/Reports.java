@@ -217,21 +217,21 @@ public class Reports {
         }
     }
 
-    public static final class LinkErrorAnalyserVisitor extends ModelSwitch<Object> {
-        private static final LinkageErrorAnalyser ANALYSER = new LinkageErrorAnalyser();
+    public static final class ErrorAnalyserVisitor extends ModelSwitch<Object> {
+        private static final ErrorAnalyser ANALYSER = new ErrorAnalyser();
 
-        private Optional<String> linkageErrorComment = Optional.absent();
+        private Optional<String> errorComment = Optional.absent();
 
         private final List<org.eclipse.epp.internal.logging.aeri.ui.model.Bundle> presentBundles;
 
-        public LinkErrorAnalyserVisitor(List<org.eclipse.epp.internal.logging.aeri.ui.model.Bundle> presentBundles) {
+        public ErrorAnalyserVisitor(List<org.eclipse.epp.internal.logging.aeri.ui.model.Bundle> presentBundles) {
             this.presentBundles = presentBundles;
         }
 
         @Override
         public Object caseThrowable(Throwable throwable) {
-            linkageErrorComment = ANALYSER.computeComment(presentBundles, throwable);
-            if (linkageErrorComment.isPresent()) {
+            errorComment = ANALYSER.computeComment(presentBundles, throwable);
+            if (errorComment.isPresent()) {
                 return Boolean.TRUE;
             } else {
                 return null;
@@ -239,7 +239,7 @@ public class Reports {
         }
 
         public Optional<String> getLinkageErrorComment() {
-            return linkageErrorComment;
+            return errorComment;
         }
     }
 
@@ -393,8 +393,8 @@ public class Reports {
         }
     }
 
-    public static void insertLinkageErrorComment(ErrorReport report) {
-        LinkErrorAnalyserVisitor visitor = new LinkErrorAnalyserVisitor(report.getPresentBundles());
+    public static void insertErrorAnalyseComment(ErrorReport report) {
+        ErrorAnalyserVisitor visitor = new ErrorAnalyserVisitor(report.getPresentBundles());
         visit(report, visitor);
         Optional<String> comment = visitor.getLinkageErrorComment();
         if (comment.isPresent()) {
