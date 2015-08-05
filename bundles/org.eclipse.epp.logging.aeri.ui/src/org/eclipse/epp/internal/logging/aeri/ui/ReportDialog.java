@@ -90,12 +90,12 @@ public class ReportDialog extends MessageDialog {
     }
 
     private final class ErrorReportSelectionChangeListener implements IValueChangeListener {
+
         @Override
         public void handleValueChange(ValueChangeEvent event) {
             boolean isAnyReportSelected = event.getObservableValue().getValue() != null;
             if (!isAnyReportSelected) {
-                messageText.setText("Please select a report for more information");
-                commentText.setText("");
+                messageText.setText("Please select a single report for more information");
                 logMessageButton.setSelection(false);
                 ignoreSimilarButton.setSelection(false);
             }
@@ -262,8 +262,10 @@ public class ReportDialog extends MessageDialog {
             @Override
             public void selectionChanged(SelectionChangedEvent event) {
                 IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
-                if (!selection.isEmpty()) {
+                if (!selection.isEmpty() && selection.size() == 1) {
                     selectedErrorReport.setValue(selection.getFirstElement());
+                } else {
+                    selectedErrorReport.setValue(null);
                 }
             }
 
