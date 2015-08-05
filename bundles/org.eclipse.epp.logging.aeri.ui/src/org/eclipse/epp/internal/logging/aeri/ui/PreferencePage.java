@@ -105,6 +105,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         // placeholder
         new Label(links, SWT.NONE);
 
+        // TODO use links from configuration of current server
         createAndConfigureLink(links, Messages.LINK_LEARN_MORE, HELP_URL);
         createAndConfigureLink(links, Messages.LINK_PROVIDE_FEEDBACK, FEEDBACK_FORM_URL);
     }

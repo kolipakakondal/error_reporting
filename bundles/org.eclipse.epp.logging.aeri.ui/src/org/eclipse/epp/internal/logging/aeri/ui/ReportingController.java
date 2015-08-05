@@ -293,7 +293,7 @@ public class ReportingController {
     @Subscribe
     public void on(ConfigureShowDialogRequest e) {
         Shell shell = Shells.getWorkbenchWindowShell().orNull();
-        ConfigurationDialog dialog = new ConfigurationDialog(shell, settings);
+        ConfigurationDialog dialog = new ConfigurationDialog(shell, settings, configuration);
         dialog.setBlockOnOpen(true);
         int status = dialog.open();
         switch (status) {

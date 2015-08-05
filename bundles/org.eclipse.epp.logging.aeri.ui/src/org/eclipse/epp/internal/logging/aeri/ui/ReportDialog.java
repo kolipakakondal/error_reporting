@@ -227,8 +227,8 @@ public class ReportDialog extends MessageDialog {
                 public void handleChange(ChangeEvent event) {
                     Object report = selectedErrorReport.getValue();
                     if (report != null && !messageText.isDisposed()) {
-                        messageText.setText(MessageFormat.format("\nThe following data will be sent:\n\n{0}",
-                                Reports.prettyPrint((ErrorReport) report, settings, configuration)));
+                        ErrorReport copy = Reports.createAnonymizedSendCopy((ErrorReport) report, settings, configuration);
+                        messageText.setText(MessageFormat.format("\nThe following data will be sent:\n\n{0}", Reports.prettyPrint(copy)));
                     }
                 }
             });

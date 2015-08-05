@@ -44,7 +44,8 @@ public class PreferencesAndSettingsTest {
 
     @Test
     public void testSettingsUpdateStore() {
-        String sendActionBefore = store.getString(PROP_SEND_ACTION);
+        String sendActionBefore = "any other value";
+        store.putValue(PROP_SEND_ACTION, sendActionBefore);
         settings.setAction(SendAction.IGNORE);
         assertThat(store.getString(PROP_SEND_ACTION), not(is(sendActionBefore)));
     }

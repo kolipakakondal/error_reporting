@@ -508,13 +508,7 @@ public class Reports {
         visit(report, new AnonymizeStacktraceVisitor(configuration.getAcceptedPackagesPatterns()));
     }
 
-    public static String prettyPrint(ErrorReport report, Settings settings, ServerConfiguration configuration) {
-        if (settings.isAnonymizeStrackTraceElements()) {
-            anonymizeStackTrace(report, configuration);
-        }
-        if (settings.isAnonymizeMessages()) {
-            clearMessages(report);
-        }
+    public static String prettyPrint(ErrorReport report) {
         PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
         visit(report, prettyPrintVisitor);
         return prettyPrintVisitor.print();

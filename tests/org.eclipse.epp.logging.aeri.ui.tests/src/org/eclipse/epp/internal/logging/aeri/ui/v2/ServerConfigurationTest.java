@@ -13,8 +13,6 @@ package org.eclipse.epp.internal.logging.aeri.ui.v2;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-import java.io.File;
-import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -34,15 +32,14 @@ public class ServerConfigurationTest {
     private static final String UNKNOWN_SERVER_URL = "https://no-route-to-host12.com/discovery-not";
     private static final String BAD_RESPONSE_SERVER_URL = "https://dev.eclipse.org/recommenders/community/confess/v2/discovery-fail";
 
-    private Executor executor = Executor.newInstance();
-
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Test
     public void testDownloadDiscovery() throws Exception {
-        URI target = new URI(SERVER_URL);
-        ServerConfiguration configuration = AeriServer.download(target, executor);
+        AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
+        server.refreshConfiguration(SERVER_URL);
+        ServerConfiguration configuration = server.getConfiguration();
         long timestamp = configuration.getTimestamp();
         assertThat(timestamp, greaterThan(0L));
         assertThat(timestamp, lessThanOrEqualTo(System.currentTimeMillis()));
@@ -50,8 +47,9 @@ public class ServerConfigurationTest {
 
     @Test
     public void testPatternsInitialized() throws Exception {
-        URI target = new URI(SERVER_URL);
-        ServerConfiguration configuration = AeriServer.download(target, executor);
+        AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
+        server.refreshConfiguration(SERVER_URL);
+        ServerConfiguration configuration = server.getConfiguration();
         // packages
         for (String p : configuration.getAcceptedPackages()) {
             Pattern pattern = WildcardRegexConverter.convert(p);
@@ -98,25 +96,26 @@ public class ServerConfigurationTest {
 
     @Test
     public void testSaveAndLoad() throws Exception {
-        URI target = new URI(SERVER_URL);
-        ServerConfiguration originalConfig = AeriServer.download(target, executor);
-        File file = folder.newFile();
-        AeriServer.saveToFile(file, originalConfig);
-        ServerConfiguration loadedConfig = AeriServer.loadFromFile(file);
+        AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
+        server.refreshConfiguration(SERVER_URL);
+        ServerConfiguration configuration = server.getConfiguration();
+        server.saveConfiguration();
+        server.setConfiguration(null);
+        server.loadConfiguration();
 
-        assertThat(EqualsBuilder.reflectionEquals(originalConfig, loadedConfig), is(true));
+        assertThat(EqualsBuilder.reflectionEquals(configuration, server.getConfiguration()), is(true));
     }
 
     @Test(expected = UnknownHostException.class)
     public void testUnknownHostException() throws Exception {
-        URI target = new URI(UNKNOWN_SERVER_URL);
-        AeriServer.download(target, executor);
+        AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
+        server.refreshConfiguration(UNKNOWN_SERVER_URL);
     }
 
     // TODO we may use some test urls on the server side to make sure they work as expected - including timeouts=
     @Test(expected = HttpResponseException.class)
     public void testHttpResponseExceptionNotFound() throws Exception {
-        URI target = new URI(BAD_RESPONSE_SERVER_URL);
-        AeriServer.download(target, executor);
+        AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
+        server.refreshConfiguration(BAD_RESPONSE_SERVER_URL);
     }
 }

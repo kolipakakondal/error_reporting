@@ -48,7 +48,7 @@ public class PopupNotificationSink extends NotificationSink {
 
     private final Set<Notification> currentlyNotifying = Collections.synchronizedSet(notifications);
 
-    private PopupNotification popup;
+    private NotificationPopup popup;
 
     private final Job openJob = new Job("") {
         @Override
@@ -135,7 +135,7 @@ public class PopupNotificationSink extends NotificationSink {
         }
 
         Shell shell = new Shell(PlatformUI.getWorkbench().getDisplay());
-        popup = new PopupNotification(shell.getDisplay());
+        popup = new NotificationPopup(shell.getDisplay());
         popup.setFadingEnabled(isAnimationsEnabled());
         List<Notification> toDisplay = new ArrayList<Notification>(currentlyNotifying);
         Collections.sort(toDisplay);

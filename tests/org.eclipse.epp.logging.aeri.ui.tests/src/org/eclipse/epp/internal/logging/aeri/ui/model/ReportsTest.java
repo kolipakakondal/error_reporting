@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,6 +31,7 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.epp.internal.logging.aeri.ui.Constants;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Reports.AnonymizeStacktraceVisitor;
 import org.eclipse.epp.internal.logging.aeri.ui.model.util.ModelSwitch;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.TestReports;
@@ -352,10 +354,56 @@ public class ReportsTest {
     }
 
     @Test
+    public void testCreateAnonymizedSendCopyCreateNewInstance() {
+        ModelFactory mf = ModelFactory.eINSTANCE;
+
+        ErrorReport report = mf.createErrorReport();
+
+        ErrorReport copy = Reports.createAnonymizedSendCopy(report, settings, configuration);
+        assertThat(copy, not(sameInstance(report)));
+    }
+
+    @Test
+    public void testCreateAnonymizedSendCopyInsertNameAndEmail() {
+        ModelFactory mf = ModelFactory.eINSTANCE;
+
+        ErrorReport report = mf.createErrorReport();
+        settings.setName("foobarbaz");
+        settings.setEmail("foo@bar.baz");
+
+        ErrorReport copy = Reports.createAnonymizedSendCopy(report, settings, configuration);
+        assertThat(copy.getName(), is("foobarbaz"));
+        assertThat(copy.getEmail(), is("foo@bar.baz"));
+    }
+
+    @Test
+    public void testCreateAnonymizedSendCopyAnonymizes() {
+        ModelFactory mf = ModelFactory.eINSTANCE;
+
+        ErrorReport report = mf.createErrorReport();
+        report.setStatus(mf.createStatus());
+        java.lang.Throwable throwable = new RuntimeException("test exception");
+        throwable.fillInStackTrace();
+        Throwable t = Reports.newThrowable(throwable);
+        report.getStatus().setException(t);
+
+        settings.setAnonymizeMessages(true);
+        settings.setAnonymizeStrackTraceElements(true);
+        configuration.setAcceptedPackages(new ArrayList<String>());
+        ErrorReport copy = Reports.createAnonymizedSendCopy(report, settings, configuration);
+        assertThat(copy.getStatus().getMessage(), is(Constants.HIDDEN));
+        StackTraceElement stackTraceElement = copy.getStatus().getException().getStackTrace().get(0);
+        assertThat(stackTraceElement.getClassName(), is(Constants.HIDDEN));
+        assertThat(stackTraceElement.getMethodName(), is(Constants.HIDDEN));
+        assertThat(stackTraceElement.getFileName(), is(Constants.HIDDEN));
+        assertThat(stackTraceElement.getLineNumber(), is(-1));
+    }
+
+    @Test
     public void testPrettyPrintNullSafe1() {
         ModelFactory mf = ModelFactory.eINSTANCE;
         ErrorReport report = mf.createErrorReport();
-        Reports.prettyPrint(report, settings, configuration);
+        Reports.prettyPrint(report);
     }
 
     @Test
@@ -363,7 +411,7 @@ public class ReportsTest {
         ModelFactory mf = ModelFactory.eINSTANCE;
         ErrorReport report = mf.createErrorReport();
         report.setStatus(mf.createStatus());
-        Reports.prettyPrint(report, settings, configuration);
+        Reports.prettyPrint(report);
     }
 
     @Test
@@ -375,7 +423,7 @@ public class ReportsTest {
         Throwable t = mf.createThrowable();
         t.setClassName("org.test");
         report.getStatus().setException(t);
-        Reports.prettyPrint(report, settings, configuration);
+        Reports.prettyPrint(report);
     }
 
     @Test
@@ -384,7 +432,7 @@ public class ReportsTest {
 
         ErrorReport report = mf.createErrorReport();
         report.setStatus(mf.createStatus());
-        String prettyPrint = Reports.prettyPrint(report, settings, configuration);
+        String prettyPrint = Reports.prettyPrint(report);
         assertThat(prettyPrint, not(containsString("Exception")));
     }
 

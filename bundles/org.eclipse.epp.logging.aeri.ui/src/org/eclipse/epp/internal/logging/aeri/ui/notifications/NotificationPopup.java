@@ -50,7 +50,7 @@ import org.eclipse.ui.forms.events.HyperlinkEvent;
 import com.google.common.collect.Lists;
 
 @SuppressWarnings("restriction")
-public class PopupNotification extends AbstractWorkbenchNotificationPopup {
+public class NotificationPopup extends AbstractWorkbenchNotificationPopup {
 
     private final class BlockPopupOnModalShellActivationListener implements Listener {
 
@@ -171,11 +171,11 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
     private List<ScalingHyperlink> links = Lists.newArrayList();
     private BlockPopupOnModalShellActivationListener blockPopupListener;
 
-    public PopupNotification(Display display) {
+    public NotificationPopup(Display display) {
         super(display);
     }
 
-    public PopupNotification(Display display, int style) {
+    public NotificationPopup(Display display, int style) {
         super(display, style);
     }
 

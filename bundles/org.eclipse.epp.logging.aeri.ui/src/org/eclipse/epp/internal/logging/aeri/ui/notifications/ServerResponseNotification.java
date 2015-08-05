@@ -128,7 +128,7 @@ public class ServerResponseNotification extends Notification {
 
                 @Override
                 public void execute() {
-                    fireEvent(new OpenUrlInBrowserRequest(state.getBugUrl().orNull()));
+                    closeWithEvent(new OpenUrlInBrowserRequest(state.getBugUrl().orNull()));
                 }
             };
             actions.add(a);
@@ -137,7 +137,7 @@ public class ServerResponseNotification extends Notification {
 
             @Override
             public void execute() {
-                fireEvent(new OpenUrlInBrowserRequest(state.getIncidentUrl()));
+                closeWithEvent(new OpenUrlInBrowserRequest(state.getIncidentUrl()));
             }
         };
         actions.add(a2);
@@ -146,7 +146,7 @@ public class ServerResponseNotification extends Notification {
 
     @Override
     public void unhandled() {
-        fireEvent(new ServerResponseNotificationTimedOut());
+        closeWithEvent(new ServerResponseNotificationTimedOut());
     }
 
 }

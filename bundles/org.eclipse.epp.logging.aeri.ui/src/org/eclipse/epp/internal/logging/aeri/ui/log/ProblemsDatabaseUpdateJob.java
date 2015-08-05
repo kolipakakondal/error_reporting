@@ -10,21 +10,23 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui.log;
 
-import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.WARN_INDEX_UPDATE_FAILED;
+import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction;
+import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Zips;
 import org.eclipse.epp.internal.logging.aeri.ui.v2.AeriServer;
-import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 
 import com.google.common.io.Files;
 
@@ -45,14 +47,25 @@ public class ProblemsDatabaseUpdateJob extends Job {
     protected IStatus run(IProgressMonitor monitor) {
         SubMonitor progress = SubMonitor.convert(monitor, 3);
         progress.beginTask("Checking...", 3);
-        if (!isProblemsDatabaseOutdated()) {
+        if (!server.isProblemsDatabaseOutdated()) {
             return Status.OK_STATUS;
         }
         try {
             progress.subTask("Checking remote database");
             File tempRemoteIndexZip = File.createTempFile("problems-index", ".zip");
-            boolean isDatabaseDownloaded = server.downloadDatabase(tempRemoteIndexZip);
-            if (!isDatabaseDownloaded) {
+            int downloadStatus = server.downloadDatabase(tempRemoteIndexZip);
+            if (downloadStatus == HttpStatus.SC_NOT_MODIFIED) {
+                return Status.OK_STATUS;
+            } else if (downloadStatus != HttpStatus.SC_OK) {
+                // Could not access problems.zip for whatever reason; switch off error reporting until restart.
+                settings.setAction(SendAction.IGNORE);
+                settings.setRememberSendAction(RememberSendAction.RESTART);
+                log(INFO_SERVER_NOT_AVAILABLE);
+                if (downloadStatus != HttpStatus.SC_NOT_FOUND) {
+                    // NOT_FOUND (404) would mean that network communication works correctly.
+                    // We are only interested in cases where the communication failed.
+                    new NetworkCommunicationTestJob().schedule();
+                }
                 return Status.OK_STATUS;
             }
 
@@ -61,7 +74,6 @@ public class ProblemsDatabaseUpdateJob extends Job {
             progress.subTask("Replacing local database");
             Zips.unzip(tempRemoteIndexZip, tempDir);
             service.replaceContent(tempDir);
-            settings.setProblemsZipLastDownloadTimestamp(System.currentTimeMillis());
             progress.worked(1);
 
             // cleanup files
@@ -78,8 +90,4 @@ public class ProblemsDatabaseUpdateJob extends Job {
         }
     }
 
-    private boolean isProblemsDatabaseOutdated() {
-        ServerConfiguration configuration = server.getConfiguration();
-        return System.currentTimeMillis() - settings.getProblemsZipLastDownloadTimestamp() > configuration.getProblemsTtlMs();
-    }
 }

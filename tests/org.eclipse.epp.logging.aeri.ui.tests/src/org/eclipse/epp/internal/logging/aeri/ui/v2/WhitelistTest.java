@@ -12,25 +12,25 @@ package org.eclipse.epp.internal.logging.aeri.ui.v2;
 
 import static org.hamcrest.Matchers.*;
 
-import java.net.URI;
 import java.util.Collection;
 
 import org.apache.http.client.fluent.Executor;
-import org.eclipse.epp.internal.logging.aeri.ui.model.PreferenceInitializer;
-import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 public class WhitelistTest {
-    private final Executor executor = Executor.newInstance();
 
-    Settings s = PreferenceInitializer.getDefault();
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
 
     @Test
     public void testWhitelistPackages() throws Exception {
-        URI target = new URI("https://dev.eclipse.org/recommenders/community/confess/v2/discovery");
-        ServerConfiguration config = AeriServer.download(target, executor);
-        Collection<String> sut = config.getAcceptedPackages();
+        AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
+        server.refreshConfiguration("https://dev.eclipse.org/recommenders/community/confess/v2/discovery");
+        ServerConfiguration configuration = server.getConfiguration();
+        Collection<String> sut = configuration.getAcceptedPackages();
         Assert.assertThat(sut, not(hasItems("")));
         Assert.assertThat(sut, hasItems("org.eclipse.*", "org.apache.*", "ch.qos.*", "org.slf4j.*", "java.*", "javax.*", "javafx.*",
                 "sun.*", "com.sun.*", "com.codetrails.*", "org.osgi.*", "com.google.*"));
@@ -38,9 +38,10 @@ public class WhitelistTest {
 
     @Test
     public void testWhitelistPlugins() throws Exception {
-        URI target = new URI("https://dev.eclipse.org/recommenders/community/confess/v2/discovery");
-        ServerConfiguration config = AeriServer.download(target, executor);
-        Collection<String> sut = config.getAcceptedPlugins();
+        AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
+        server.refreshConfiguration("https://dev.eclipse.org/recommenders/community/confess/v2/discovery");
+        ServerConfiguration configuration = server.getConfiguration();
+        Collection<String> sut = configuration.getAcceptedPlugins();
         Assert.assertThat(sut, not(hasItems("")));
         Assert.assertThat(sut, hasItems("org.eclipse.*", "org.apache.log4j.*", "com.codetrails.*"));
     }

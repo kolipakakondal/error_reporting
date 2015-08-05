@@ -63,14 +63,14 @@ public class NewErrorNotification extends Notification {
 
             @Override
             public void execute() {
-                fireEvent(new NewReportShowDetailsRequest(report));
+                closeWithEvent(new NewReportShowDetailsRequest(report));
             }
         };
         NoficationAction a2 = new NoficationAction("Send") {
 
             @Override
             public void execute() {
-                fireEvent(new SendReportsRequest());
+                closeWithEvent(new SendReportsRequest());
             }
         };
         return Lists.newArrayList(a1, a2);
@@ -83,6 +83,6 @@ public class NewErrorNotification extends Notification {
 
     @Override
     public void unhandled() {
-        fireEvent(new NewReportNotificationTimedOut(report));
+        closeWithEvent(new NewReportNotificationTimedOut(report));
     }
 }

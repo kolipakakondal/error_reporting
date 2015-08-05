@@ -11,7 +11,6 @@
 package org.eclipse.epp.internal.logging.aeri.ui;
 
 import static org.eclipse.emf.databinding.EMFProperties.value;
-import static org.eclipse.epp.internal.logging.aeri.ui.Constants.*;
 import static org.eclipse.jface.databinding.swt.WidgetProperties.*;
 
 import org.eclipse.core.databinding.DataBindingContext;
@@ -20,6 +19,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.l10n.Messages;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Browsers;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -62,10 +62,12 @@ public class ConfigurationDialog extends TitleAreaDialog {
     private Button clearMessagesButton;
 
     private Settings settings;
+    private ServerConfiguration configuration;
 
-    public ConfigurationDialog(Shell parentShell, final Settings settings) {
+    public ConfigurationDialog(Shell parentShell, final Settings settings, ServerConfiguration configuration) {
         super(parentShell);
         this.settings = settings;
+        this.configuration = configuration;
         setHelpAvailable(false);
         setShellStyle(getShellStyle() | SWT.RESIZE);
     }
@@ -173,7 +175,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
         learnMoreLink.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                Browsers.openInExternalBrowser(HELP_URL);
+                Browsers.openInExternalBrowser(configuration.getHelpUrl());
             }
         });
         Link feedbackLink = new Link(linksComposite, SWT.NONE);
@@ -182,7 +184,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
         feedbackLink.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                Browsers.openInExternalBrowser(FEEDBACK_FORM_URL);
+                Browsers.openInExternalBrowser(configuration.getFeedbackUrl());
             }
         });
         return linksComposite;

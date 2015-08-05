@@ -127,6 +127,10 @@ public class Events {
         }
     }
 
+    public static class BugIsFixedNotificationTimedOut {
+
+    }
+
     public static class NeedInfoRequestdTimedOut {
 
     }

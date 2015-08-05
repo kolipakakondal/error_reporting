@@ -25,7 +25,7 @@ public abstract class Notification extends AbstractUiNotification {
 
     private EventBus bus;
     private boolean unhandled = true;
-    private PopupNotification popup;
+    private NotificationPopup popup;
 
     public Notification(String eventId, EventBus bus) {
         super(eventId);
@@ -57,11 +57,11 @@ public abstract class Notification extends AbstractUiNotification {
         return "Error Reporting";
     }
 
-    public void setPopup(PopupNotification popup) {
+    public void setPopup(NotificationPopup popup) {
         this.popup = popup;
     }
 
-    public Optional<PopupNotification> getPopup() {
+    public Optional<NotificationPopup> getPopup() {
         return Optional.fromNullable(popup);
     }
 
@@ -79,9 +79,9 @@ public abstract class Notification extends AbstractUiNotification {
         }
     }
 
-    public void fireEvent(Object event) {
+    public void closeWithEvent(Object event) {
         unhandled = false;
-        PopupNotification popup = getPopup().orNull();
+        NotificationPopup popup = getPopup().orNull();
         if (popup != null) {
             popup.close();
         }

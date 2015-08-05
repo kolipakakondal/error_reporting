@@ -53,13 +53,13 @@ class PredicateDebugDecorator<T> implements Predicate<T> {
         if (inputStatus.getSeverity() == DEBUG_STATUS_SEVERITY && inputStatus.getPlugin().equals(DEBUG_STATUS_PLUGIN_ID)) {
             return;
         }
-        String message = MessageFormat.format("Debug: predicate {0} filtered status:\n {1}", predicate.getClass().getName(),
-                inputStatus.toString());
+        String message = MessageFormat.format("Debug: predicate {0} filtered status: {1}", predicate.getClass().getSimpleName(),
+                inputStatus.getMessage());
         logDebugMessageStatus(message);
     }
 
     private void debugReport(ErrorReport report) {
-        String message = MessageFormat.format("Debug: predicate {0} filtered report:\n {1}", predicate.getClass().getName(),
+        String message = MessageFormat.format("Debug: predicate {0} filtered report: {1}", predicate.getClass().getSimpleName(),
                 report.getStatus().getMessage());
         logDebugMessageStatus(message);
     }

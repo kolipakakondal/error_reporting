@@ -15,7 +15,7 @@ import static org.apache.commons.lang3.StringUtils.abbreviate;
 import java.util.List;
 
 import org.eclipse.epp.internal.logging.aeri.ui.Constants;
-import org.eclipse.epp.internal.logging.aeri.ui.Events.NeedInfoRequestdTimedOut;
+import org.eclipse.epp.internal.logging.aeri.ui.Events;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportShowDetailsRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.OpenUrlInBrowserRequest;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
@@ -68,7 +68,7 @@ public class BugIsFixedNotification extends Notification {
         NoficationAction a1 = new NoficationAction("View Details") {
             @Override
             public void execute() {
-                fireEvent(new NewReportShowDetailsRequest(report));
+                closeWithEvent(new NewReportShowDetailsRequest(report));
             }
         };
         actions.add(a1);
@@ -78,7 +78,7 @@ public class BugIsFixedNotification extends Notification {
 
                 @Override
                 public void execute() {
-                    fireEvent(new OpenUrlInBrowserRequest(state.getBugUrl().get()));
+                    closeWithEvent(new OpenUrlInBrowserRequest(state.getBugUrl().get()));
                 }
             };
             actions.add(a);
@@ -88,6 +88,6 @@ public class BugIsFixedNotification extends Notification {
 
     @Override
     public void unhandled() {
-        fireEvent(new NeedInfoRequestdTimedOut());
+        closeWithEvent(new Events.BugIsFixedNotificationTimedOut());
     }
 }

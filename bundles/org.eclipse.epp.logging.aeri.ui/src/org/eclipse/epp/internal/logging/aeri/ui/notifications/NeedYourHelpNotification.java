@@ -68,7 +68,7 @@ public class NeedYourHelpNotification extends Notification {
         NoficationAction a1 = new NoficationAction("View Details") {
             @Override
             public void execute() {
-                fireEvent(new NewReportShowDetailsRequest(report));
+                closeWithEvent(new NewReportShowDetailsRequest(report));
             }
         };
         actions.add(a1);
@@ -78,7 +78,7 @@ public class NeedYourHelpNotification extends Notification {
 
                 @Override
                 public void execute() {
-                    fireEvent(new OpenUrlInBrowserRequest(state.getBugUrl().get()));
+                    closeWithEvent(new OpenUrlInBrowserRequest(state.getBugUrl().get()));
                 }
             };
             actions.add(a);
@@ -88,6 +88,6 @@ public class NeedYourHelpNotification extends Notification {
 
     @Override
     public void unhandled() {
-        fireEvent(new NeedInfoRequestdTimedOut());
+        closeWithEvent(new NeedInfoRequestdTimedOut());
     }
 }

@@ -32,7 +32,7 @@ public class ConfigureNotification extends Notification {
 
             @Override
             public void execute() {
-                fireEvent(new ConfigureShowDialogRequest());
+                closeWithEvent(new ConfigureShowDialogRequest());
             }
 
         };
@@ -40,7 +40,7 @@ public class ConfigureNotification extends Notification {
 
             @Override
             public void execute() {
-                fireEvent(new ConfigurePopupDisableRequested());
+                closeWithEvent(new ConfigurePopupDisableRequested());
             }
 
         };
@@ -49,7 +49,7 @@ public class ConfigureNotification extends Notification {
 
     @Override
     public void unhandled() {
-        fireEvent(new ConfigureRequestTimedOut());
+        closeWithEvent(new ConfigureRequestTimedOut());
     }
 
     @Override

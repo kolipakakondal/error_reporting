@@ -18,7 +18,6 @@ import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
 import java.io.File;
 import java.net.SocketException;
-import java.net.URI;
 import java.net.UnknownHostException;
 
 import org.apache.http.client.fluent.Executor;
@@ -196,14 +195,16 @@ public class Startup implements IStartup {
         try {
             Executor executor = Executor.newInstance();
             File configurationFile = new File(settings.getServerConfigurationLocalFile());
+            server = new AeriServer(executor, configurationFile);
             if (configurationFile.exists()) {
-                configuration = AeriServer.loadFromFile(configurationFile);
+                server.loadConfiguration();
+                configuration = server.getConfiguration();
             }
-            if (configuration == null || System.currentTimeMillis() - configuration.getTimestamp() > configuration.getTtlMs()) {
-                configuration = AeriServer.download(new URI(settings.getServerUrl()), executor);
-                AeriServer.saveToFile(configurationFile, configuration);
+            if (configuration == null || server.isConfigurationOutdated()) {
+                server.refreshConfiguration(settings.getServerUrl());
+                server.saveConfiguration();
+                configuration = server.getConfiguration();
             }
-            server = new AeriServer(executor, configuration, settings);
         } catch (UnknownHostException | SocketException e) {
             throw e;
         } catch (Exception e) {
@@ -237,7 +238,7 @@ public class Startup implements IStartup {
                 }
             };
             job.setSystem(true);
-            long outdatedTimestamp = settings.getProblemsZipLastDownloadTimestamp() + configuration.getProblemsTtlMs();
+            long outdatedTimestamp = configuration.getProblemsZipLastDownloadTimestamp() + configuration.getProblemsTtlMs();
             long timeToUpdate = outdatedTimestamp - System.currentTimeMillis();
             long scheduleMs = max(MILLISECONDS.convert(10, SECONDS), timeToUpdate);
             job.schedule(scheduleMs);

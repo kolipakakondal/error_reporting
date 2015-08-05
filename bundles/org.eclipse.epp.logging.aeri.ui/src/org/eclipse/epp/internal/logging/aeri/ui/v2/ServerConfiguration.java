@@ -10,6 +10,7 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui.v2;
 
+import static java.util.concurrent.TimeUnit.*;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.WARN_INVALID_PATTERN;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
@@ -162,8 +163,14 @@ public class ServerConfiguration {
     private int submitSizeLimit;
     private String problemsUrl;
 
-    private long problemsTtl; // in minutes
+    // in minutes
+    private long problemsTtl;
     private String queryUrl;
+
+    // max time in seconds until a connection to the server has to be established.
+    private int connectTimeout = (int) TimeUnit.SECONDS.toMillis(3);;
+    // max time in seconds between two packets sent back to the client.
+    private int socketTimeout = (int) TimeUnit.SECONDS.toMillis(10);;
 
     private List<String> acceptedProducts;
     private transient List<Pattern> acceptedProductsPatterns;
@@ -198,6 +205,31 @@ public class ServerConfiguration {
      */
     private List<String> ignoredPluginMessages;
     private transient List<IgnorePattern> ignoredPatterns;
+    private long problemsZipLastDownloadTimestamp;
+
+    public int getConnectTimeoutMs() {
+        return (int) MILLISECONDS.convert(connectTimeout, SECONDS);
+    }
+
+    public int getConnectTimeout() {
+        return connectTimeout;
+    }
+
+    public void setConnectTimeout(int connectTimeout) {
+        this.connectTimeout = connectTimeout;
+    }
+
+    public int getSocketTimeoutMs() {
+        return (int) MILLISECONDS.convert(socketTimeout, SECONDS);
+    }
+
+    public long getSocketTimeout() {
+        return socketTimeout;
+    }
+
+    public void setSocketTimeout(int socketTimeout) {
+        this.socketTimeout = socketTimeout;
+    }
 
     public String getVersion() {
         return version;
@@ -231,7 +263,7 @@ public class ServerConfiguration {
     }
 
     public long getTtlMs() {
-        return TimeUnit.MILLISECONDS.convert(getTtl(), TimeUnit.MINUTES);
+        return MILLISECONDS.convert(getTtl(), MINUTES);
     }
 
     public void setTtl(long ttlInMinutes) {
@@ -294,7 +326,7 @@ public class ServerConfiguration {
     }
 
     public long getProblemsTtlMs() {
-        return TimeUnit.MILLISECONDS.convert(getProblemsTtl(), TimeUnit.MINUTES);
+        return MILLISECONDS.convert(getProblemsTtl(), MINUTES);
     }
 
     public void setProblemsTtl(long problemsTtlInMinutes) {
@@ -315,6 +347,7 @@ public class ServerConfiguration {
 
     public void setAcceptedProducts(List<String> acceptedProducts) {
         this.acceptedProducts = acceptedProducts;
+        this.acceptedProductsPatterns = null;
     }
 
     public List<String> getAcceptedPlugins() {
@@ -323,6 +356,7 @@ public class ServerConfiguration {
 
     public void setAcceptedPlugins(List<String> acceptedPlugins) {
         this.acceptedPlugins = acceptedPlugins;
+        this.acceptedPluginsPatterns = null;
     }
 
     public List<Pattern> getAcceptedProductsPatterns() {
@@ -352,6 +386,7 @@ public class ServerConfiguration {
 
     public void setAcceptedPackages(List<String> acceptedPackages) {
         this.acceptedPackages = acceptedPackages;
+        this.acceptedPackagesPatterns = null;
     }
 
     public boolean isAcceptOtherPackages() {
@@ -403,5 +438,13 @@ public class ServerConfiguration {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public long getProblemsZipLastDownloadTimestamp() {
+        return problemsZipLastDownloadTimestamp;
+    }
+
+    public void setProblemsZipLastDownloadTimestamp(long problemsZipLastDownloadTimestamp) {
+        this.problemsZipLastDownloadTimestamp = problemsZipLastDownloadTimestamp;
     }
 }
