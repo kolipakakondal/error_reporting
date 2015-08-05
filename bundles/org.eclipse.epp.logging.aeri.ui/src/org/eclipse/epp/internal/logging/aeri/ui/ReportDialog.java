@@ -14,6 +14,8 @@ package org.eclipse.epp.internal.logging.aeri.ui;
 import static org.eclipse.emf.databinding.EMFProperties.value;
 import static org.eclipse.jface.databinding.swt.WidgetProperties.*;
 
+import java.text.MessageFormat;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.ChangeEvent;
@@ -225,7 +227,8 @@ public class ReportDialog extends MessageDialog {
                 public void handleChange(ChangeEvent event) {
                     Object report = selectedErrorReport.getValue();
                     if (report != null && !messageText.isDisposed()) {
-                        messageText.setText(Reports.prettyPrint((ErrorReport) report, settings, configuration));
+                        messageText.setText(MessageFormat.format("\nThe following data will be sent:\n\n{0}",
+                                Reports.prettyPrint((ErrorReport) report, settings, configuration)));
                     }
                 }
             });
