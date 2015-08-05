@@ -57,7 +57,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
     public static final String PROP_REMEMBER_SEND_ACTION = PKG.getSettings_RememberSendAction().getName();
     public static final String PROP_REMEMBER_SETTING_PERIOD_START = PKG.getSettings_RememberSendActionPeriodStart().getName();
     public static final String PROP_SEND_ACTION = PKG.getSettings_Action().getName();
-    public static final String PROP_SERVER = PKG.getSettings_ServerConfigurationUrl().getName();
+    public static final String PROP_SERVER = PKG.getSettings_ServerUrl().getName();
     public static final String PROP_SKIP_SIMILAR_ERRORS = PKG.getSettings_SkipSimilarErrors().getName();
     public static final String PROP_SERVER_CONFIGURATION_LOCAL_FILE = PKG.getSettings_ServerConfigurationLocalFile().getName();
     public static final String PROP_PROBLEM_INDEX_LAST_DOWNLOAD = PKG.getSettings_ProblemsZipLastDownloadTimestamp().getName();

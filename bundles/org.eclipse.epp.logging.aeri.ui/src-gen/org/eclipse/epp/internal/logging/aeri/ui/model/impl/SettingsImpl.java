@@ -26,7 +26,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getAction <em>Action</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getRememberSendAction <em>Remember Send Action</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getRememberSendActionPeriodStart <em>Remember Send Action Period Start</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getServerConfigurationUrl <em>Server Configuration Url</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getServerUrl <em>Server Url</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getProblemsZipEtag <em>Problems Zip Etag</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getServerConfigurationLocalFile <em>Server Configuration Local File</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getProblemsZipLastDownloadTimestamp <em>Problems Zip Last Download Timestamp</em>}</li>
@@ -208,24 +208,24 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected long rememberSendActionPeriodStart = REMEMBER_SEND_ACTION_PERIOD_START_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getServerConfigurationUrl() <em>Server Configuration Url</em>}' attribute.
+     * The default value of the '{@link #getServerUrl() <em>Server Url</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getServerConfigurationUrl()
+     * @see #getServerUrl()
      * @generated
      * @ordered
      */
-    protected static final String SERVER_CONFIGURATION_URL_EDEFAULT = null;
+    protected static final String SERVER_URL_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getServerConfigurationUrl() <em>Server Configuration Url</em>}' attribute.
+     * The cached value of the '{@link #getServerUrl() <em>Server Url</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getServerConfigurationUrl()
+     * @see #getServerUrl()
      * @generated
      * @ordered
      */
-    protected String serverConfigurationUrl = SERVER_CONFIGURATION_URL_EDEFAULT;
+    protected String serverUrl = SERVER_URL_EDEFAULT;
 
     /**
      * The default value of the '{@link #getProblemsZipEtag() <em>Problems Zip Etag</em>}' attribute.
@@ -480,8 +480,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
      * <!-- end-user-doc -->
      * @generated
      */
-    public String getServerConfigurationUrl() {
-        return serverConfigurationUrl;
+    public String getServerUrl() {
+        return serverUrl;
     }
 
     /**
@@ -489,11 +489,11 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
      * <!-- end-user-doc -->
      * @generated
      */
-    public void setServerConfigurationUrl(String newServerConfigurationUrl) {
-        String oldServerConfigurationUrl = serverConfigurationUrl;
-        serverConfigurationUrl = newServerConfigurationUrl;
+    public void setServerUrl(String newServerUrl) {
+        String oldServerUrl = serverUrl;
+        serverUrl = newServerUrl;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__SERVER_CONFIGURATION_URL, oldServerConfigurationUrl, serverConfigurationUrl));
+            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__SERVER_URL, oldServerUrl, serverUrl));
     }
 
     /**
@@ -582,8 +582,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
                 return getRememberSendAction();
             case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
                 return getRememberSendActionPeriodStart();
-            case ModelPackage.SETTINGS__SERVER_CONFIGURATION_URL:
-                return getServerConfigurationUrl();
+            case ModelPackage.SETTINGS__SERVER_URL:
+                return getServerUrl();
             case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
                 return getProblemsZipEtag();
             case ModelPackage.SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE:
@@ -629,8 +629,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
             case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
                 setRememberSendActionPeriodStart((Long)newValue);
                 return;
-            case ModelPackage.SETTINGS__SERVER_CONFIGURATION_URL:
-                setServerConfigurationUrl((String)newValue);
+            case ModelPackage.SETTINGS__SERVER_URL:
+                setServerUrl((String)newValue);
                 return;
             case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
                 setProblemsZipEtag((String)newValue);
@@ -679,8 +679,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
             case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
                 setRememberSendActionPeriodStart(REMEMBER_SEND_ACTION_PERIOD_START_EDEFAULT);
                 return;
-            case ModelPackage.SETTINGS__SERVER_CONFIGURATION_URL:
-                setServerConfigurationUrl(SERVER_CONFIGURATION_URL_EDEFAULT);
+            case ModelPackage.SETTINGS__SERVER_URL:
+                setServerUrl(SERVER_URL_EDEFAULT);
                 return;
             case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
                 setProblemsZipEtag(PROBLEMS_ZIP_ETAG_EDEFAULT);
@@ -720,8 +720,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
                 return rememberSendAction != REMEMBER_SEND_ACTION_EDEFAULT;
             case ModelPackage.SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START:
                 return rememberSendActionPeriodStart != REMEMBER_SEND_ACTION_PERIOD_START_EDEFAULT;
-            case ModelPackage.SETTINGS__SERVER_CONFIGURATION_URL:
-                return SERVER_CONFIGURATION_URL_EDEFAULT == null ? serverConfigurationUrl != null : !SERVER_CONFIGURATION_URL_EDEFAULT.equals(serverConfigurationUrl);
+            case ModelPackage.SETTINGS__SERVER_URL:
+                return SERVER_URL_EDEFAULT == null ? serverUrl != null : !SERVER_URL_EDEFAULT.equals(serverUrl);
             case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
                 return PROBLEMS_ZIP_ETAG_EDEFAULT == null ? problemsZipEtag != null : !PROBLEMS_ZIP_ETAG_EDEFAULT.equals(problemsZipEtag);
             case ModelPackage.SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE:
@@ -759,8 +759,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
         result.append(rememberSendAction);
         result.append(", rememberSendActionPeriodStart: ");
         result.append(rememberSendActionPeriodStart);
-        result.append(", serverConfigurationUrl: ");
-        result.append(serverConfigurationUrl);
+        result.append(", serverUrl: ");
+        result.append(serverUrl);
         result.append(", problemsZipEtag: ");
         result.append(problemsZipEtag);
         result.append(", serverConfigurationLocalFile: ");

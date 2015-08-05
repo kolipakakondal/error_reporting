@@ -64,8 +64,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="rememberSendAction" eType="#//RememberSendAction"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="rememberSendActionPeriodStart"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serverConfigurationUrl"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serverUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="problemsZipEtag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="serverConfigurationLocalFile"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

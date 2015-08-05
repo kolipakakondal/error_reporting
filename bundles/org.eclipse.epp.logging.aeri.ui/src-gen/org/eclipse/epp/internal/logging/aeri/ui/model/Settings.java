@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getAction <em>Action</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendAction <em>Remember Send Action</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendActionPeriodStart <em>Remember Send Action Period Start</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerConfigurationUrl <em>Server Configuration Url</em>}</li>
+ *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerUrl <em>Server Url</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerConfigurationLocalFile <em>Server Configuration Local File</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipLastDownloadTimestamp <em>Problems Zip Last Download Timestamp</em>}</li>
@@ -262,30 +262,30 @@ public interface Settings extends EObject {
     void setRememberSendActionPeriodStart(long value);
 
     /**
-     * Returns the value of the '<em><b>Server Configuration Url</b></em>' attribute.
+     * Returns the value of the '<em><b>Server Url</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <p>
-     * If the meaning of the '<em>Server Configuration Url</em>' attribute isn't clear,
+     * If the meaning of the '<em>Server Url</em>' attribute isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Server Configuration Url</em>' attribute.
-     * @see #setServerConfigurationUrl(String)
-     * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_ServerConfigurationUrl()
+     * @return the value of the '<em>Server Url</em>' attribute.
+     * @see #setServerUrl(String)
+     * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_ServerUrl()
      * @model
      * @generated
      */
-    String getServerConfigurationUrl();
+    String getServerUrl();
 
     /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerConfigurationUrl <em>Server Configuration Url</em>}' attribute.
+     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerUrl <em>Server Url</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Server Configuration Url</em>' attribute.
-     * @see #getServerConfigurationUrl()
+     * @param value the new value of the '<em>Server Url</em>' attribute.
+     * @see #getServerUrl()
      * @generated
      */
-    void setServerConfigurationUrl(String value);
+    void setServerUrl(String value);
 
     /**
      * Returns the value of the '<em><b>Problems Zip Etag</b></em>' attribute.

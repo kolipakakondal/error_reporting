@@ -542,7 +542,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getSettings_ServerConfigurationUrl() {
+    public EAttribute getSettings_ServerUrl() {
         return (EAttribute)settingsEClass.getEStructuralFeatures().get(9);
     }
 
@@ -683,7 +683,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
         createEAttribute(settingsEClass, SETTINGS__ACTION);
         createEAttribute(settingsEClass, SETTINGS__REMEMBER_SEND_ACTION);
         createEAttribute(settingsEClass, SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START);
-        createEAttribute(settingsEClass, SETTINGS__SERVER_CONFIGURATION_URL);
+        createEAttribute(settingsEClass, SETTINGS__SERVER_URL);
         createEAttribute(settingsEClass, SETTINGS__PROBLEMS_ZIP_ETAG);
         createEAttribute(settingsEClass, SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE);
         createEAttribute(settingsEClass, SETTINGS__PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP);
@@ -779,7 +779,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
         initEAttribute(getSettings_Action(), this.getSendAction(), "action", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getSettings_RememberSendAction(), this.getRememberSendAction(), "rememberSendAction", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getSettings_RememberSendActionPeriodStart(), ecorePackage.getELong(), "rememberSendActionPeriodStart", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_ServerConfigurationUrl(), ecorePackage.getEString(), "serverConfigurationUrl", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSettings_ServerUrl(), ecorePackage.getEString(), "serverUrl", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getSettings_ProblemsZipEtag(), ecorePackage.getEString(), "problemsZipEtag", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getSettings_ServerConfigurationLocalFile(), ecorePackage.getEString(), "serverConfigurationLocalFile", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getSettings_ProblemsZipLastDownloadTimestamp(), ecorePackage.getELong(), "problemsZipLastDownloadTimestamp", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

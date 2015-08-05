@@ -200,8 +200,7 @@ public class Startup implements IStartup {
                 configuration = AeriServer.loadFromFile(configurationFile);
             }
             if (configuration == null || System.currentTimeMillis() - configuration.getTimestamp() > configuration.getTtlMs()) {
-                configuration = AeriServer.download(new URI("https://dev.eclipse.org/recommenders/community/confess/v2/discovery"),
-                        executor);
+                configuration = AeriServer.download(new URI(settings.getServerUrl()), executor);
                 AeriServer.saveToFile(configurationFile, configuration);
             }
             server = new AeriServer(executor, configuration, settings);

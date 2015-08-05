@@ -535,13 +535,13 @@ public interface ModelPackage extends EPackage {
     int SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START = 8;
 
     /**
-     * The feature id for the '<em><b>Server Configuration Url</b></em>' attribute.
+     * The feature id for the '<em><b>Server Url</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int SETTINGS__SERVER_CONFIGURATION_URL = 9;
+    int SETTINGS__SERVER_URL = 9;
 
     /**
      * The feature id for the '<em><b>Problems Zip Etag</b></em>' attribute.
@@ -1116,15 +1116,15 @@ public interface ModelPackage extends EPackage {
     EAttribute getSettings_RememberSendActionPeriodStart();
 
     /**
-     * Returns the meta object for the attribute '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerConfigurationUrl <em>Server Configuration Url</em>}'.
+     * Returns the meta object for the attribute '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerUrl <em>Server Url</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Server Configuration Url</em>'.
-     * @see org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerConfigurationUrl()
+     * @return the meta object for the attribute '<em>Server Url</em>'.
+     * @see org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerUrl()
      * @see #getSettings()
      * @generated
      */
-    EAttribute getSettings_ServerConfigurationUrl();
+    EAttribute getSettings_ServerUrl();
 
     /**
      * Returns the meta object for the attribute '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}'.
@@ -1590,12 +1590,12 @@ public interface ModelPackage extends EPackage {
         EAttribute SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START = eINSTANCE.getSettings_RememberSendActionPeriodStart();
 
         /**
-         * The meta object literal for the '<em><b>Server Configuration Url</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>Server Url</b></em>' attribute feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute SETTINGS__SERVER_CONFIGURATION_URL = eINSTANCE.getSettings_ServerConfigurationUrl();
+        EAttribute SETTINGS__SERVER_URL = eINSTANCE.getSettings_ServerUrl();
 
         /**
          * The meta object literal for the '<em><b>Problems Zip Etag</b></em>' attribute feature. <!-- begin-user-doc --> <!-- end-user-doc
