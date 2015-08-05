@@ -229,10 +229,18 @@ public class Startup implements IStartup {
 
     private void scheduleJobs() {
         try {
+            Job job = new Job("schedule problem database update") {
+                @Override
+                protected IStatus run(IProgressMonitor monitor) {
+                    new ProblemsDatabaseUpdateJob(problemsDb, server, settings).schedule();
+                    return Status.OK_STATUS;
+                }
+            };
+            job.setSystem(true);
             long outdatedTimestamp = settings.getProblemsZipLastDownloadTimestamp() + configuration.getProblemsTtlMs();
             long timeToUpdate = outdatedTimestamp - System.currentTimeMillis();
             long scheduleMs = max(MILLISECONDS.convert(10, SECONDS), timeToUpdate);
-            new ProblemsDatabaseUpdateJob(problemsDb, server, settings).schedule(scheduleMs);
+            job.schedule(scheduleMs);
         } catch (Exception e) {
             Throwables.propagate(e);
         }
