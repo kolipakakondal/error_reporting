@@ -60,7 +60,9 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
         public BlockPopupOnModalShellActivationListener() {
             title = getPopupShellTitle();
             titleLabel = getTitleLabel(getContents());
-            title = titleLabel.getText();
+            if (titleLabel != null) {
+                title = titleLabel.getText();
+            }
             // check existing shells
             IWorkbench workbench = PlatformUI.getWorkbench();
             for (Shell shell : workbench.getDisplay().getShells()) {
@@ -68,24 +70,6 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
                     deactivate();
                 }
             }
-        }
-
-        private Label getTitleLabel(Control c) {
-            if (c instanceof Label) {
-                Label l = (Label) c;
-                if (getPopupShellTitle().equals(l.getText())) {
-                    return l;
-                }
-            }
-            if (c instanceof Composite) {
-                for (Control cc : ((Composite) c).getChildren()) {
-                    Label l = getTitleLabel(cc);
-                    if (l != null) {
-                        return l;
-                    }
-                }
-            }
-            return null;
         }
 
         @Override
@@ -120,7 +104,9 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
 
         private void deactivate() {
             popupBlocked = true;
-            titleLabel.setText("(Waiting for focus) " + title);
+            if (titleLabel != null) {
+                titleLabel.setText("(Waiting for focus) " + title);
+            }
             for (ScalingHyperlink link : links) {
                 link.setEnabled(false);
             }
@@ -128,11 +114,31 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
 
         private void activate() {
             popupBlocked = false;
-            titleLabel.setText(title);
+            if (titleLabel != null) {
+                titleLabel.setText(title);
+            }
             for (ScalingHyperlink link : links) {
                 link.setEnabled(true);
             }
         }
+    }
+
+    private Label getTitleLabel(Control c) {
+        if (c instanceof Label) {
+            Label l = (Label) c;
+            if (getPopupShellTitle().equals(l.getText())) {
+                return l;
+            }
+        }
+        if (c instanceof Composite) {
+            for (Control cc : ((Composite) c).getChildren()) {
+                Label l = getTitleLabel(cc);
+                if (l != null) {
+                    return l;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
@@ -288,6 +294,10 @@ public class PopupNotification extends AbstractWorkbenchNotificationPopup {
     public void create() {
         super.create();
         registerModalShellListener();
+        Label titleLabel = getTitleLabel(getContents());
+        if (titleLabel != null) {
+            titleLabel.setCursor(getParentShell().getDisplay().getSystemCursor(SWT.CURSOR_ARROW));
+        }
     }
 
     private void registerModalShellListener() {

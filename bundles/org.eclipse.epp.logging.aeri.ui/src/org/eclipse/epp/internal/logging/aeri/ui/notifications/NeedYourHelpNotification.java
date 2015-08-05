@@ -47,7 +47,7 @@ public class NeedYourHelpNotification extends Notification {
 
     @Override
     public String getTitle() {
-        return "You hit a known issue in Eclipse. Now we need your help.";
+        return "You hit a known issue in Eclipse.";
     }
 
     @Override
@@ -72,14 +72,6 @@ public class NeedYourHelpNotification extends Notification {
             }
         };
         actions.add(a1);
-
-        // NoficationAction a2 = new NoficationAction("Send Configuration") {
-        // @Override
-        // public void execute() {
-        // fireEvent(new NewReportShowDetailsRequest(report));
-        // }
-        // };
-        // actions.add(a2);
 
         if (state.hasBugId()) {
             NoficationAction a = new NoficationAction("Visit #" + state.getBugId()) {
