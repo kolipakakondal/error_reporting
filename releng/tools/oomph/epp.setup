@@ -1515,6 +1515,16 @@
         name="Mars">
       <description></description>
     </setupTask>
+    <setupTask
+        xsi:type="setup:EclipseIniTask"
+        option="-debug"
+        value="${installation.location|uri}/${installation.relativeProductFolder}/.options">
+      <description>Enable debug output</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:ResourceCreationTask"
+        content="org.eclipse.epp.logging.aeri.ui/debug=true"
+        targetURL="${installation.location|uri}/${installation.relativeProductFolder}/.options"/>
     <stream
         name="master"/>
     <logicalProjectContainer
