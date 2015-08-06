@@ -16,6 +16,7 @@ import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
 import java.io.File;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.UnknownHostException;
 
@@ -109,7 +110,7 @@ public class Startup implements IStartup {
                     progress.worked(1);
 
                     monitor.done();
-                } catch (UnknownHostException e) {
+                } catch (UnknownHostException | SocketException e) {
                     if (DEBUG) {
                         log(WARN_STARTUP_FAILED, e);
                     }
@@ -192,7 +193,7 @@ public class Startup implements IStartup {
         settings = PreferenceInitializer.getDefault();
     }
 
-    private void initializeServerAndConfiguration() throws UnknownHostException {
+    private void initializeServerAndConfiguration() throws UnknownHostException, SocketException {
         try {
             Executor executor = Executor.newInstance();
             File configurationFile = new File(settings.getServerConfigurationLocalFile());
@@ -204,7 +205,7 @@ public class Startup implements IStartup {
                 AeriServer.saveToFile(configurationFile, configuration);
             }
             server = new AeriServer(executor, configuration, settings);
-        } catch (UnknownHostException e) {
+        } catch (UnknownHostException | SocketException e) {
             throw e;
         } catch (Exception e) {
             log(WARN_CONFIGURATION_DOWNLOAD_FAILED, e);
