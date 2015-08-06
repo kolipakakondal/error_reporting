@@ -12,6 +12,7 @@ package org.eclipse.epp.internal.logging.aeri.ui;
 
 import java.util.Set;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.epp.internal.logging.aeri.ui.log.LogListener;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StandInStacktraceProvider;
 
@@ -22,6 +23,8 @@ public final class Constants {
     private Constants() {
         throw new IllegalStateException("Not meant to be instantiated"); //$NON-NLS-1$
     }
+
+    public static final boolean DEBUG = "true".equalsIgnoreCase(Platform.getDebugOption("org.eclipse.epp.logging.aeri.ui/debug"));
 
     public static final String PLUGIN_ID = "org.eclipse.epp.logging.aeri.ui";
     public static final String AERI_NAMESPACE = "org.eclipse.epp.logging.aeri";

@@ -12,6 +12,7 @@ package org.eclipse.epp.internal.logging.aeri.ide;
 
 import static java.lang.Math.max;
 import static java.util.concurrent.TimeUnit.*;
+import static org.eclipse.epp.internal.logging.aeri.ui.Constants.DEBUG;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
@@ -53,8 +54,6 @@ import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 
 public class Startup implements IStartup {
-
-    private static final boolean DEBUG = "true".equalsIgnoreCase(Platform.getDebugOption("org.eclipse.epp.logging.aeri.ide/debug"));
 
     private ReportHistory history;
     private Settings settings;
