@@ -155,12 +155,12 @@ public class ServerConfiguration {
     private String description;
     private long timestamp; // when did we discover the service the last time?
     private long ttl; // (in minutes) how long is this service configuration valid?
-
+    private String id;
     private String helpUrl;
     private String feedbackUrl;
     private String aboutUrl;
     private String submitUrl;
-    private int submitSizeLimit;
+    private int maxReportSize;
     private String problemsUrl;
 
     // in minutes
@@ -203,7 +203,7 @@ public class ServerConfiguration {
      * to ignore all exceptions from plugins starting with <code>org.eclipse.epp.logging.aeri.</code> on top of a stacktrace, ending with
      * <code>StandInException</code> with any message. The status may be included in other status-objects.
      */
-    private List<String> ignoredPluginMessages;
+    private List<String> ignoredStatuses;
     private transient List<IgnorePattern> ignoredPatterns;
     private long problemsZipLastDownloadTimestamp;
 
@@ -302,12 +302,12 @@ public class ServerConfiguration {
         this.submitUrl = submitUrl;
     }
 
-    public int getSubmitSizeLimit() {
-        return submitSizeLimit;
+    public int getMaxReportSize() {
+        return maxReportSize;
     }
 
-    public void setSubmitSizeLimit(int submitSizeLimit) {
-        this.submitSizeLimit = submitSizeLimit;
+    public void setMaxReportSize(int submitSizeLimit) {
+        this.maxReportSize = submitSizeLimit;
     }
 
     public String getProblemsUrl() {
@@ -397,22 +397,10 @@ public class ServerConfiguration {
         this.acceptOtherPackages = acceptOtherPackages;
     }
 
-    public List<String> getIgnoredPluginMessages() {
-        return ignoredPluginMessages;
-    }
-
-    public void setIgnoredPluginMessages(List<String> ignoredPluginMessages) {
-        this.ignoredPluginMessages = ignoredPluginMessages;
-    }
-
-    public void setIgnoredExceptions(List<String> ignoredPatternsStrings) {
-        this.ignoredPluginMessages = ignoredPatternsStrings;
-    }
-
     public List<IgnorePattern> getIgnoredPluginMessagesPatterns() {
         if (ignoredPatterns == null) {
             ignoredPatterns = Lists.newArrayList();
-            for (String s : getIgnoredPluginMessages()) {
+            for (String s : getIgnoredStatuses()) {
                 IgnorePattern pattern = IgnorePattern.fromString(s);
                 if (pattern != null) {
                     ignoredPatterns.add(pattern);
@@ -446,5 +434,17 @@ public class ServerConfiguration {
 
     public void setProblemsZipLastDownloadTimestamp(long problemsZipLastDownloadTimestamp) {
         this.problemsZipLastDownloadTimestamp = problemsZipLastDownloadTimestamp;
+    }
+
+    public List<String> getIgnoredStatuses() {
+        return ignoredStatuses;
+    }
+
+    public void setIgnoredStatuses(List<String> ignoredStatuses) {
+        this.ignoredStatuses = ignoredStatuses;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

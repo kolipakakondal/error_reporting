@@ -86,8 +86,8 @@ public class LogListenerTest {
         configuration = new ServerConfiguration();
         configuration.setAcceptedPlugins(newArrayList(TEST_PLUGIN_ID));
         configuration.setAcceptedPackages(newArrayList("java.*"));
-        configuration.setIgnoredPluginMessages(new ArrayList<String>());
         configuration.setAcceptOtherPackages(true);
+        configuration.setIgnoredStatuses(new ArrayList<String>());
         settings.setAction(SendAction.SILENT);
         settings.setSkipSimilarErrors(true);
 

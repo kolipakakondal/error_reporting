@@ -40,9 +40,12 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse.ProblemReso
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Json;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies;
 
+import com.google.common.annotations.VisibleForTesting;
+
 public class AeriServer {
 
-    private static Response request(URI target, Executor executor) throws ClientProtocolException, IOException {
+    @VisibleForTesting
+    protected static Response request(URI target, Executor executor) throws ClientProtocolException, IOException {
         // max time until a connection to the server has to be established.
         int connectTimeout = (int) TimeUnit.SECONDS.toMillis(3);
         // max time between two packets sent back to the client. 10 seconds of silence will kill the session
