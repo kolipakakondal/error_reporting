@@ -60,7 +60,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
     public static final String PROP_SERVER = PKG.getSettings_ServerUrl().getName();
     public static final String PROP_SKIP_SIMILAR_ERRORS = PKG.getSettings_SkipSimilarErrors().getName();
     public static final String PROP_SERVER_CONFIGURATION_LOCAL_FILE = PKG.getSettings_ServerConfigurationLocalFile().getName();
-    public static final String PROP_PROBLEM_INDEX_LAST_DOWNLOAD = PKG.getSettings_ProblemsZipLastDownloadTimestamp().getName();
 
     private static String getServerUrl() {
         return System.getProperty(PLUGIN_ID + "." + PROP_SERVER, "https://dev.eclipse.org/recommenders/community/confess/v2/discovery");
@@ -111,7 +110,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         s.putLong(PROP_REMEMBER_SETTING_PERIOD_START, 0L);
         s.put(PROP_SEND_ACTION, SendAction.ASK.name());
         s.put(PROP_REMEMBER_SEND_ACTION, RememberSendAction.NONE.name());
-        s.putLong(PROP_PROBLEM_INDEX_LAST_DOWNLOAD, 0L);
     }
 
     public static Settings getDefault() {

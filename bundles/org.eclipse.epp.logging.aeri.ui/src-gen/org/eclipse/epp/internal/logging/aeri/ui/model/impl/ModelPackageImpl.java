@@ -547,29 +547,12 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
     }
 
     /**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getSettings_ProblemsZipEtag() {
-        return (EAttribute)settingsEClass.getEStructuralFeatures().get(10);
-    }
-
-    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     public EAttribute getSettings_ServerConfigurationLocalFile() {
-        return (EAttribute)settingsEClass.getEStructuralFeatures().get(11);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getSettings_ProblemsZipLastDownloadTimestamp() {
-        return (EAttribute)settingsEClass.getEStructuralFeatures().get(12);
+        return (EAttribute)settingsEClass.getEStructuralFeatures().get(10);
     }
 
     /**
@@ -684,9 +667,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
         createEAttribute(settingsEClass, SETTINGS__REMEMBER_SEND_ACTION);
         createEAttribute(settingsEClass, SETTINGS__REMEMBER_SEND_ACTION_PERIOD_START);
         createEAttribute(settingsEClass, SETTINGS__SERVER_URL);
-        createEAttribute(settingsEClass, SETTINGS__PROBLEMS_ZIP_ETAG);
         createEAttribute(settingsEClass, SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE);
-        createEAttribute(settingsEClass, SETTINGS__PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP);
 
         // Create enums
         sendActionEEnum = createEEnum(SEND_ACTION);
@@ -780,9 +761,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
         initEAttribute(getSettings_RememberSendAction(), this.getRememberSendAction(), "rememberSendAction", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getSettings_RememberSendActionPeriodStart(), ecorePackage.getELong(), "rememberSendActionPeriodStart", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getSettings_ServerUrl(), ecorePackage.getEString(), "serverUrl", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_ProblemsZipEtag(), ecorePackage.getEString(), "problemsZipEtag", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getSettings_ServerConfigurationLocalFile(), ecorePackage.getEString(), "serverConfigurationLocalFile", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSettings_ProblemsZipLastDownloadTimestamp(), ecorePackage.getELong(), "problemsZipLastDownloadTimestamp", null, 0, 1, Settings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize enums and add enum literals
         initEEnum(sendActionEEnum, SendAction.class, "SendAction");

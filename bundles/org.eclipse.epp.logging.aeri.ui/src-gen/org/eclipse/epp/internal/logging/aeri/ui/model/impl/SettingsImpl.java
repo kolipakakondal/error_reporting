@@ -27,9 +27,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getRememberSendAction <em>Remember Send Action</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getRememberSendActionPeriodStart <em>Remember Send Action Period Start</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getServerUrl <em>Server Url</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getProblemsZipEtag <em>Problems Zip Etag</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getServerConfigurationLocalFile <em>Server Configuration Local File</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.impl.SettingsImpl#getProblemsZipLastDownloadTimestamp <em>Problems Zip Last Download Timestamp</em>}</li>
  * </ul>
  *
  * @generated
@@ -228,26 +226,6 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     protected String serverUrl = SERVER_URL_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getProblemsZipEtag() <em>Problems Zip Etag</em>}' attribute.
-     * <!-- begin-user-doc --> <!--
-     * end-user-doc -->
-     * @see #getProblemsZipEtag()
-     * @generated
-     * @ordered
-     */
-    protected static final String PROBLEMS_ZIP_ETAG_EDEFAULT = null;
-
-    /**
-     * The cached value of the '{@link #getProblemsZipEtag() <em>Problems Zip Etag</em>}' attribute.
-     * <!-- begin-user-doc --> <!--
-     * end-user-doc -->
-     * @see #getProblemsZipEtag()
-     * @generated
-     * @ordered
-     */
-    protected String problemsZipEtag = PROBLEMS_ZIP_ETAG_EDEFAULT;
-
-    /**
      * The default value of the '{@link #getServerConfigurationLocalFile() <em>Server Configuration Local File</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -266,26 +244,6 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
      * @ordered
      */
     protected String serverConfigurationLocalFile = SERVER_CONFIGURATION_LOCAL_FILE_EDEFAULT;
-
-    /**
-     * The default value of the '{@link #getProblemsZipLastDownloadTimestamp() <em>Problems Zip Last Download Timestamp</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getProblemsZipLastDownloadTimestamp()
-     * @generated
-     * @ordered
-     */
-    protected static final long PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP_EDEFAULT = 0L;
-
-    /**
-     * The cached value of the '{@link #getProblemsZipLastDownloadTimestamp() <em>Problems Zip Last Download Timestamp</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getProblemsZipLastDownloadTimestamp()
-     * @generated
-     * @ordered
-     */
-    protected long problemsZipLastDownloadTimestamp = PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP_EDEFAULT;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -497,25 +455,6 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
     }
 
     /**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @generated
-     */
-    public String getProblemsZipEtag() {
-        return problemsZipEtag;
-    }
-
-    /**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @generated
-     */
-    public void setProblemsZipEtag(String newProblemsZipEtag) {
-        String oldProblemsZipEtag = problemsZipEtag;
-        problemsZipEtag = newProblemsZipEtag;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG, oldProblemsZipEtag, problemsZipEtag));
-    }
-
-    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -534,27 +473,6 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
         serverConfigurationLocalFile = newServerConfigurationLocalFile;
         if (eNotificationRequired())
             eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE, oldServerConfigurationLocalFile, serverConfigurationLocalFile));
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public long getProblemsZipLastDownloadTimestamp() {
-        return problemsZipLastDownloadTimestamp;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setProblemsZipLastDownloadTimestamp(long newProblemsZipLastDownloadTimestamp) {
-        long oldProblemsZipLastDownloadTimestamp = problemsZipLastDownloadTimestamp;
-        problemsZipLastDownloadTimestamp = newProblemsZipLastDownloadTimestamp;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.SETTINGS__PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP, oldProblemsZipLastDownloadTimestamp, problemsZipLastDownloadTimestamp));
     }
 
     /**
@@ -584,12 +502,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
                 return getRememberSendActionPeriodStart();
             case ModelPackage.SETTINGS__SERVER_URL:
                 return getServerUrl();
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
-                return getProblemsZipEtag();
             case ModelPackage.SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE:
                 return getServerConfigurationLocalFile();
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP:
-                return getProblemsZipLastDownloadTimestamp();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -632,14 +546,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
             case ModelPackage.SETTINGS__SERVER_URL:
                 setServerUrl((String)newValue);
                 return;
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
-                setProblemsZipEtag((String)newValue);
-                return;
             case ModelPackage.SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE:
                 setServerConfigurationLocalFile((String)newValue);
-                return;
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP:
-                setProblemsZipLastDownloadTimestamp((Long)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -682,14 +590,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
             case ModelPackage.SETTINGS__SERVER_URL:
                 setServerUrl(SERVER_URL_EDEFAULT);
                 return;
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
-                setProblemsZipEtag(PROBLEMS_ZIP_ETAG_EDEFAULT);
-                return;
             case ModelPackage.SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE:
                 setServerConfigurationLocalFile(SERVER_CONFIGURATION_LOCAL_FILE_EDEFAULT);
-                return;
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP:
-                setProblemsZipLastDownloadTimestamp(PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP_EDEFAULT);
                 return;
         }
         super.eUnset(featureID);
@@ -722,12 +624,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
                 return rememberSendActionPeriodStart != REMEMBER_SEND_ACTION_PERIOD_START_EDEFAULT;
             case ModelPackage.SETTINGS__SERVER_URL:
                 return SERVER_URL_EDEFAULT == null ? serverUrl != null : !SERVER_URL_EDEFAULT.equals(serverUrl);
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_ETAG:
-                return PROBLEMS_ZIP_ETAG_EDEFAULT == null ? problemsZipEtag != null : !PROBLEMS_ZIP_ETAG_EDEFAULT.equals(problemsZipEtag);
             case ModelPackage.SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE:
                 return SERVER_CONFIGURATION_LOCAL_FILE_EDEFAULT == null ? serverConfigurationLocalFile != null : !SERVER_CONFIGURATION_LOCAL_FILE_EDEFAULT.equals(serverConfigurationLocalFile);
-            case ModelPackage.SETTINGS__PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP:
-                return problemsZipLastDownloadTimestamp != PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }
@@ -761,12 +659,8 @@ public class SettingsImpl extends MinimalEObjectImpl.Container implements Settin
         result.append(rememberSendActionPeriodStart);
         result.append(", serverUrl: ");
         result.append(serverUrl);
-        result.append(", problemsZipEtag: ");
-        result.append(problemsZipEtag);
         result.append(", serverConfigurationLocalFile: ");
         result.append(serverConfigurationLocalFile);
-        result.append(", problemsZipLastDownloadTimestamp: ");
-        result.append(problemsZipLastDownloadTimestamp);
         result.append(')');
         return result.toString();
     }

@@ -544,30 +544,13 @@ public interface ModelPackage extends EPackage {
     int SETTINGS__SERVER_URL = 9;
 
     /**
-     * The feature id for the '<em><b>Problems Zip Etag</b></em>' attribute.
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int SETTINGS__PROBLEMS_ZIP_ETAG = 10;
-
-    /**
      * The feature id for the '<em><b>Server Configuration Local File</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE = 11;
-
-    /**
-     * The feature id for the '<em><b>Problems Zip Last Download Timestamp</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int SETTINGS__PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP = 12;
+    int SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE = 10;
 
     /**
      * The number of structural features of the '<em>Settings</em>' class.
@@ -575,7 +558,7 @@ public interface ModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int SETTINGS_FEATURE_COUNT = 13;
+    int SETTINGS_FEATURE_COUNT = 11;
 
     /**
      * The number of operations of the '<em>Settings</em>' class.
@@ -1127,16 +1110,6 @@ public interface ModelPackage extends EPackage {
     EAttribute getSettings_ServerUrl();
 
     /**
-     * Returns the meta object for the attribute '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}'.
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Problems Zip Etag</em>'.
-     * @see org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag()
-     * @see #getSettings()
-     * @generated
-     */
-    EAttribute getSettings_ProblemsZipEtag();
-
-    /**
      * Returns the meta object for the attribute '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerConfigurationLocalFile <em>Server Configuration Local File</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1146,17 +1119,6 @@ public interface ModelPackage extends EPackage {
      * @generated
      */
     EAttribute getSettings_ServerConfigurationLocalFile();
-
-    /**
-     * Returns the meta object for the attribute '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipLastDownloadTimestamp <em>Problems Zip Last Download Timestamp</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Problems Zip Last Download Timestamp</em>'.
-     * @see org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipLastDownloadTimestamp()
-     * @see #getSettings()
-     * @generated
-     */
-    EAttribute getSettings_ProblemsZipLastDownloadTimestamp();
 
     /**
      * Returns the meta object for enum '{@link org.eclipse.epp.internal.logging.aeri.ui.model.SendAction <em>Send Action</em>}'. <!--
@@ -1598,28 +1560,12 @@ public interface ModelPackage extends EPackage {
         EAttribute SETTINGS__SERVER_URL = eINSTANCE.getSettings_ServerUrl();
 
         /**
-         * The meta object literal for the '<em><b>Problems Zip Etag</b></em>' attribute feature. <!-- begin-user-doc --> <!-- end-user-doc
-         * -->
-         * 
-         * @generated
-         */
-        EAttribute SETTINGS__PROBLEMS_ZIP_ETAG = eINSTANCE.getSettings_ProblemsZipEtag();
-
-        /**
          * The meta object literal for the '<em><b>Server Configuration Local File</b></em>' attribute feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
         EAttribute SETTINGS__SERVER_CONFIGURATION_LOCAL_FILE = eINSTANCE.getSettings_ServerConfigurationLocalFile();
-
-        /**
-         * The meta object literal for the '<em><b>Problems Zip Last Download Timestamp</b></em>' attribute feature.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @generated
-         */
-        EAttribute SETTINGS__PROBLEMS_ZIP_LAST_DOWNLOAD_TIMESTAMP = eINSTANCE.getSettings_ProblemsZipLastDownloadTimestamp();
 
         /**
          * The meta object literal for the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.SendAction <em>Send Action</em>}' enum.

@@ -21,9 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendAction <em>Remember Send Action</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getRememberSendActionPeriodStart <em>Remember Send Action Period Start</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerUrl <em>Server Url</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}</li>
  *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getServerConfigurationLocalFile <em>Server Configuration Local File</em>}</li>
- *   <li>{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipLastDownloadTimestamp <em>Problems Zip Last Download Timestamp</em>}</li>
  * </ul>
  *
  * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings()
@@ -288,30 +286,6 @@ public interface Settings extends EObject {
     void setServerUrl(String value);
 
     /**
-     * Returns the value of the '<em><b>Problems Zip Etag</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of the '<em>Problems Zip Etag</em>' attribute isn't clear, there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @return the value of the '<em>Problems Zip Etag</em>' attribute.
-     * @see #setProblemsZipEtag(String)
-     * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_ProblemsZipEtag()
-     * @model
-     * @generated
-     */
-    String getProblemsZipEtag();
-
-    /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipEtag <em>Problems Zip Etag</em>}' attribute.
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @param value the new value of the '<em>Problems Zip Etag</em>' attribute.
-     * @see #getProblemsZipEtag()
-     * @generated
-     */
-    void setProblemsZipEtag(String value);
-
-    /**
      * Returns the value of the '<em><b>Server Configuration Local File</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <p>
@@ -336,31 +310,5 @@ public interface Settings extends EObject {
      * @generated
      */
     void setServerConfigurationLocalFile(String value);
-
-    /**
-     * Returns the value of the '<em><b>Problems Zip Last Download Timestamp</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of the '<em>Problems Zip Last Download Timestamp</em>' attribute isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @return the value of the '<em>Problems Zip Last Download Timestamp</em>' attribute.
-     * @see #setProblemsZipLastDownloadTimestamp(long)
-     * @see org.eclipse.epp.internal.logging.aeri.ui.model.ModelPackage#getSettings_ProblemsZipLastDownloadTimestamp()
-     * @model
-     * @generated
-     */
-    long getProblemsZipLastDownloadTimestamp();
-
-    /**
-     * Sets the value of the '{@link org.eclipse.epp.internal.logging.aeri.ui.model.Settings#getProblemsZipLastDownloadTimestamp <em>Problems Zip Last Download Timestamp</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Problems Zip Last Download Timestamp</em>' attribute.
-     * @see #getProblemsZipLastDownloadTimestamp()
-     * @generated
-     */
-    void setProblemsZipLastDownloadTimestamp(long value);
 
 } // Settings
