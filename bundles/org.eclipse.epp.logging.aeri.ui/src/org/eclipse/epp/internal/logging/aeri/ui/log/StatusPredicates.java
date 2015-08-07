@@ -135,4 +135,29 @@ public class StatusPredicates {
             return history.isRunning();
         }
     }
+
+    public static class AcceptProductPredicate implements Predicate<IStatus> {
+
+        private ServerConfiguration configuration;
+
+        public AcceptProductPredicate(ServerConfiguration configuration) {
+            this.configuration = configuration;
+        }
+
+        @Override
+        public boolean apply(IStatus input) {
+            String product = System.getProperty(SYSPROP_ECLIPSE_PRODUCT);
+            return product == null ? false : isAccepted(product);
+        }
+
+        private boolean isAccepted(String product) {
+            for (Pattern acceptedProductPattern : configuration.getAcceptedProductsPatterns()) {
+                if (acceptedProductPattern.matcher(product).matches()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    }
 }

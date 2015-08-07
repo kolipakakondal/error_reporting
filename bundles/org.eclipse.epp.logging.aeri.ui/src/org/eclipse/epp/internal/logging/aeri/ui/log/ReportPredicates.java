@@ -133,10 +133,7 @@ public class ReportPredicates {
 
         @Override
         public boolean apply(ErrorReport report) {
-            if (!configuration.isAcceptUiFreezes() && isUiMonitoring(report.getStatus())) {
-                return false;
-            }
-            return true;
+            return configuration.isAcceptUiFreezes() || !isUiMonitoring(report.getStatus());
         }
 
     }
@@ -151,10 +148,7 @@ public class ReportPredicates {
 
         @Override
         public boolean apply(ErrorReport report) {
-            if (!configuration.isAcceptOtherPackages() && Reports.containsNotWhitelistedClasses(report, configuration)) {
-                return false;
-            }
-            return true;
+            return configuration.isAcceptOtherPackages() || !Reports.containsNotWhitelistedClasses(report, configuration);
         }
 
     }
@@ -164,6 +158,8 @@ public class ReportPredicates {
     }
 
     public static class ValidSizeErrorReportPredicate implements Predicate<ErrorReport> {
+
+        private ServerConfiguration configuration;
 
         private static final class EstimateSizeVisitor extends ModelSwitch<Object> {
 
@@ -202,10 +198,8 @@ public class ReportPredicates {
             }
         }
 
-        private int maxReportByteSize;
-
-        public ValidSizeErrorReportPredicate(int maxReportByteSize) {
-            this.maxReportByteSize = maxReportByteSize;
+        public ValidSizeErrorReportPredicate(ServerConfiguration configuration) {
+            this.configuration = configuration;
         }
 
         @Override
@@ -215,7 +209,7 @@ public class ReportPredicates {
             Reports.visit(report, visitor);
             // assume 16 bit chars
             int estimatedByteLength = visitor.estimatedCharacters * 2;
-            return estimatedByteLength < maxReportByteSize;
+            return estimatedByteLength < configuration.getMaxReportSize();
         }
 
     }
