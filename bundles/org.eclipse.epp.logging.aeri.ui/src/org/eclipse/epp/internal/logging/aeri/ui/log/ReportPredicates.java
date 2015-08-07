@@ -18,8 +18,10 @@ import org.eclipse.epp.internal.logging.aeri.ui.ExpiringReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus.RequiredAction;
+import org.eclipse.epp.internal.logging.aeri.ui.model.Reports;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
+import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -107,13 +109,54 @@ public class ReportPredicates {
         }
     }
 
-    public static class CompleteErrorReportPredicate implements Predicate<ErrorReport> {
+    public static class CompleteUiFreezeReportPredicate implements Predicate<ErrorReport> {
 
         @Override
         public boolean apply(ErrorReport report) {
             Status status = report.getStatus();
-            return equal("org.eclipse.ui.monitoring", status.getPluginId()) ? !status.getChildren().isEmpty() : true;
+            return isUiMonitoring(status) ? !status.getChildren().isEmpty() : true;
         }
+
+    }
+
+    public static class AcceptUiFreezesPredicate implements Predicate<ErrorReport> {
+
+        private ServerConfiguration configuration;
+
+        public AcceptUiFreezesPredicate(ServerConfiguration configuration) {
+            this.configuration = configuration;
+        }
+
+        @Override
+        public boolean apply(ErrorReport report) {
+            if (!configuration.isAcceptUiFreezes() && isUiMonitoring(report.getStatus())) {
+                return false;
+            }
+            return true;
+        }
+
+    }
+
+    public static class AcceptOtherPackagesPredicate implements Predicate<ErrorReport> {
+
+        private ServerConfiguration configuration;
+
+        public AcceptOtherPackagesPredicate(ServerConfiguration configuration) {
+            this.configuration = configuration;
+        }
+
+        @Override
+        public boolean apply(ErrorReport report) {
+            if (!configuration.isAcceptOtherPackages() && Reports.containsNotWhitelistedClasses(report, configuration)) {
+                return false;
+            }
+            return true;
+        }
+
+    }
+
+    private static boolean isUiMonitoring(Status status) {
+        return equal("org.eclipse.ui.monitoring", status.getPluginId());
     }
 
 }

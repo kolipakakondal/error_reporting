@@ -67,6 +67,37 @@ public class Reports {
         }
     }
 
+    public static final class NotWhitelistedClassDetectorVisitor extends ModelSwitch<Object> {
+        private List<Pattern> whitelist;
+        private boolean detected = false;
+
+        public NotWhitelistedClassDetectorVisitor(List<Pattern> whitelist) {
+            this.whitelist = whitelist;
+        }
+
+        @Override
+        public Object caseThrowable(Throwable throwable) {
+            if (!isWhitelisted(throwable.getClassName(), whitelist)) {
+                detected = true;
+                return detected;
+            }
+            return null;
+        }
+
+        @Override
+        public Object caseStackTraceElement(StackTraceElement element) {
+            if (!isWhitelisted(element.getClassName(), whitelist)) {
+                detected = true;
+                return detected;
+            }
+            return null;
+        }
+
+        public boolean isDetected() {
+            return detected;
+        }
+    }
+
     public static final class AnonymizeStacktraceVisitor extends ModelSwitch<Object> {
         private List<Pattern> whitelist;
 
@@ -506,6 +537,12 @@ public class Reports {
 
     public static void anonymizeStackTrace(ErrorReport report, final ServerConfiguration configuration) {
         visit(report, new AnonymizeStacktraceVisitor(configuration.getAcceptedPackagesPatterns()));
+    }
+
+    public static boolean containsNotWhitelistedClasses(ErrorReport report, final ServerConfiguration configuration) {
+        NotWhitelistedClassDetectorVisitor visitor = new NotWhitelistedClassDetectorVisitor(configuration.getAcceptedPackagesPatterns());
+        visit(report, visitor);
+        return visitor.isDetected();
     }
 
     public static String prettyPrint(ErrorReport report) {

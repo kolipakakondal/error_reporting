@@ -87,6 +87,7 @@ public class LogListenerTest {
         configuration.setAcceptedPlugins(newArrayList(TEST_PLUGIN_ID));
         configuration.setAcceptedPackages(newArrayList("java.*"));
         configuration.setIgnoredPluginMessages(new ArrayList<String>());
+        configuration.setAcceptOtherPackages(true);
         settings.setAction(SendAction.SILENT);
         settings.setSkipSimilarErrors(true);
 
@@ -100,9 +101,6 @@ public class LogListenerTest {
 
         expiringHistory = new ExpiringReportHistory();
 
-        // problemStatusIndex = new TestServerProblemStatusIndex(null);
-        // problemStatusIndex.startAsync();
-        // problemStatusIndex.awaitRunning();+
         problemStatusIndex = mock(ProblemsDatabaseService.class);
         Optional<ProblemStatus> noStatus = Optional.absent();
 
@@ -350,6 +348,31 @@ public class LogListenerTest {
         }
         // only one event should be logged
         verifyExactOneErrorReportLogged();
+    }
+
+    @Test
+    public void testNoAcceptingOtherPackages() {
+        Throwable t = new RuntimeException();
+        t.fillInStackTrace();
+        StackTraceElement[] stackTrace = t.getStackTrace();
+        stackTrace[0] = new StackTraceElement("any.third.party.Clazz", "thirdPartyMethod", "Clazz.java", 42);
+        t.setStackTrace(stackTrace);
+        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "Error Message", t);
+
+        configuration.setAcceptOtherPackages(false);
+
+        sut.logging(status, "");
+        verifyNoErrorReportLogged();
+    }
+
+    @Test
+    public void testNoAcceptingUiFreezes() {
+        Status status = new Status(IStatus.ERROR, "org.eclipse.ui.monitoring", "Error Message", new RuntimeException());
+
+        configuration.setAcceptUiFreezes(false);
+
+        sut.logging(status, "");
+        verifyNoErrorReportLogged();
     }
 
     @Test

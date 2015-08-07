@@ -20,7 +20,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportLogged;
 import org.eclipse.epp.internal.logging.aeri.ui.ExpiringReportHistory;
-import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.CompleteErrorReportPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.AcceptOtherPackagesPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.AcceptUiFreezesPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.CompleteUiFreezeReportPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.ProblemDatabaseIgnoredPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.ReportsHistoryPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.UnseenErrorReportPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.EclipseBuildIdPresentPredicate;
@@ -48,15 +51,28 @@ public class LogListener implements ILogListener {
     @VisibleForTesting
     public static LogListener createLogListener(Settings settings, ServerConfiguration configuration, ReportHistory history, EventBus bus,
             ExpiringReportHistory expiringReportHistory, ProblemsDatabaseService serverProblemsStatusIndex) {
-        Predicate<? super IStatus>[] statusPredicates = decorateForDebug(new ReporterNotDisabledPredicate(settings),
-                new WhitelistedPluginIdPresentPredicate(configuration), new SkipReportsAbsentPredicate(),
-                new EclipseBuildIdPresentPredicate(), new ErrorStatusOnlyPredicate(),
-                new WorkbenchRunningPredicate(PlatformUI.getWorkbench()), new HistoryReadyPredicate(history),
-                new IgnorePatternPredicate(configuration.getIgnoredPluginMessagesPatterns()));
+        Predicate<? super IStatus>[] statusPredicates = decorateForDebug(
+                // @formatter:off
+                new EclipseBuildIdPresentPredicate(),
+                new ErrorStatusOnlyPredicate(),
+                new HistoryReadyPredicate(history),
+                new IgnorePatternPredicate(configuration.getIgnoredPluginMessagesPatterns()),
+                new ReporterNotDisabledPredicate(settings),
+                new SkipReportsAbsentPredicate(),
+                new WhitelistedPluginIdPresentPredicate(configuration),
+                new WorkbenchRunningPredicate(PlatformUI.getWorkbench()));
+                // @formatter:on
         Predicate<IStatus> statusFilters = Predicates.and(statusPredicates);
-        Predicate<? super ErrorReport>[] reportPredicates = decorateForDebug(new UnseenErrorReportPredicate(history, settings),
-                new CompleteErrorReportPredicate(), new ReportsHistoryPredicate(expiringReportHistory, settings),
-                new ReportPredicates.ProblemDatabaseIgnoredPredicate(serverProblemsStatusIndex, settings));
+
+        Predicate<? super ErrorReport>[] reportPredicates = decorateForDebug(
+                // @formatter:off
+                new AcceptOtherPackagesPredicate(configuration),
+                new AcceptUiFreezesPredicate(configuration),
+                new CompleteUiFreezeReportPredicate(),
+                new ProblemDatabaseIgnoredPredicate(serverProblemsStatusIndex, settings),
+                new ReportsHistoryPredicate(expiringReportHistory, settings),
+                new UnseenErrorReportPredicate(history, settings));
+                 // @formatter:on
         Predicate<ErrorReport> reportFilters = Predicates.and(reportPredicates);
         LogListener listener = new LogListener(statusFilters, reportFilters, settings, configuration, bus);
         return listener;
