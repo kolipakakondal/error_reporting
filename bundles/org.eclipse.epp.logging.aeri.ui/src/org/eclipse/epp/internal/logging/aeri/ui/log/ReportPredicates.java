@@ -15,12 +15,16 @@ import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.WARN_HIS
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
 import org.eclipse.epp.internal.logging.aeri.ui.ExpiringReportHistory;
+import org.eclipse.epp.internal.logging.aeri.ui.model.Bundle;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus.RequiredAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Reports;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
+import org.eclipse.epp.internal.logging.aeri.ui.model.StackTraceElement;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Status;
+import org.eclipse.epp.internal.logging.aeri.ui.model.Throwable;
+import org.eclipse.epp.internal.logging.aeri.ui.model.util.ModelSwitch;
 import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 
 import com.google.common.base.Optional;
@@ -159,4 +163,60 @@ public class ReportPredicates {
         return equal("org.eclipse.ui.monitoring", status.getPluginId());
     }
 
+    public static class ValidSizeErrorReportPredicate implements Predicate<ErrorReport> {
+
+        private static final class EstimateSizeVisitor extends ModelSwitch<Object> {
+
+            int estimatedCharacters = 0;
+
+            @Override
+            public Object caseStatus(Status status) {
+                if (status != null) {
+                    estimatedCharacters += status.getPluginId().length();
+                    estimatedCharacters += status.getMessage().length();
+                }
+                return null;
+            }
+
+            @Override
+            public Object caseThrowable(Throwable throwable) {
+                if (throwable.getMessage() != null) {
+                    estimatedCharacters += throwable.getMessage().length();
+                }
+                return null;
+            }
+
+            @Override
+            public Object caseStackTraceElement(StackTraceElement element) {
+                estimatedCharacters += element.getClassName().length();
+                estimatedCharacters += element.getFileName().length();
+                estimatedCharacters += element.getMethodName().length();
+                return null;
+            }
+
+            @Override
+            public Object caseBundle(Bundle bundle) {
+                estimatedCharacters += bundle.getName().length();
+                estimatedCharacters += bundle.getVersion().length();
+                return null;
+            }
+        }
+
+        private int maxReportByteSize;
+
+        public ValidSizeErrorReportPredicate(int maxReportByteSize) {
+            this.maxReportByteSize = maxReportByteSize;
+        }
+
+        @Override
+        public boolean apply(ErrorReport report) {
+            // in case of very large reports (~50+ MB), toJson or String.getBytes may be too expensive
+            EstimateSizeVisitor visitor = new EstimateSizeVisitor();
+            Reports.visit(report, visitor);
+            // assume 16 bit chars
+            int estimatedByteLength = visitor.estimatedCharacters * 2;
+            return estimatedByteLength < maxReportByteSize;
+        }
+
+    }
 }

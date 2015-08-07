@@ -26,6 +26,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.CompleteUiF
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.ProblemDatabaseIgnoredPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.ReportsHistoryPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.UnseenErrorReportPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.ValidSizeErrorReportPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.EclipseBuildIdPresentPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ErrorStatusOnlyPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.HistoryReadyPredicate;
@@ -71,7 +72,8 @@ public class LogListener implements ILogListener {
                 new CompleteUiFreezeReportPredicate(),
                 new ProblemDatabaseIgnoredPredicate(serverProblemsStatusIndex, settings),
                 new ReportsHistoryPredicate(expiringReportHistory, settings),
-                new UnseenErrorReportPredicate(history, settings));
+                new UnseenErrorReportPredicate(history, settings),
+                new ValidSizeErrorReportPredicate(configuration.getMaxReportSize()));
                  // @formatter:on
         Predicate<ErrorReport> reportFilters = Predicates.and(reportPredicates);
         LogListener listener = new LogListener(statusFilters, reportFilters, settings, configuration, bus);

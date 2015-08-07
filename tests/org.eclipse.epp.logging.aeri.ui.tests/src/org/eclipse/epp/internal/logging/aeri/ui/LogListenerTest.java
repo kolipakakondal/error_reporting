@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -88,6 +89,7 @@ public class LogListenerTest {
         configuration.setAcceptedPackages(newArrayList("java.*"));
         configuration.setAcceptOtherPackages(true);
         configuration.setIgnoredStatuses(new ArrayList<String>());
+        configuration.setMaxReportSize(1000 * 1000);
         settings.setAction(SendAction.SILENT);
         settings.setSkipSimilarErrors(true);
 
@@ -416,5 +418,18 @@ public class LogListenerTest {
 
         ErrorReport report = pollEvent().report;
         assertThat(report.getComment(), not(isEmptyOrNullString()));
+    }
+
+    @Test
+    public void testLargeReportsFiltered() {
+        byte[] chars = new byte[1000 * 1000 * 10]; // ~10 MB of chars
+        // 'a'
+        byte b = 97;
+        Arrays.fill(chars, b);
+        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, new String(chars));
+
+        sut.logging(status, "");
+
+        verifyNoErrorReportLogged();
     }
 }
