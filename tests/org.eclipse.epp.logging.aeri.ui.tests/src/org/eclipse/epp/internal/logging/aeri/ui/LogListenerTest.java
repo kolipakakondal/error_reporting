@@ -11,7 +11,7 @@
 package org.eclipse.epp.internal.logging.aeri.ui;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static org.eclipse.epp.internal.logging.aeri.ui.Constants.SYSPROP_ECLIPSE_BUILD_ID;
+import static org.eclipse.epp.internal.logging.aeri.ui.Constants.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -82,11 +81,13 @@ public class LogListenerTest {
     @Before
     public void setup() {
         System.setProperty(SYSPROP_ECLIPSE_BUILD_ID, "unit-tests");
+        System.setProperty(SYSPROP_ECLIPSE_PRODUCT, "org.eclipse.sdk.ide");
         settings = ModelFactory.eINSTANCE.createSettings();
         settings.setConfigured(true);
         configuration = new ServerConfiguration();
         configuration.setAcceptedPlugins(newArrayList(TEST_PLUGIN_ID));
         configuration.setAcceptedPackages(newArrayList("java.*"));
+        configuration.setAcceptedProducts(newArrayList("org.eclipse.*"));
         configuration.setAcceptOtherPackages(true);
         configuration.setIgnoredStatuses(new ArrayList<String>());
         configuration.setMaxReportSize(1000 * 1000);
@@ -378,6 +379,24 @@ public class LogListenerTest {
     }
 
     @Test
+    public void testNoAcceptingOtherProduct() {
+        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "Error Message", new RuntimeException());
+
+        System.setProperty(SYSPROP_ECLIPSE_PRODUCT, "other.eclipse.product");
+        sut.logging(status, "");
+        verifyNoErrorReportLogged();
+    }
+
+    @Test
+    public void testAcceptOtherProduct() {
+        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "Error Message", new RuntimeException());
+        System.setProperty(SYSPROP_ECLIPSE_PRODUCT, "other.eclipse.product");
+        configuration.setAcceptedProducts(newArrayList("other.eclipse.product"));
+        sut.logging(status, "");
+        verifyExactOneErrorReportLogged();
+    }
+
+    @Test
     public void testMultipleErrorsWithDifferentMessages() {
         for (int i = 0; i < 10; i++) {
             Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "Error Message Number " + i, new RuntimeException());
@@ -420,16 +439,4 @@ public class LogListenerTest {
         assertThat(report.getComment(), not(isEmptyOrNullString()));
     }
 
-    @Test
-    public void testLargeReportsFiltered() {
-        byte[] chars = new byte[1000 * 1000 * 10]; // ~10 MB of chars
-        // 'a'
-        byte b = 97;
-        Arrays.fill(chars, b);
-        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, new String(chars));
-
-        sut.logging(status, "");
-
-        verifyNoErrorReportLogged();
-    }
 }
