@@ -70,7 +70,7 @@ public class ProblemsDatabaseUpdateJobTest {
     @Test
     public void testDownloadFails() throws IOException, URISyntaxException {
         mockDatabaseOutdated();
-        when(server.downloadDatabase(any(File.class))).thenReturn(HttpStatus.SC_NOT_FOUND);
+        when(server.downloadDatabase(any(File.class), any(IProgressMonitor.class))).thenReturn(HttpStatus.SC_NOT_FOUND);
 
         IStatus status = runJob();
 
@@ -78,7 +78,7 @@ public class ProblemsDatabaseUpdateJobTest {
         verifyZeroInteractions(service);
         verify(server).isProblemsDatabaseOutdated();
         verify(server).setConfiguration(any(ServerConfiguration.class));
-        verify(server).downloadDatabase(any(File.class));
+        verify(server).downloadDatabase(any(File.class), any(IProgressMonitor.class));
         verifyNoMoreInteractions(server);
     }
 
@@ -86,7 +86,7 @@ public class ProblemsDatabaseUpdateJobTest {
     public void testDownloadSuccess() throws IOException, URISyntaxException {
         mockDatabaseOutdated();
         // the job will try to unzip the index for the service
-        when(server.downloadDatabase(any(File.class))).thenAnswer(new Answer<Integer>() {
+        when(server.downloadDatabase(any(File.class), any(IProgressMonitor.class))).thenAnswer(new Answer<Integer>() {
 
             @Override
             public Integer answer(InvocationOnMock invocation) throws Throwable {
@@ -101,7 +101,7 @@ public class ProblemsDatabaseUpdateJobTest {
         assertThat(status, is(Status.OK_STATUS));
         verify(server).isProblemsDatabaseOutdated();
         verify(server).setConfiguration(any(ServerConfiguration.class));
-        verify(server).downloadDatabase(any(File.class));
+        verify(server).downloadDatabase(any(File.class), any(IProgressMonitor.class));
         verify(service).replaceContent(any(File.class));
         verifyNoMoreInteractions(server);
     }
@@ -109,7 +109,7 @@ public class ProblemsDatabaseUpdateJobTest {
     @Test
     public void testDownloadException() throws IOException, URISyntaxException {
         mockDatabaseOutdated();
-        when(server.downloadDatabase(any(File.class))).thenThrow(new RuntimeException());
+        when(server.downloadDatabase(any(File.class), any(IProgressMonitor.class))).thenThrow(new RuntimeException());
 
         IStatus status = runJob();
 

@@ -16,6 +16,7 @@ import static org.eclipse.epp.internal.logging.aeri.ui.Constants.PLUGIN_ID;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.CancellationException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -56,10 +57,12 @@ public class UploadJob extends Job {
             while (!events.isEmpty()) {
                 ErrorReport event = poll(events);
                 ErrorReport reportToSend = Reports.createAnonymizedSendCopy(event, settings, configuration);
-                ServerResponse result = server.upload(reportToSend);
+                ServerResponse result = server.upload(reportToSend, monitor);
                 bus.post(new ServerResponseShowRequest(result));
             }
             return new Status(IStatus.OK, PLUGIN_ID, Messages.UPLOADJOB_THANK_YOU);
+        } catch (CancellationException e) {
+            return Status.CANCEL_STATUS;
         } catch (Exception e) {
             return new Status(WARNING, PLUGIN_ID, Messages.UPLOADJOB_FAILED, e);
         } finally {

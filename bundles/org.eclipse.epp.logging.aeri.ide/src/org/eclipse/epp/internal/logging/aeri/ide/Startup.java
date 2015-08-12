@@ -88,7 +88,7 @@ public class Startup implements IStartup {
                     progress.worked(1);
 
                     progress.subTask("server");
-                    initializeServerAndConfiguration();
+                    initializeServerAndConfiguration(monitor);
                     progress.worked(1);
 
                     progress.subTask("eventbus");
@@ -191,7 +191,7 @@ public class Startup implements IStartup {
         settings = PreferenceInitializer.getDefault();
     }
 
-    private void initializeServerAndConfiguration() throws UnknownHostException, SocketException {
+    private void initializeServerAndConfiguration(IProgressMonitor monitor) throws UnknownHostException, SocketException {
         try {
             Executor executor = Executor.newInstance();
             File configurationFile = new File(settings.getServerConfigurationLocalFile());
@@ -201,7 +201,7 @@ public class Startup implements IStartup {
                 configuration = server.getConfiguration();
             }
             if (configuration == null || server.isConfigurationOutdated()) {
-                server.refreshConfiguration(settings.getServerUrl());
+                server.refreshConfiguration(settings.getServerUrl(), monitor);
                 server.saveConfiguration();
                 configuration = server.getConfiguration();
             }

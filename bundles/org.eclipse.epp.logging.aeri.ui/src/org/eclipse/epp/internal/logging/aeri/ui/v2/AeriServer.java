@@ -33,12 +33,14 @@ import org.apache.http.client.fluent.Request;
 import org.apache.http.client.fluent.Response;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Reports;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse.ProblemResolution;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Json;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Proxies;
+import org.eclipse.epp.internal.logging.aeri.ui.utils.Responses;
 
 import com.google.common.annotations.VisibleForTesting;
 
@@ -66,9 +68,10 @@ public class AeriServer {
     }
 
     // TODO test all remote cases for exceptions
-    public void refreshConfiguration(String serverUrl) throws HttpResponseException, UnknownHostException, Exception {
+    public void refreshConfiguration(String serverUrl, IProgressMonitor monitor)
+            throws HttpResponseException, UnknownHostException, Exception {
         Response response = request(newURI(serverUrl), executor);
-        String content = response.returnContent().asString();
+        String content = Responses.getContentWithProgress(response, monitor);
         configuration = Json.deserialize(content, ServerConfiguration.class);
         configuration.setTimestamp(System.currentTimeMillis());
     }
@@ -89,10 +92,12 @@ public class AeriServer {
         this.configuration = configuration;
     }
 
-    public ServerResponse upload(ErrorReport report) throws IOException {
+    public ServerResponse upload(ErrorReport report, IProgressMonitor monitor) throws IOException {
         String body = Reports.toJson(report, false);
         StringEntity stringEntity = new StringEntity(body, ContentType.APPLICATION_OCTET_STREAM.withCharset(UTF_8));
-        HttpEntity entity = new GzipCompressingEntity(stringEntity);
+        // length of zipped conent is unknown, using the progress of the string-stream instead.
+        // download progress percentage will be accurate, download progress size will be too large by the compression factor
+        HttpEntity entity = new GzipCompressingEntity(Responses.decorateForProgressMonitoring(stringEntity, monitor));
 
         String submitUrl = configuration.getSubmitUrl();
         URI target = newURI(submitUrl);
@@ -127,9 +132,10 @@ public class AeriServer {
 
     /**
      *
+     * @param monitor
      * @return the {@link HttpStatus}
      */
-    public int downloadDatabase(File destination) throws IOException {
+    public int downloadDatabase(File destination, IProgressMonitor monitor) throws IOException {
         URI target = newURI(configuration.getProblemsUrl());
         // @formatter:off
         Request request = Request.Get(target)
@@ -140,7 +146,8 @@ public class AeriServer {
         // @formatter:on
 
         Response response = Proxies.proxyAuthentication(executor, target).execute(request);
-        HttpResponse returnResponse = response.returnResponse();
+
+        HttpResponse returnResponse = Responses.getResponseWithProgress(response, monitor);
         int statusCode = returnResponse.getStatusLine().getStatusCode();
 
         if (statusCode == HttpStatus.SC_OK) {

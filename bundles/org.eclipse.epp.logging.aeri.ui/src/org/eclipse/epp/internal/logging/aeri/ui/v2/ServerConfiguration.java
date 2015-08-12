@@ -155,7 +155,6 @@ public class ServerConfiguration {
     private String description;
     private long timestamp; // when did we discover the service the last time?
     private long ttl; // (in minutes) how long is this service configuration valid?
-    private String id;
     private String helpUrl;
     private String feedbackUrl;
     private String aboutUrl;
@@ -442,9 +441,5 @@ public class ServerConfiguration {
 
     public void setIgnoredStatuses(List<String> ignoredStatuses) {
         this.ignoredStatuses = ignoredStatuses;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }

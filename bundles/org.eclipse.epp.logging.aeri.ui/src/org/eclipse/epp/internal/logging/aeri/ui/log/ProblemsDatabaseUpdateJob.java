@@ -14,6 +14,7 @@ import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
 import java.io.File;
+import java.util.concurrent.CancellationException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpStatus;
@@ -46,14 +47,14 @@ public class ProblemsDatabaseUpdateJob extends Job {
     @Override
     protected IStatus run(IProgressMonitor monitor) {
         SubMonitor progress = SubMonitor.convert(monitor, 3);
-        progress.beginTask("Checking...", 3);
+        progress.beginTask("Checking...", 1000);
         if (!server.isProblemsDatabaseOutdated()) {
             return Status.OK_STATUS;
         }
         try {
             progress.subTask("Checking remote database");
             File tempRemoteIndexZip = File.createTempFile("problems-index", ".zip");
-            int downloadStatus = server.downloadDatabase(tempRemoteIndexZip);
+            int downloadStatus = server.downloadDatabase(tempRemoteIndexZip, progress);
             if (downloadStatus == HttpStatus.SC_NOT_MODIFIED) {
                 return Status.OK_STATUS;
             } else if (downloadStatus != HttpStatus.SC_OK) {
@@ -82,6 +83,8 @@ public class ProblemsDatabaseUpdateJob extends Job {
             progress.worked(1);
 
             return Status.OK_STATUS;
+        } catch (CancellationException e) {
+            return Status.CANCEL_STATUS;
         } catch (Exception e) {
             log(WARN_INDEX_UPDATE_FAILED, e);
             return Status.OK_STATUS;

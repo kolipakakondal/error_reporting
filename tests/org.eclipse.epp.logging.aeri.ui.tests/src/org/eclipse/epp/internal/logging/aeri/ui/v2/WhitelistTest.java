@@ -28,7 +28,7 @@ public class WhitelistTest {
     @Test
     public void testWhitelistPackages() throws Exception {
         AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
-        server.refreshConfiguration("https://dev.eclipse.org/recommenders/community/confess/v2/discovery");
+        server.refreshConfiguration("https://dev.eclipse.org/recommenders/community/confess/v2/discovery", null);
         ServerConfiguration configuration = server.getConfiguration();
         Collection<String> sut = configuration.getAcceptedPackages();
         Assert.assertThat(sut, not(hasItems("")));
@@ -39,7 +39,7 @@ public class WhitelistTest {
     @Test
     public void testWhitelistPlugins() throws Exception {
         AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
-        server.refreshConfiguration("https://dev.eclipse.org/recommenders/community/confess/v2/discovery");
+        server.refreshConfiguration("https://dev.eclipse.org/recommenders/community/confess/v2/discovery", null);
         ServerConfiguration configuration = server.getConfiguration();
         Collection<String> sut = configuration.getAcceptedPlugins();
         Assert.assertThat(sut, not(hasItems("")));

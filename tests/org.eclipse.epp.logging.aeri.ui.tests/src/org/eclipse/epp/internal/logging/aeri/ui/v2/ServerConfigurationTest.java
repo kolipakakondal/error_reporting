@@ -49,7 +49,7 @@ public class ServerConfigurationTest {
     @Test
     public void testDownloadDiscovery() throws Exception {
         AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
-        server.refreshConfiguration(SERVER_URL);
+        server.refreshConfiguration(SERVER_URL, null);
         ServerConfiguration configuration = server.getConfiguration();
         long timestamp = configuration.getTimestamp();
         assertThat(timestamp, greaterThan(0L));
@@ -59,7 +59,7 @@ public class ServerConfigurationTest {
     @Test
     public void testPatternsInitialized() throws Exception {
         AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
-        server.refreshConfiguration(SERVER_URL);
+        server.refreshConfiguration(SERVER_URL, null);
         ServerConfiguration configuration = server.getConfiguration();
         // packages
         for (String p : configuration.getAcceptedPackages()) {
@@ -108,7 +108,7 @@ public class ServerConfigurationTest {
     @Test
     public void testSaveAndLoad() throws Exception {
         AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
-        server.refreshConfiguration(SERVER_URL);
+        server.refreshConfiguration(SERVER_URL, null);
         ServerConfiguration configuration = server.getConfiguration();
         server.saveConfiguration();
         server.setConfiguration(null);
@@ -120,14 +120,14 @@ public class ServerConfigurationTest {
     @Test(expected = UnknownHostException.class)
     public void testUnknownHostException() throws Exception {
         AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
-        server.refreshConfiguration(UNKNOWN_SERVER_URL);
+        server.refreshConfiguration(UNKNOWN_SERVER_URL, null);
     }
 
     // TODO we may use some test urls on the server side to make sure they work as expected - including timeouts=
     @Test(expected = HttpResponseException.class)
     public void testHttpResponseExceptionNotFound() throws Exception {
         AeriServer server = new AeriServer(Executor.newInstance(), folder.newFile());
-        server.refreshConfiguration(BAD_RESPONSE_SERVER_URL);
+        server.refreshConfiguration(BAD_RESPONSE_SERVER_URL, null);
     }
 
     @Test
