@@ -27,8 +27,8 @@ public class ConfigureNotification extends Notification {
     }
 
     @Override
-    public List<NoficationAction> getActions() {
-        NoficationAction a1 = new NoficationAction("Enable") {
+    public List<NotificationAction> getActions() {
+        NotificationAction a1 = new NotificationAction("Enable") {
 
             @Override
             public void execute() {
@@ -36,7 +36,7 @@ public class ConfigureNotification extends Notification {
             }
 
         };
-        NoficationAction a2 = new NoficationAction("Disable") {
+        NotificationAction a2 = new NotificationAction("Disable") {
 
             @Override
             public void execute() {

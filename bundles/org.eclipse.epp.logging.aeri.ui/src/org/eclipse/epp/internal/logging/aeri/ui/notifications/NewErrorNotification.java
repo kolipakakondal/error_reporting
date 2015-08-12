@@ -58,15 +58,15 @@ public class NewErrorNotification extends Notification {
     }
 
     @Override
-    public List<NoficationAction> getActions() {
-        NoficationAction a1 = new NoficationAction("View Details") {
+    public List<NotificationAction> getActions() {
+        NotificationAction a1 = new NotificationAction("View Details") {
 
             @Override
             public void execute() {
                 closeWithEvent(new NewReportShowDetailsRequest(report));
             }
         };
-        NoficationAction a2 = new NoficationAction("Send") {
+        NotificationAction a2 = new NotificationAction("Send") {
 
             @Override
             public void execute() {

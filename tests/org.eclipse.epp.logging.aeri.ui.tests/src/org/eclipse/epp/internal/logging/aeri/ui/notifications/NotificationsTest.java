@@ -78,7 +78,7 @@ public class NotificationsTest {
     @Test
     public void testConfigureNotificationEnableAction() {
         Notification notification = new ConfigureNotification(bus);
-        NoficationAction action = notification.getActions().get(0);
+        NotificationAction action = notification.getActions().get(0);
         assertThat(action.getName(), is("Enable"));
         action.execute();
 
@@ -88,7 +88,7 @@ public class NotificationsTest {
     @Test
     public void testConfigureNotificationDisableAction() {
         Notification notification = new ConfigureNotification(bus);
-        NoficationAction action = notification.getActions().get(1);
+        NotificationAction action = notification.getActions().get(1);
         assertThat(action.getName(), is("Disable"));
         action.execute();
 

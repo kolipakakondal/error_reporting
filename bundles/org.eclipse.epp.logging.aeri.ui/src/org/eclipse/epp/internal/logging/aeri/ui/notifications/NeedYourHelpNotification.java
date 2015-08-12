@@ -62,10 +62,10 @@ public class NeedYourHelpNotification extends Notification {
     }
 
     @Override
-    public List<NoficationAction> getActions() {
-        List<NoficationAction> actions = Lists.newArrayList();
+    public List<NotificationAction> getActions() {
+        List<NotificationAction> actions = Lists.newArrayList();
 
-        NoficationAction a1 = new NoficationAction("View Details") {
+        NotificationAction a1 = new NotificationAction("View Details") {
             @Override
             public void execute() {
                 closeWithEvent(new NewReportShowDetailsRequest(report));
@@ -74,7 +74,7 @@ public class NeedYourHelpNotification extends Notification {
         actions.add(a1);
 
         if (state.hasBugId()) {
-            NoficationAction a = new NoficationAction("Visit #" + state.getBugId()) {
+            NotificationAction a = new NotificationAction("Visit #" + state.getBugId()) {
 
                 @Override
                 public void execute() {

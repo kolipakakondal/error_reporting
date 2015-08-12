@@ -69,11 +69,11 @@ public abstract class Notification extends AbstractUiNotification {
      * Returns the list of actions for this notification. The first action (if present) will be selected as default action for the
      * notification and used in {@link #open()}
      */
-    public abstract List<NoficationAction> getActions();
+    public abstract List<NotificationAction> getActions();
 
     @Override
     public void open() {
-        List<NoficationAction> actions = getActions();
+        List<NotificationAction> actions = getActions();
         if (!actions.isEmpty()) {
             actions.get(0).execute();
         }

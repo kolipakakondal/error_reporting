@@ -10,10 +10,10 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui.notifications;
 
-public abstract class NoficationAction {
+public abstract class NotificationAction {
     private final String name;
 
-    public NoficationAction(String name) {
+    public NotificationAction(String name) {
         this.name = name;
     }
 

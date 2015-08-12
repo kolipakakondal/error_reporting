@@ -121,10 +121,10 @@ public class ServerResponseNotification extends Notification {
     }
 
     @Override
-    public List<NoficationAction> getActions() {
-        List<NoficationAction> actions = Lists.newArrayList();
+    public List<NotificationAction> getActions() {
+        List<NotificationAction> actions = Lists.newArrayList();
         if (state.getBugId().isPresent()) {
-            NoficationAction a = new NoficationAction("Visit #" + state.getBugId().get()) {
+            NotificationAction a = new NotificationAction("Visit #" + state.getBugId().get()) {
 
                 @Override
                 public void execute() {
@@ -133,7 +133,7 @@ public class ServerResponseNotification extends Notification {
             };
             actions.add(a);
         }
-        NoficationAction a2 = new NoficationAction("Visit Submission") {
+        NotificationAction a2 = new NotificationAction("Visit Submission") {
 
             @Override
             public void execute() {

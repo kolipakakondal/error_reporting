@@ -221,7 +221,7 @@ public class NotificationPopup extends AbstractWorkbenchNotificationPopup {
             Composite linksComposite = new Composite(contentComposite, SWT.NO_FOCUS | SWT.RIGHT);
             GridDataFactory.fillDefaults().span(2, SWT.DEFAULT).grab(true, false).align(SWT.END, SWT.TOP).applyTo(linksComposite);
             GridLayoutFactory.fillDefaults().numColumns(executableNotification.getActions().size()).applyTo(linksComposite);
-            for (final NoficationAction action : executableNotification.getActions()) {
+            for (final NotificationAction action : executableNotification.getActions()) {
                 final ScalingHyperlink actionLink = new ScalingHyperlink(linksComposite, SWT.RIGHT | SWT.NO_FOCUS);
                 GridDataFactory.fillDefaults().grab(true, false).applyTo(actionLink);
                 Color linkColor = JFaceResources.getColorRegistry().get(JFacePreferences.HYPERLINK_COLOR);
