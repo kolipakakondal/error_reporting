@@ -243,26 +243,6 @@ public class LogListenerTest {
     }
 
     @Test
-    public void testIfSkipReportsTrue() {
-        System.setProperty(Constants.SYSPROP_SKIP_REPORTS, "true");
-        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message");
-
-        sut.logging(status, "");
-
-        verifyNoErrorReportLogged();
-    }
-
-    @Test
-    public void testIfSkipReportsFalse() {
-        System.setProperty(Constants.SYSPROP_SKIP_REPORTS, "false");
-        Status status = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message");
-
-        sut.logging(status, "");
-
-        assertThat(pollEvent(), is(not(nullValue())));
-    }
-
-    @Test
     public void testUnknownPluginsIgnored() {
         Status status = new Status(IStatus.ERROR, ANY_THIRD_PARTY_PLUGIN_ID, "any message");
 

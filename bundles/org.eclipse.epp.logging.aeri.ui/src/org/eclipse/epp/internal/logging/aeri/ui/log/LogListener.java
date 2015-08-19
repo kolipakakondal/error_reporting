@@ -33,7 +33,6 @@ import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ErrorStatus
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.HistoryReadyPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.IgnorePatternPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ReporterNotDisabledPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.SkipReportsAbsentPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WhitelistedPluginIdPresentPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WorkbenchRunningPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
@@ -61,7 +60,6 @@ public class LogListener implements ILogListener {
                 new HistoryReadyPredicate(history),
                 new IgnorePatternPredicate(configuration.getIgnoredPluginMessagesPatterns()),
                 new ReporterNotDisabledPredicate(settings),
-                new SkipReportsAbsentPredicate(),
                 new WhitelistedPluginIdPresentPredicate(configuration),
                 new WorkbenchRunningPredicate(PlatformUI.getWorkbench()));
                 // @formatter:on

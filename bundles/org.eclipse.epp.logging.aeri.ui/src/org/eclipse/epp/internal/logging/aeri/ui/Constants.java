@@ -30,10 +30,10 @@ public final class Constants {
     public static final String AERI_NAMESPACE = "org.eclipse.epp.logging.aeri";
 
     /**
-     * Specifying '-Dorg.eclipse.epp.logging.aeri.rcp.skipReports=true' as vmarg in eclipse launch configurations lets the log listener skip
-     * automated error reporting.
+     * Specifying '-Dorg.eclipse.epp.logging.aeri.ui.skipReports=true' as vmarg in eclipse launch configurations skips automated error
+     * reporting startup.
      */
-    public static final String SYSPROP_SKIP_REPORTS = PLUGIN_ID + ".skipReports";
+    public static final String SYSPROP_DISABLE_AERI = PLUGIN_ID + ".skipReports";
     public static final String SYSPROP_ECLIPSE_BUILD_ID = "eclipse.buildId";
     public static final String SYSPROP_ECLIPSE_PRODUCT = "eclipse.product";
 

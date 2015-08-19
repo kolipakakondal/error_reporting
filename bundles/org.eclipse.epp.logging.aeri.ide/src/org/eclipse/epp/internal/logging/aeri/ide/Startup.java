@@ -12,7 +12,7 @@ package org.eclipse.epp.internal.logging.aeri.ide;
 
 import static java.lang.Math.max;
 import static java.util.concurrent.TimeUnit.*;
-import static org.eclipse.epp.internal.logging.aeri.ui.Constants.DEBUG;
+import static org.eclipse.epp.internal.logging.aeri.ui.Constants.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 
@@ -69,6 +69,9 @@ public class Startup implements IStartup {
 
             @Override
             protected IStatus run(IProgressMonitor monitor) {
+                if (Boolean.getBoolean(SYSPROP_DISABLE_AERI)) {
+                    return Status.OK_STATUS;
+                }
                 SubMonitor progress = SubMonitor.convert(monitor, "Initializing error reporting", 10);
                 try {
                     progress.subTask("history");

@@ -31,7 +31,6 @@ import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ErrorStatus
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.HistoryReadyPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.IgnorePatternPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ReporterNotDisabledPredicate;
-import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.SkipReportsAbsentPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WhitelistedPluginIdPresentPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WorkbenchRunningPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
@@ -92,27 +91,6 @@ public class StatusPredicatesTest {
         when(status.getPlugin()).thenReturn("org.eclipse.plugin");
         when(configuration.getAcceptedPluginsPatterns()).thenReturn(newArrayList(Pattern.compile(quote("org.eclipse.plugin"))));
         sut = new WhitelistedPluginIdPresentPredicate(configuration);
-        assertTrue(sut.apply(status));
-    }
-
-    @Test
-    public void testSkipReportsAbsentPredicateTrue() {
-        System.setProperty(SYSPROP_SKIP_REPORTS, "true");
-        sut = new SkipReportsAbsentPredicate();
-        assertFalse(sut.apply(status));
-    }
-
-    @Test
-    public void testSkipReportsAbsentPredicateFalse() {
-        System.setProperty(SYSPROP_SKIP_REPORTS, "false");
-        sut = new SkipReportsAbsentPredicate();
-        assertTrue(sut.apply(status));
-    }
-
-    @Test
-    public void testSkipReportsAbsentPredicateEmpty() {
-        System.clearProperty(SYSPROP_SKIP_REPORTS);
-        sut = new SkipReportsAbsentPredicate();
         assertTrue(sut.apply(status));
     }
 

@@ -63,14 +63,6 @@ public class StatusPredicates {
 
     }
 
-    public static class SkipReportsAbsentPredicate implements Predicate<IStatus> {
-
-        @Override
-        public boolean apply(IStatus input) {
-            return !Boolean.getBoolean(SYSPROP_SKIP_REPORTS);
-        }
-    }
-
     public static class IgnorePatternPredicate implements Predicate<IStatus> {
 
         private List<IgnorePattern> patterns;
