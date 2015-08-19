@@ -185,7 +185,10 @@ public class ReportPredicates {
             @Override
             public Object caseStackTraceElement(StackTraceElement element) {
                 estimatedCharacters += element.getClassName().length();
-                estimatedCharacters += element.getFileName().length();
+                String fileName = element.getFileName();
+                if (fileName != null) {
+                    estimatedCharacters += fileName.length();
+                }
                 estimatedCharacters += element.getMethodName().length();
                 return null;
             }
