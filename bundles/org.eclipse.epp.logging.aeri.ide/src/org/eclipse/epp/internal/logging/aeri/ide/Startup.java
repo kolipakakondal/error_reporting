@@ -65,13 +65,13 @@ public class Startup implements IStartup {
 
     @Override
     public void earlyStartup() {
+        if (Boolean.getBoolean(SYSPROP_DISABLE_AERI)) {
+            return;
+        }
         new Job("Initializing Error Reporting System") {
 
             @Override
             protected IStatus run(IProgressMonitor monitor) {
-                if (Boolean.getBoolean(SYSPROP_DISABLE_AERI)) {
-                    return Status.OK_STATUS;
-                }
                 SubMonitor progress = SubMonitor.convert(monitor, "Initializing error reporting", 10);
                 try {
                     progress.subTask("history");
