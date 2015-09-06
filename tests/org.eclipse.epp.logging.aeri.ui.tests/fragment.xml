@@ -2,36 +2,45 @@
 <?eclipse version="3.4"?>
 <fragment>
    <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="org.eclipse.epp.logging.aeri.rcp.test.actionSet"
-            label="Error Reports Set"
-            visible="true">
-         <menu
-               id="sampleMenu"
-               label="Error Reporting">
-            <separator
-                  name="sampleGroup">
-            </separator>
-         </menu>
-         <action
-               class="org.eclipse.epp.internal.logging.aeri.ui.actions.UiFreezeAction"
-               icon="icons/sample2.gif"
-               id="org.eclipse.epp.logging.aeri.rcp.test.actions.SampleFreezeAction"
-               label="UI Freeze"
-               menubarPath="sampleMenu/sampleGroup"
-               toolbarPath="sampleGroup"
-               tooltip="Ooups! UI freeze...">
-         </action>
-         <action
-               class="org.eclipse.epp.internal.logging.aeri.ui.actions.LogErrorsAction"
-               icon="icons/sample.gif"
-               id="org.eclipse.epp.logging.aeri.rcp.test.actions.SampleLogAction"
-               label="Log error(s)"
-               menubarPath="sampleMenu/sampleGroup"
-               toolbarPath="sampleGroup"
-               tooltip="Ooups! Error...">
-         </action>
-      </actionSet>
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.eclipse.epp.internal.logging.aeri.ui.actions.LogErrorHandler"
+            id="org.eclipse.epp.logging.aeri.ui.tests.errorCommand"
+            name="Log Error">
+            <commandParameter id="org.eclipse.epp.logging.aeri.ui.tests.errorCommand.param" name="Message" optional="true"/>
+      </command>
    </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+          <toolbar id="org.eclipse.epp.logging.aeri.ui.tests.toolbar">
+           <command commandId="org.eclipse.epp.logging.aeri.ui.tests.errorCommand" id="org.eclipse.epp.logging.aeri.ui.tests.errorCommand" style="pulldown" 
+                    tooltip="Log Error">
+                    <parameter name="org.eclipse.epp.logging.aeri.ui.tests.errorCommand.param" value="0"/>
+           </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension point="org.eclipse.ui.menus">
+     <menuContribution locationURI="menu:org.eclipse.epp.logging.aeri.ui.tests.errorCommand">
+        <command commandId="org.eclipse.epp.logging.aeri.ui.tests.errorCommand" label="Log Verify Error" style="push">
+           <parameter name="org.eclipse.epp.logging.aeri.ui.tests.errorCommand.param" value="1">
+           </parameter>
+        </command>
+        <command commandId="org.eclipse.epp.logging.aeri.ui.tests.errorCommand" label="Log MS Error" style="push">
+           <parameter name="org.eclipse.epp.logging.aeri.ui.tests.errorCommand.param" value="2">
+           </parameter>
+        </command>
+         <command commandId="org.eclipse.epp.logging.aeri.ui.tests.errorCommand" label="UI Freeze" style="push">
+           <parameter name="org.eclipse.epp.logging.aeri.ui.tests.errorCommand.param" value="3">
+           </parameter>
+        </command>
+        <command commandId="org.eclipse.epp.logging.aeri.ui.tests.errorCommand" label="Log CE Error" style="push">
+           <parameter name="org.eclipse.epp.logging.aeri.ui.tests.errorCommand.param" value="4">
+           </parameter>
+        </command>
+     </menuContribution>
+  </extension>
 </fragment>
