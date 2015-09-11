@@ -138,6 +138,7 @@ public class ServerConfigurationTest {
         @SuppressWarnings("unchecked")
         Map<String, String> map = (Map<String, String>) new GsonBuilder().create().fromJson(asString, Object.class);
         Set<String> serverFields = map.keySet();
+        map.remove("id");
         List<Field> classFieldsAll = Lists.newArrayList(ServerConfiguration.class.getDeclaredFields());
         Set<String> classFields = Sets.newHashSet();
         for (int i = classFieldsAll.size() - 1; i >= 0; i--) {
