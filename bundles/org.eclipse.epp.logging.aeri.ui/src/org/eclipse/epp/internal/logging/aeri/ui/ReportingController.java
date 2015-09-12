@@ -120,10 +120,6 @@ public class ReportingController {
     public synchronized void on(NewReportLogged e) {
         ErrorReport report = e.report;
         addToQueue(report);
-        if (!Shells.hasActiveWindow()) {
-            // skip event for the moment if eclipse has no focus
-            return;
-        }
         if (!isConfigured()) {
             if (!isConfigureInProgress()) {
                 requestShowConfigureDialog();
@@ -401,6 +397,7 @@ public class ReportingController {
     @Subscribe
     public void on(NewReportNotificationTimedOut e) {
         setNotificationInProgress(false);
+        resetNotificationInProgress();
         clearIncoming();
     }
 

@@ -57,6 +57,7 @@ public class LogListener implements ILogListener {
                 new AcceptProductPredicate(configuration),
                 new EclipseBuildIdPresentPredicate(),
                 new ErrorStatusOnlyPredicate(),
+                new ActiveShellPredicate(),
                 new HistoryReadyPredicate(history),
                 new IgnorePatternPredicate(configuration.getIgnoredPluginMessagesPatterns()),
                 new ReporterNotDisabledPredicate(settings),

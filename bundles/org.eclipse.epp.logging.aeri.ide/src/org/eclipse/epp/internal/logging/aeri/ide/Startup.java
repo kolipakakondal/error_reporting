@@ -40,6 +40,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.RememberSendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.notifications.MylynNotificationService;
+import org.eclipse.epp.internal.logging.aeri.ui.utils.Shells;
 import org.eclipse.epp.internal.logging.aeri.ui.v2.AeriServer;
 import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
 import org.eclipse.ui.IStartup;
@@ -68,6 +69,9 @@ public class Startup implements IStartup {
         if (Boolean.getBoolean(SYSPROP_DISABLE_AERI)) {
             return;
         }
+        // XXX: we need to initialize the active window in Shells
+        Shells.isUIThread();
+
         new Job("Initializing Error Reporting System") {
 
             @Override
