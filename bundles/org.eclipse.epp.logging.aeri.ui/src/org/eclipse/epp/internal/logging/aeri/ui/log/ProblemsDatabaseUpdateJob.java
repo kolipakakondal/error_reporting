@@ -62,11 +62,6 @@ public class ProblemsDatabaseUpdateJob extends Job {
                 settings.setAction(SendAction.IGNORE);
                 settings.setRememberSendAction(RememberSendAction.RESTART);
                 log(INFO_SERVER_NOT_AVAILABLE);
-                if (downloadStatus != HttpStatus.SC_NOT_FOUND) {
-                    // NOT_FOUND (404) would mean that network communication works correctly.
-                    // We are only interested in cases where the communication failed.
-                    new NetworkCommunicationTestJob().schedule();
-                }
                 return Status.OK_STATUS;
             }
 
