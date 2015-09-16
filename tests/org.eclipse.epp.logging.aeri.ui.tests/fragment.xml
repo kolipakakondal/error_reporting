@@ -41,6 +41,10 @@
            <parameter name="org.eclipse.epp.logging.aeri.ui.tests.errorCommand.param" value="4">
            </parameter>
         </command>
+        <command commandId="org.eclipse.epp.logging.aeri.ui.tests.errorCommand" label="Test UI Deadlock" style="push">
+           <parameter name="org.eclipse.epp.logging.aeri.ui.tests.errorCommand.param" value="5">
+           </parameter>
+        </command>
      </menuContribution>
   </extension>
 </fragment>

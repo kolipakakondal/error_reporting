@@ -20,9 +20,16 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobFunction;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.Shells;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.handlers.HandlerUtil;
 import org.osgi.framework.FrameworkUtil;
+
+import com.google.common.base.Throwables;
 
 public class LogErrorHandler extends AbstractHandler {
 
@@ -56,6 +63,20 @@ public class LogErrorHandler extends AbstractHandler {
                 case 4: {
                     logCoreExceptionError();
                     break;
+                }
+                case 5: {
+                    Display.getDefault().asyncExec(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                testUiDeadlock(event);
+                            } catch (ExecutionException e) {
+                                Throwables.propagate(e);
+                            }
+                        }
+
+                    });
                 }
                 default:
                     break;
@@ -121,6 +142,40 @@ public class LogErrorHandler extends AbstractHandler {
     private void logCoreExceptionError() {
         Status s = new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "Core-Exception inner status");
         log.log(new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "Core-Exception outer status", new CoreException(s)));
+    }
+
+    private void testUiDeadlock(ExecutionEvent event) throws ExecutionException {
+
+        final Object lock = new Object();
+        IWorkbenchWindow window;
+        window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+        MessageDialog.openInformation(window.getShell(), "TestLogingLock", "Test lock");
+        Job longRunningJob = Job.create("Test Log running job", new IJobFunction() {
+
+            @Override
+            public IStatus run(IProgressMonitor monitor) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    //
+                }
+                Platform.getLog(FrameworkUtil.getBundle(getClass()))
+                        .log(new Status(IStatus.ERROR, "org.eclipse.epp.logging.aeri", "Test logging errors"));
+                synchronized (lock) {
+                    lock.notifyAll();
+                }
+                return Status.OK_STATUS;
+            }
+        });
+        longRunningJob.schedule();
+        synchronized (lock) {
+            try {
+                lock.wait();
+            } catch (InterruptedException e) {
+                Platform.getLog(FrameworkUtil.getBundle(getClass())).log(Status.CANCEL_STATUS);
+            }
+        }
+        MessageDialog.openInformation(window.getShell(), "TestLogingLock", "No lock.");
     }
 
 }
