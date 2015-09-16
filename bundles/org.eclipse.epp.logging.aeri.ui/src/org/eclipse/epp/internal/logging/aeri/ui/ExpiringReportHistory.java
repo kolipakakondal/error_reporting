@@ -18,9 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Reports;
-import org.eclipse.epp.internal.logging.aeri.ui.model.ServerResponse;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -31,17 +29,6 @@ public class ExpiringReportHistory {
 
     public void add(ErrorReport report) {
         removeOutdated();
-        HistoryEntry entry = new HistoryEntry(report, expiresOn());
-        history.add(entry);
-    }
-
-    public void response(ErrorReport report, ServerResponse response) {
-        for (HistoryEntry e : history) {
-            if (e.getReport().equals(report)) {
-                e.setResponse(response);
-            }
-        }
-
         HistoryEntry entry = new HistoryEntry(report, expiresOn());
         history.add(entry);
     }
@@ -59,16 +46,13 @@ public class ExpiringReportHistory {
         history.drainTo(Lists.newLinkedList());
     }
 
-    public static class HistoryEntry implements Delayed {
+    private static class HistoryEntry implements Delayed {
 
         private long expiresOn;
-        private final ErrorReport report;
         private final String reportExactIndentityHash;
         private final String reportTraceIdentityHash;
-        private Optional<ServerResponse> response;
 
         public HistoryEntry(ErrorReport report, long expiresOn) {
-            this.report = report;
             reportExactIndentityHash = Reports.exactIdentityHash(report);
             reportTraceIdentityHash = Reports.traceIdentityHash(report);
             this.expiresOn = expiresOn;
@@ -91,19 +75,6 @@ public class ExpiringReportHistory {
         public long getDelay(TimeUnit unit) {
             return unit.convert(expiresOn - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         }
-
-        public void setResponse(ServerResponse response) {
-            this.response = Optional.fromNullable(response);
-        }
-
-        public Optional<ServerResponse> getResponse() {
-            return response;
-        }
-
-        public ErrorReport getReport() {
-            return report;
-        }
-
     }
 
     public boolean seenExact(ErrorReport report) {
