@@ -35,6 +35,21 @@ import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportLogged;
 import org.eclipse.epp.internal.logging.aeri.ui.log.LogListener;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ProblemsDatabaseService;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportHistory;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.AcceptOtherPackagesPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.AcceptUiFreezesPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.CompleteUiFreezeReportPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.ProblemDatabaseIgnoredPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.ReportsHistoryPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.UnseenErrorReportPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.ValidSizeErrorReportPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.AcceptProductPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.EclipseBuildIdPresentPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ErrorStatusOnlyPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.HistoryReadyPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.IgnorePatternPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.ReporterNotDisabledPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WhitelistedPluginIdPresentPredicate;
+import org.eclipse.epp.internal.logging.aeri.ui.log.StatusPredicates.WorkbenchRunningPredicate;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ErrorReport;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ModelFactory;
 import org.eclipse.epp.internal.logging.aeri.ui.model.ProblemStatus;
@@ -44,6 +59,7 @@ import org.eclipse.epp.internal.logging.aeri.ui.model.SendAction;
 import org.eclipse.epp.internal.logging.aeri.ui.model.Settings;
 import org.eclipse.epp.internal.logging.aeri.ui.utils.RetainSystemProperties;
 import org.eclipse.epp.internal.logging.aeri.ui.v2.ServerConfiguration;
+import org.eclipse.ui.PlatformUI;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -51,6 +67,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -109,7 +127,40 @@ public class LogListenerTest {
 
         when(problemStatusIndex.seen(org.mockito.Matchers.any(ErrorReport.class))).thenReturn(noStatus);
 
-        sut = LogListener.createLogListener(settings, configuration, history, bus, expiringHistory, problemStatusIndex);
+        sut = createLogListener(settings, configuration, history, bus, expiringHistory, problemStatusIndex);
+    }
+
+    // TODO Local tests need to be executed without the activeShellPredicate
+    // The predicates from LogListener.createLogListener should be moved to Constants in a later change
+    @SuppressWarnings("unchecked")
+    public static LogListener createLogListener(Settings settings, ServerConfiguration configuration, ReportHistory history, EventBus bus,
+            ExpiringReportHistory expiringReportHistory, ProblemsDatabaseService serverProblemsStatusIndex) {
+        Predicate<? super IStatus>[] statusPredicates = new Predicate[] {
+                // @formatter:off
+                new AcceptProductPredicate(configuration),
+                new EclipseBuildIdPresentPredicate(),
+                new ErrorStatusOnlyPredicate(),
+                new HistoryReadyPredicate(history),
+                new IgnorePatternPredicate(configuration.getIgnoredPluginMessagesPatterns()),
+                new ReporterNotDisabledPredicate(settings),
+                new WhitelistedPluginIdPresentPredicate(configuration),
+                new WorkbenchRunningPredicate(PlatformUI.getWorkbench())};
+                // @formatter:on
+        Predicate<IStatus> statusFilters = Predicates.and(statusPredicates);
+
+        Predicate<? super ErrorReport>[] reportPredicates = new Predicate[] {
+                // @formatter:off
+                new AcceptOtherPackagesPredicate(configuration),
+                new AcceptUiFreezesPredicate(configuration),
+                new CompleteUiFreezeReportPredicate(),
+                new ProblemDatabaseIgnoredPredicate(serverProblemsStatusIndex, settings),
+                new ReportsHistoryPredicate(expiringReportHistory, settings),
+                new UnseenErrorReportPredicate(history, settings),
+                new ValidSizeErrorReportPredicate(configuration)};
+                 // @formatter:on
+        Predicate<ErrorReport> reportFilters = Predicates.and(reportPredicates);
+        LogListener listener = new LogListener(statusFilters, reportFilters, settings, configuration, bus);
+        return listener;
     }
 
     @Subscribe
