@@ -16,8 +16,11 @@ import static org.eclipse.epp.internal.logging.aeri.ui.model.Reports.*;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.ILogListener;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportLogged;
 import org.eclipse.epp.internal.logging.aeri.ui.ExpiringReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.AcceptOtherPackagesPredicate;
@@ -114,14 +117,31 @@ public class LogListener implements ILogListener {
             if (!statusFilters.apply(status)) {
                 return;
             }
-            ErrorReport report = createErrorReport(status);
-            if (!reportFilters.apply(report)) {
-                return;
-            }
-            bus.post(new NewReportLogged(report));
+            final ErrorReport report = createErrorReport(status);
+            logging(report);
         } catch (Exception e) {
             log(WARN_REPORTING_ERROR, e);
         }
+    }
+
+    private void logging(final ErrorReport report) {
+        Job job = new Job("Handle report") {
+
+            @Override
+            protected IStatus run(IProgressMonitor monitor) {
+                try {
+                    if (!reportFilters.apply(report)) {
+                        return Status.OK_STATUS;
+                    }
+                    bus.post(new NewReportLogged(report));
+                } catch (Exception e) {
+                    log(WARN_REPORTING_ERROR, e);
+                }
+                return Status.OK_STATUS;
+            }
+        };
+        job.setSystem(true);
+        job.schedule();
     }
 
     private ErrorReport createErrorReport(final IStatus status) {
