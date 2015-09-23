@@ -85,6 +85,11 @@ public abstract class Notification extends AbstractUiNotification {
         if (popup != null) {
             popup.close();
         }
+        fireEvent(event);
+    }
+
+    public void fireEvent(Object event) {
+        unhandled = false;
         bus.post(event);
     }
 

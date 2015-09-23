@@ -78,7 +78,7 @@ public class BugIsFixedNotification extends Notification {
 
                 @Override
                 public void execute() {
-                    closeWithEvent(new OpenUrlInBrowserRequest(state.getBugUrl().get()));
+                    fireEvent(new OpenUrlInBrowserRequest(state.getBugUrl().get()));
                 }
             };
             actions.add(a);
