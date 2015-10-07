@@ -172,9 +172,9 @@ public class LogListenerTest {
         return pollEvent(20, TimeUnit.SECONDS);
     }
 
-    private NewReportLogged pollEvent(int timeoutSeconds, TimeUnit unit) {
+    private NewReportLogged pollEvent(int timout, TimeUnit unit) {
         try {
-            Object event = queue.poll(timeoutSeconds, unit);
+            Object event = queue.poll(timout, unit);
             if (event == null) {
                 return null;
             }
@@ -185,11 +185,24 @@ public class LogListenerTest {
     }
 
     private void verifyNoErrorReportLogged() {
+        try {
+            // logging is done async, wait for system to handle events
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Throwables.propagate(e);
+        }
         assertThat(queue.isEmpty(), is(true));
     }
 
     private void verifyExactOneErrorReportLogged() {
-        NewReportLogged event1 = pollEvent(1, TimeUnit.SECONDS);
+        try {
+            // logging is done async, wait for system to handle events
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Throwables.propagate(e);
+        }
+        assertThat(queue.size(), is(1));
+        NewReportLogged event1 = pollEvent();
         assertThat(event1, is(not(nullValue())));
         assertThat(queue.isEmpty(), is(true));
     }
@@ -339,12 +352,12 @@ public class LogListenerTest {
         Status s2 = new Status(IStatus.ERROR, TEST_PLUGIN_ID, "test message", t1);
 
         sut.logging(s1, "");
-        NewReportLogged event1 = pollEvent(1, TimeUnit.SECONDS);
+        NewReportLogged event1 = pollEvent();
         history.remember(event1.report);
 
         sut.logging(s2, "");
 
-        NewReportLogged event2 = pollEvent(1, TimeUnit.SECONDS);
+        NewReportLogged event2 = pollEvent();
         assertThat(event2, is(not(nullValue())));
     }
 
