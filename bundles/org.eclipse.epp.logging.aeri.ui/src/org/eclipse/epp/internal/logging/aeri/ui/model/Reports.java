@@ -508,6 +508,7 @@ public class Reports {
             mStackTraceElement.setClassName(ensureNotBlank(stackTraceElement.getClassName(), throwable));
             mStackTraceElement.setMethodName(ensureNotBlank(stackTraceElement.getMethodName(), throwable));
             mStackTraceElement.setLineNumber(stackTraceElement.getLineNumber());
+            mStackTraceElement.setNative(stackTraceElement.isNativeMethod());
             mStackTrace.add(mStackTraceElement);
         }
         java.lang.Throwable cause = throwable.getCause();
