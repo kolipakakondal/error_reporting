@@ -14,16 +14,10 @@ import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.WARN_REP
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.model.Reports.*;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.ILogListener;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.epp.internal.logging.aeri.ui.Events.NewReportLogged;
 import org.eclipse.epp.internal.logging.aeri.ui.ExpiringReportHistory;
 import org.eclipse.epp.internal.logging.aeri.ui.log.ReportPredicates.AcceptOtherPackagesPredicate;
@@ -53,30 +47,6 @@ import com.google.common.base.Predicates;
 import com.google.common.eventbus.EventBus;
 
 public class LogListener implements ILogListener {
-
-    private final class HandleErrorReportJob extends Job {
-
-        private HandleErrorReportJob(String name) {
-            super(name);
-        }
-
-        @Override
-        protected IStatus run(IProgressMonitor monitor) {
-            while (!reports.isEmpty()) {
-                ErrorReport report = reports.poll();
-                try {
-                    if (!reportFilters.apply(report)) {
-                        return Status.OK_STATUS;
-                    }
-                    bus.post(new NewReportLogged(report));
-                } catch (Exception e) {
-                    log(WARN_REPORTING_ERROR, e);
-                }
-            }
-            handleErrorReportJob = null;
-            return Status.OK_STATUS;
-        }
-    }
 
     @SuppressWarnings("unchecked")
     @VisibleForTesting
@@ -127,8 +97,6 @@ public class LogListener implements ILogListener {
     private EventBus bus;
     private Settings settings;
     private ServerConfiguration configuration;
-    private Queue<ErrorReport> reports = new ConcurrentLinkedQueue<ErrorReport>();
-    private Job handleErrorReportJob;
 
     public LogListener(Predicate<IStatus> statusFilters, Predicate<ErrorReport> reportFilters, Settings settings,
             ServerConfiguration configuration, EventBus bus) {
@@ -146,19 +114,13 @@ public class LogListener implements ILogListener {
             if (!statusFilters.apply(status)) {
                 return;
             }
-            final ErrorReport report = createErrorReport(status);
-            logging(report);
+            ErrorReport report = createErrorReport(status);
+            if (!reportFilters.apply(report)) {
+                return;
+            }
+            bus.post(new NewReportLogged(report));
         } catch (Exception e) {
             log(WARN_REPORTING_ERROR, e);
-        }
-    }
-
-    private void logging(final ErrorReport report) {
-        reports.add(report);
-        if (handleErrorReportJob == null) {
-            handleErrorReportJob = new HandleErrorReportJob("Handle report");
-            handleErrorReportJob.setSystem(true);
-            handleErrorReportJob.schedule();
         }
     }
 

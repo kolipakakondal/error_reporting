@@ -10,7 +10,6 @@
  */
 package org.eclipse.epp.internal.logging.aeri.ui.log;
 
-import static org.apache.lucene.index.IndexReader.openIfChanged;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.WARN_HISTORY_NOT_AVAILABLE;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
 import static org.eclipse.epp.internal.logging.aeri.ui.model.Reports.*;
@@ -24,13 +23,13 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
@@ -55,8 +54,7 @@ public class ReportHistory extends AbstractIdleService {
     private static final String F_IDENTITY_TRACE = "identity-trace";
     private Directory index;
     protected IndexWriter writer;
-    protected IndexReader reader;
-    protected IndexSearcher searcher;
+    private SearcherManager manager;
 
     protected String getIndexDirectoryName() {
         return "history";
@@ -71,14 +69,20 @@ public class ReportHistory extends AbstractIdleService {
     }
 
     private boolean seen(Query q) {
+        IndexSearcher searcher = manager.acquire();
         try {
-            renewReaderAndSearcher();
             TopDocs results = searcher.search(q, 1);
             boolean foundIdenticalReport = results.totalHits > 0;
             return foundIdenticalReport;
         } catch (Exception e) {
             log(WARN_HISTORY_NOT_AVAILABLE, e);
             return false;
+        } finally {
+            try {
+                manager.release(searcher);
+            } catch (IOException e) {
+                log(WARN_HISTORY_NOT_AVAILABLE, e);
+            }
         }
     }
 
@@ -105,6 +109,15 @@ public class ReportHistory extends AbstractIdleService {
         } catch (Exception e) {
             log(WARN_HISTORY_NOT_AVAILABLE, e);
         }
+        reopen();
+    }
+
+    private void reopen() {
+        try {
+            manager.maybeReopen();
+        } catch (IOException e) {
+            log(WARN_HISTORY_NOT_AVAILABLE, e);
+        }
     }
 
     @VisibleForTesting
@@ -120,7 +133,7 @@ public class ReportHistory extends AbstractIdleService {
     protected void startUp() throws Exception {
         index = createIndexDirectory();
         createWriter();
-        createReaderAndSearcher();
+        manager = new SearcherManager(index, null, null);
     }
 
     private void createWriter() throws CorruptIndexException, LockObtainFailedException, IOException {
@@ -140,22 +153,9 @@ public class ReportHistory extends AbstractIdleService {
         writer.commit();
     }
 
-    private void createReaderAndSearcher() throws CorruptIndexException, IOException {
-        reader = IndexReader.open(index);
-        searcher = new IndexSearcher(reader);
-    }
-
-    protected void renewReaderAndSearcher() throws IOException {
-        IndexReader tmp = openIfChanged(reader);
-        if (tmp != null) {
-            IOUtils.close(reader, searcher);
-            searcher = new IndexSearcher(tmp);
-            reader = tmp;
-        }
-    }
-
     @Override
     protected void shutDown() throws Exception {
-        IOUtils.close(searcher, reader, writer, index);
-    };
+        IOUtils.close(writer, index);
+        manager.close();
+    }
 }

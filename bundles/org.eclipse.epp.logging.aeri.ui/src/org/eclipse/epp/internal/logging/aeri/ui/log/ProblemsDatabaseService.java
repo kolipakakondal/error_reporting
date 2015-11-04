@@ -12,7 +12,6 @@ package org.eclipse.epp.internal.logging.aeri.ui.log;
 
 import static com.google.common.base.Optional.absent;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.lucene.index.IndexReader.openIfChanged;
 import static org.eclipse.epp.internal.logging.aeri.ui.Constants.*;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.LogMessages.WARN_STATUS_INDEX_NOT_AVAILABLE;
 import static org.eclipse.epp.internal.logging.aeri.ui.l10n.Logs.log;
@@ -25,7 +24,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -33,6 +31,7 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
@@ -58,8 +57,7 @@ public class ProblemsDatabaseService extends AbstractIdleService {
     private static final String F_FINGERPRINT = "fingerprint";
     private File indexDirectory;
     private Directory index;
-    private IndexReader reader;
-    private IndexSearcher searcher;
+    private SearcherManager manager;
 
     public ProblemsDatabaseService(File indexDirectory) {
         this.indexDirectory = indexDirectory;
@@ -74,17 +72,23 @@ public class ProblemsDatabaseService extends AbstractIdleService {
     }
 
     private Optional<ProblemStatus> seen(Query q) {
+        IndexSearcher searcher = manager.acquire();
         try {
-            renewReaderAndSearcher();
             TopDocs results = searcher.search(q, 1);
             if (results.totalHits > 0) {
                 int doc = results.scoreDocs[0].doc;
-                Document d = reader.document(doc);
+                Document d = searcher.doc(doc);
                 ProblemStatus status = loadStatus(d);
                 return Optional.of(status);
             }
         } catch (Exception e) {
             log(WARN_STATUS_INDEX_NOT_AVAILABLE, e);
+        } finally {
+            try {
+                manager.release(searcher);
+            } catch (IOException e) {
+                log(WARN_STATUS_INDEX_NOT_AVAILABLE, e);
+            }
         }
         return Optional.absent();
     }
@@ -124,7 +128,7 @@ public class ProblemsDatabaseService extends AbstractIdleService {
     @Override
     protected void startUp() throws Exception {
         index = createIndexDirectory();
-        createReaderAndSearcher();
+        manager = new SearcherManager(index, null, null);
     }
 
     @VisibleForTesting
@@ -148,23 +152,10 @@ public class ProblemsDatabaseService extends AbstractIdleService {
         }
     }
 
-    private void createReaderAndSearcher() throws CorruptIndexException, IOException {
-        reader = IndexReader.open(index);
-        searcher = new IndexSearcher(reader);
-    }
-
-    protected void renewReaderAndSearcher() throws IOException {
-        IndexReader tmp = openIfChanged(reader);
-        if (tmp != null) {
-            IOUtils.close(reader, searcher);
-            searcher = new IndexSearcher(tmp);
-            reader = tmp;
-        }
-    }
-
     @Override
     protected void shutDown() throws Exception {
-        IOUtils.close(searcher, reader, index);
+        IOUtils.close(index);
+        manager.close();
     }
 
     public void replaceContent(File tempDir) throws IOException {
@@ -174,6 +165,7 @@ public class ProblemsDatabaseService extends AbstractIdleService {
             writer.deleteAll();
             writer.addIndexes(newContent);
             writer.commit();
+            manager.maybeReopen();
         }
     }
 

@@ -186,10 +186,12 @@ public class Reports {
 
         private void appendAttributes(EObject object, StringBuilder builder) {
             for (EAttribute attribute : object.eClass().getEAllAttributes()) {
-                String format = "%-" + RIGHT_PADDING + "s%s\n";
+                // String format = "%-" + RIGHT_PADDING + "s%s\n";
+                // String line = String.format(format, attribute.getName(), value);
                 Object value = firstNonNull(object.eGet(attribute), "");
-                String line = String.format(format, attribute.getName(), value);
-                builder.append(line);
+                builder.append(StringUtils.rightPad(attribute.getName(), RIGHT_PADDING));
+                builder.append(value);
+                builder.append('\n');
             }
             builder.append("\n");
         }

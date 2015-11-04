@@ -354,7 +354,6 @@ public class LogListenerTest {
         sut.logging(s1, "");
         NewReportLogged event1 = pollEvent();
         history.remember(event1.report);
-
         sut.logging(s2, "");
 
         NewReportLogged event2 = pollEvent();
